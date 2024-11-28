@@ -1,14 +1,17 @@
 import { Model } from 'mongoose';
-import { USER_ROLES } from '../../../enums/user';
+import { GENDER, USER_ROLES } from '../../../enums/user';
 
 export type IUser = {
-  name: string;
+  firstName: string;
+  lastName: string;
   role: USER_ROLES;
   contact: string;
   email: string;
   password: string;
   location: string;
+  gender: GENDER.MALE | GENDER.FEMALE | GENDER.OTHER;
   profile?: string;
+  dateOfBirth?: string;
   status: 'active' | 'delete';
   verified: boolean;
   authentication?: {

@@ -2,13 +2,17 @@ import bcrypt from 'bcrypt';
 import { StatusCodes } from 'http-status-codes';
 import { model, Schema } from 'mongoose';
 import config from '../../../config';
-import { USER_ROLES } from '../../../enums/user';
+import { GENDER, USER_ROLES } from '../../../enums/user';
 import ApiError from '../../../errors/ApiError';
 import { IUser, UserModal } from './user.interface';
 
 const userSchema = new Schema<IUser, UserModal>(
   {
-    name: {
+    firstName: {
+      type: String,
+      required: true,
+    },
+    lastName: {
       type: String,
       required: true,
     },
@@ -23,6 +27,11 @@ const userSchema = new Schema<IUser, UserModal>(
       unique: true,
       lowercase: true,
     },
+    gender: {
+      type: String,
+      enum: Object.values(GENDER),
+      required: true,
+    },
     contact: {
       type: String,
       required: true,
@@ -34,6 +43,10 @@ const userSchema = new Schema<IUser, UserModal>(
       minlength: 8,
     },
     location: {
+      type: String,
+      required: true,
+    },
+    dateOfBirth: {
       type: String,
       required: true,
     },
