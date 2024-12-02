@@ -9,7 +9,7 @@ export type IUser = {
   email: string;
   password: string;
   location: string;
-  gender: GENDER.MALE | GENDER.FEMALE | GENDER.OTHER;
+  gender: GENDER;
   profile?: string;
   dateOfBirth?: string;
   status: 'active' | 'delete';
