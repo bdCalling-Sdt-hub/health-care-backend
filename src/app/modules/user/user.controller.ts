@@ -3,6 +3,8 @@ import { StatusCodes } from 'http-status-codes';
 import catchAsync from '../../../shared/catchAsync';
 import sendResponse from '../../../shared/sendResponse';
 import { UserService } from './user.service';
+import { paginationHelper } from '../../../helpers/paginationHelper';
+import { IPaginationOptions } from '../../../types/pagination';
 
 const createUser = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -53,5 +55,40 @@ const updateProfile = catchAsync(
     });
   }
 );
+const getAllUsers = catchAsync(async (req: Request, res: Response) => {
+  const paginationOptions = {
+    page: Number(req.query.page),
+    limit: Number(req.query.limit),
+    sortBy: req.query.sortBy as string,
+    sortOrder: req.query.sortOrder as 'asc' | 'desc',
+  };
 
-export const UserController = { createUser, getUserProfile, updateProfile };
+  const { page, limit, skip, sortBy, sortOrder } =
+    paginationHelper.calculatePagination(paginationOptions);
+
+  const result = await UserService.getAllUsersFromDB({
+    limit,
+    skip,
+    sortBy,
+    sortOrder,
+  });
+
+  sendResponse(res, {
+    success: true,
+    statusCode: StatusCodes.OK,
+    message: 'Users data retrieved successfully',
+    pagination: {
+      page: page,
+      limit: limit,
+      totalPage: result.totalPage,
+      total: result.total,
+    },
+    data: result.data,
+  });
+});
+export const UserController = {
+  createUser,
+  getUserProfile,
+  updateProfile,
+  getAllUsers,
+};

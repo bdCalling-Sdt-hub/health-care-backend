@@ -24,5 +24,6 @@ router
     fileUploadHandler(),
     UserController.updateProfile
   );
+router.get('/all', auth(USER_ROLES.ADMIN), UserController.getAllUsers);
 
 export const UserRoutes = router;
