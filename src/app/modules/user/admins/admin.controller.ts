@@ -1,7 +1,6 @@
 import catchAsync from '../../../../shared/catchAsync';
 import { StatusCodes } from 'http-status-codes';
 import ApiError from '../../../../errors/ApiError';
-import { AdminService } from './admin.service';
 import sendResponse from '../../../../shared/sendResponse';
 import { Request, Response } from 'express';
 import { UserService } from '../user.service';
@@ -11,7 +10,7 @@ import { USER_ROLES } from '../../../../enums/user';
 
 const addAdmin = catchAsync(async (req: Request, res: Response) => {
   const { ...adminData } = req.body;
-  const result = await AdminService.addAdminToDB(adminData);
+  const result = await HelperService.addDataToDB(adminData, User);
   sendResponse(res, {
     success: true,
     statusCode: StatusCodes.OK,
@@ -53,7 +52,7 @@ const getSingleAdmin = catchAsync(async (req: Request, res: Response) => {
 const deleteAdmin = catchAsync(async (req: Request, res: Response) => {
   const id = req.params.id as string;
   if (!id) throw new ApiError(StatusCodes.BAD_REQUEST, 'Admin not found');
-  const result = await AdminService.deleteAdminByIDFromDB(id);
+  const result = await HelperService.deleteDataByIDFromDB(id, User);
 
   sendResponse(res, {
     success: true,

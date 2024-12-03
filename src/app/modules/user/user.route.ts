@@ -6,8 +6,8 @@ import validateRequest from '../../middlewares/validateRequest';
 import { UserController } from './user.controller';
 import { UserValidation } from './user.validation';
 import { AdminRoutes } from './admins/admin.route';
-import { PharmecyRoutes } from './pharmecy/pharmecy.route';
 import { DoctorRoutes } from './doctor/doctor.route';
+import { PharmecyRoutes } from './pharmecy/pharmecy.route';
 const router = express.Router();
 
 router.get(

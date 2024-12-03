@@ -10,12 +10,13 @@ const userSchema = new Schema<IUser, UserModal>(
   {
     firstName: {
       type: String,
-      required: true,
+      required: false,
     },
     lastName: {
       type: String,
-      required: true,
+      required: false,
     },
+
     role: {
       type: String,
       enum: Object.values(USER_ROLES),
@@ -67,6 +68,10 @@ const userSchema = new Schema<IUser, UserModal>(
     verified: {
       type: Boolean,
       default: false,
+    },
+    pharmecyName: {
+      type: String,
+      required: false,
     },
     authentication: {
       type: {

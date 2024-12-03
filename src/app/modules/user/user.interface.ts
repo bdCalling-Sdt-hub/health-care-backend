@@ -2,8 +2,8 @@ import { Model } from 'mongoose';
 import { GENDER, USER_ROLES } from '../../../enums/user';
 
 export type IUser = {
-  firstName: string;
-  lastName: string;
+  firstName?: string;
+  lastName?: string;
   role: USER_ROLES;
   contact: string;
   email: string;
@@ -15,6 +15,7 @@ export type IUser = {
   dateOfBirth?: string;
   status: 'active' | 'delete';
   verified: boolean;
+  pharmecyName?: string;
   authentication?: {
     isResetPassword: boolean;
     oneTimeCode: number;

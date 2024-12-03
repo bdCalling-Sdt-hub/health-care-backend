@@ -1,7 +1,7 @@
 import catchAsync from '../../../../shared/catchAsync';
 import { StatusCodes } from 'http-status-codes';
 import ApiError from '../../../../errors/ApiError';
-import { DoctorService } from './doctor.service';
+import { DoctorService } from './pharmecy.service';
 import sendResponse from '../../../../shared/sendResponse';
 import { Request, Response } from 'express';
 import { UserService } from '../user.service';
@@ -9,29 +9,27 @@ import { User } from '../user.model';
 import { HelperService } from '../../../../helpers/helper.service';
 import { USER_ROLES } from '../../../../enums/user';
 
-const addDoctor = catchAsync(async (req: Request, res: Response) => {
-  const doctorData = {
-    role: USER_ROLES.DOCTOR,
-    ...req.body,
-  };
-  const result = await HelperService.addDataToDB(doctorData, User);
+const addPharmecy = catchAsync(async (req: Request, res: Response) => {
+  const { ...pharmecyData } = req.body;
+  pharmecyData.role = USER_ROLES.PHARMACY;
+  const result = await HelperService.addDataToDB(pharmecyData, User);
   sendResponse(res, {
     success: true,
     statusCode: StatusCodes.OK,
-    message: 'Doctor created successfully',
+    message: 'Pharmecy created successfully',
     data: result,
   });
 });
 
-const getAllDoctors = catchAsync(async (req: Request, res: Response) => {
+const getAllPharmecy = catchAsync(async (req: Request, res: Response) => {
   const query = req.query;
-  query.role = USER_ROLES.DOCTOR;
+  query.role = USER_ROLES.PHARMACY;
   const result = await HelperService.getAllDataFromDB(query, User);
 
   sendResponse(res, {
     success: true,
     statusCode: StatusCodes.OK,
-    message: 'Doctors data retrieved successfully',
+    message: 'Pharmecy data retrieved successfully',
     data: result.data,
     pagination: {
       page: Number(query.page) || 1,
@@ -41,35 +39,35 @@ const getAllDoctors = catchAsync(async (req: Request, res: Response) => {
     },
   });
 });
-const getSingleDoctor = catchAsync(async (req: Request, res: Response) => {
+const getSinglePharmecy = catchAsync(async (req: Request, res: Response) => {
   const id = (req.params.id as string) || (req.user.id as string);
-  if (!id) throw new ApiError(StatusCodes.BAD_REQUEST, 'Doctor not found');
+  if (!id) throw new ApiError(StatusCodes.BAD_REQUEST, 'Pharmecy not found');
   const result = await HelperService.getSingleDataFromDB(id, User);
 
   sendResponse(res, {
     success: true,
     statusCode: StatusCodes.OK,
-    message: 'Doctor retrieved successfully',
+    message: 'Pharmecy retrieved successfully',
     data: result,
   });
 });
 
-const deleteDoctor = catchAsync(async (req: Request, res: Response) => {
+const deletePharmecy = catchAsync(async (req: Request, res: Response) => {
   const id = req.params.id as string;
-  if (!id) throw new ApiError(StatusCodes.BAD_REQUEST, 'Doctor not found');
+  if (!id) throw new ApiError(StatusCodes.BAD_REQUEST, 'Pharmecy not found');
   const result = await HelperService.deleteDataByIDFromDB(id, User);
 
   sendResponse(res, {
     success: true,
     statusCode: StatusCodes.OK,
-    message: 'Doctor deleted successfully',
+    message: 'Pharmecy deleted successfully',
     data: result,
   });
 });
 
-export const DoctorController = {
-  addDoctor,
-  getAllDoctors,
-  getSingleDoctor,
-  deleteDoctor,
+export const PharmecyController = {
+  addPharmecy,
+  getAllPharmecy,
+  getSinglePharmecy,
+  deletePharmecy,
 };
