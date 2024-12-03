@@ -13,7 +13,6 @@ router.post(
   validateRequest(DoctorValidation.createDoctorZodSchema),
   DoctorController.addDoctor
 );
-
 router.get(
   '/all',
   auth(USER_ROLES.SUPERADMIN, USER_ROLES.ADMIN),

@@ -20,52 +20,6 @@ const addAdminToDB = async (payload: Partial<IUser>): Promise<IUser> => {
   return createUser;
 };
 
-const getAllAdmins = async (
-  page: number,
-  limit: number,
-  sortBy: string,
-  sortOrder: 'asc' | 'desc',
-  search: string
-) => {
-  const searchConditions = search
-    ? {
-        $and: [
-          { role: USER_ROLES.ADMIN },
-          {
-            $or: [
-              { firstName: { $regex: search, $options: 'i' } },
-              { lastName: { $regex: search, $options: 'i' } },
-              { email: { $regex: search, $options: 'i' } },
-            ],
-          },
-        ],
-      }
-    : { role: USER_ROLES.ADMIN };
-
-  const admins = await User.find(searchConditions)
-    .sort({ [sortBy]: sortOrder })
-    .skip((page - 1) * limit)
-    .limit(limit)
-    .select('-password');
-
-  const totalPages = Math.ceil(
-    (await User.countDocuments(searchConditions)) / limit
-  );
-
-  return {
-    admins,
-    totalPages,
-  };
-};
-
-const getAdminByIDFromDB = async (id: string) => {
-  const admin = await User.findById(id);
-  if (!admin) {
-    throw new ApiError(StatusCodes.BAD_REQUEST, 'Admin not found');
-  }
-  return admin;
-};
-
 const deleteAdminByIDFromDB = async (id: string) => {
   const admin = await User.findByIdAndDelete(id);
   if (!admin) {
@@ -76,7 +30,5 @@ const deleteAdminByIDFromDB = async (id: string) => {
 
 export const AdminService = {
   addAdminToDB,
-  getAllAdmins,
-  getAdminByIDFromDB,
   deleteAdminByIDFromDB,
 };

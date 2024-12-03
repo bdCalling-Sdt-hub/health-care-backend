@@ -7,11 +7,23 @@ import { USER_ROLES } from '../../../../enums/user';
 const router = Router();
 router.post(
   '/',
-  auth(USER_ROLES.SUPERADMIN),
+  auth(USER_ROLES.SUPERADMIN, USER_ROLES.ADMIN),
   validateRequest(AdminValidation.createAdminZodSchema),
   AdminController.addAdmin
 );
-router.get('/all', auth(USER_ROLES.SUPERADMIN), AdminController.getAllAdmins);
-router.get('/:id', auth(USER_ROLES.SUPERADMIN), AdminController.getSingleAdmin);
-router.delete('/:id', auth(USER_ROLES.SUPERADMIN), AdminController.deleteAdmin);
+router.get(
+  '/all',
+  auth(USER_ROLES.SUPERADMIN, USER_ROLES.ADMIN),
+  AdminController.getAllAdmins
+);
+router.get(
+  '/:id',
+  auth(USER_ROLES.SUPERADMIN, USER_ROLES.ADMIN),
+  AdminController.getSingleAdmin
+);
+router.delete(
+  '/:id',
+  auth(USER_ROLES.SUPERADMIN, USER_ROLES.ADMIN),
+  AdminController.deleteAdmin
+);
 export const AdminRoutes = router;

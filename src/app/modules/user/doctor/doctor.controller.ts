@@ -4,6 +4,10 @@ import ApiError from '../../../../errors/ApiError';
 import { DoctorService } from './doctor.service';
 import sendResponse from '../../../../shared/sendResponse';
 import { Request, Response } from 'express';
+import { UserService } from '../user.service';
+import { User } from '../user.model';
+import { HelperService } from '../../../../helpers/helper.service';
+import { USER_ROLES } from '../../../../enums/user';
 
 const addDoctor = catchAsync(async (req: Request, res: Response) => {
   const { ...doctorData } = req.body;
@@ -17,39 +21,27 @@ const addDoctor = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getAllDoctors = catchAsync(async (req: Request, res: Response) => {
-  const paginationOptions = {
-    page: Number(req.query.page),
-    limit: Number(req.query.limit),
-    sortBy: req.query.sortBy as string,
-    sortOrder: req.query.sortOrder as 'asc' | 'desc',
-    search: req.query.search as string,
-  };
-  const result = await DoctorService.getAllDoctors(
-    paginationOptions.page,
-    paginationOptions.limit,
-    paginationOptions.sortBy,
-    paginationOptions.sortOrder,
-    paginationOptions.search
-  );
+  const query = req.query;
+  query.role = USER_ROLES.DOCTOR;
+  const result = await HelperService.getAllDataFromDB(query, User);
 
   sendResponse(res, {
     success: true,
     statusCode: StatusCodes.OK,
-    message: 'Doctors retrieved successfully',
-    data: result.doctors,
+    message: 'Doctors data retrieved successfully',
+    data: result.data,
     pagination: {
-      page: paginationOptions.page,
-      limit: paginationOptions.limit,
+      page: Number(query.page) || 1,
+      limit: Number(query.limit) || 10,
       totalPage: result.totalPages,
-      total: result.doctors.length,
+      total: result.data.length,
     },
   });
 });
-
 const getSingleDoctor = catchAsync(async (req: Request, res: Response) => {
   const id = (req.params.id as string) || (req.user.id as string);
   if (!id) throw new ApiError(StatusCodes.BAD_REQUEST, 'Doctor not found');
-  const result = await DoctorService.getDoctorByIDFromDB(id);
+  const result = await HelperService.getSingleDataFromDB(id, User);
 
   sendResponse(res, {
     success: true,

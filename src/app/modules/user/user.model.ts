@@ -27,6 +27,10 @@ const userSchema = new Schema<IUser, UserModal>(
       unique: true,
       lowercase: true,
     },
+    doctorType: {
+      type: String,
+      required: false,
+    },
     gender: {
       type: String,
       enum: Object.values(GENDER),

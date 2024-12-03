@@ -9,6 +9,7 @@ export type IUser = {
   email: string;
   password: string;
   location: string;
+  doctorType?: string;
   gender: GENDER;
   profile?: string;
   dateOfBirth?: string;

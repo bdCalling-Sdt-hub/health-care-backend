@@ -74,35 +74,8 @@ const updateProfileToDB = async (
   return updateDoc;
 };
 
-const getAllUsersFromDB = async ({
-  skip,
-  limit,
-  sortBy,
-  sortOrder,
-}: {
-  skip: number;
-  limit: number;
-  sortBy: string;
-  sortOrder: 'asc' | 'desc';
-}) => {
-  const users = await User.find()
-    .sort({ [sortBy]: sortOrder })
-    .skip(skip)
-    .limit(limit)
-    .select('-password');
-
-  const total = await User.countDocuments();
-  const totalPage = Math.ceil(total / limit);
-  return {
-    data: users,
-    total,
-    totalPage,
-  };
-};
-
 export const UserService = {
   createUserToDB,
   getUserProfileFromDB,
   updateProfileToDB,
-  getAllUsersFromDB,
 };

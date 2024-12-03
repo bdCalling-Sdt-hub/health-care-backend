@@ -20,52 +20,6 @@ const addDoctorToDB = async (payload: Partial<IUser>): Promise<IUser> => {
   return createUser;
 };
 
-const getAllDoctors = async (
-  page: number,
-  limit: number,
-  sortBy: string,
-  sortOrder: 'asc' | 'desc',
-  search: string
-) => {
-  const searchConditions = search
-    ? {
-        $and: [
-          { role: USER_ROLES.DOCTOR },
-          {
-            $or: [
-              { firstName: { $regex: search, $options: 'i' } },
-              { lastName: { $regex: search, $options: 'i' } },
-              { email: { $regex: search, $options: 'i' } },
-            ],
-          },
-        ],
-      }
-    : { role: USER_ROLES.DOCTOR };
-
-  const doctors = await User.find(searchConditions)
-    .sort({ [sortBy]: sortOrder })
-    .skip((page - 1) * limit)
-    .limit(limit)
-    .select('-password');
-
-  const totalPages = Math.ceil(
-    (await User.countDocuments(searchConditions)) / limit
-  );
-
-  return {
-    doctors,
-    totalPages,
-  };
-};
-
-const getDoctorByIDFromDB = async (id: string) => {
-  const doctor = await User.findById(id);
-  if (!doctor) {
-    throw new ApiError(StatusCodes.BAD_REQUEST, 'Doctor not found');
-  }
-  return doctor;
-};
-
 const deleteDoctorByIDFromDB = async (id: string) => {
   const doctor = await User.findByIdAndDelete(id);
   if (!doctor) {
@@ -76,7 +30,5 @@ const deleteDoctorByIDFromDB = async (id: string) => {
 
 export const DoctorService = {
   addDoctorToDB,
-  getAllDoctors,
-  getDoctorByIDFromDB,
   deleteDoctorByIDFromDB,
 };

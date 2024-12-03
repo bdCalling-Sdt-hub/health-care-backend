@@ -4,6 +4,10 @@ import ApiError from '../../../../errors/ApiError';
 import { AdminService } from './admin.service';
 import sendResponse from '../../../../shared/sendResponse';
 import { Request, Response } from 'express';
+import { UserService } from '../user.service';
+import { User } from '../user.model';
+import { HelperService } from '../../../../helpers/helper.service';
+import { USER_ROLES } from '../../../../enums/user';
 
 const addAdmin = catchAsync(async (req: Request, res: Response) => {
   const { ...adminData } = req.body;
@@ -16,38 +20,28 @@ const addAdmin = catchAsync(async (req: Request, res: Response) => {
   });
 });
 const getAllAdmins = catchAsync(async (req: Request, res: Response) => {
-  const paginationOptions = {
-    page: Number(req.query.page),
-    limit: Number(req.query.limit),
-    sortBy: req.query.sortBy as string,
-    sortOrder: req.query.sortOrder as 'asc' | 'desc',
-    search: req.query.search as string,
-  };
-  const result = await AdminService.getAllAdmins(
-    paginationOptions.page,
-    paginationOptions.limit,
-    paginationOptions.sortBy,
-    paginationOptions.sortOrder,
-    paginationOptions.search
-  );
+  const query = req.query;
+  query.role = USER_ROLES.ADMIN;
+
+  const result = await HelperService.getAllDataFromDB(query, User);
 
   sendResponse(res, {
     success: true,
     statusCode: StatusCodes.OK,
     message: 'Admins retrieved successfully',
-    data: result.admins,
+    data: result.data,
     pagination: {
-      page: paginationOptions.page,
-      limit: paginationOptions.limit,
+      page: Number(query.page) || 1,
+      limit: Number(query.limit) || 10,
       totalPage: result.totalPages,
-      total: result.admins.length,
+      total: result.data.length,
     },
   });
 });
 const getSingleAdmin = catchAsync(async (req: Request, res: Response) => {
   const id = (req.params.id as string) || (req.user.id as string);
   if (!id) throw new ApiError(StatusCodes.BAD_REQUEST, 'Admin not found');
-  const result = await AdminService.getAdminByIDFromDB(id);
+  const result = await HelperService.getSingleDataFromDB(id, User);
 
   sendResponse(res, {
     success: true,

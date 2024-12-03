@@ -5,6 +5,9 @@ import sendResponse from '../../../shared/sendResponse';
 import { UserService } from './user.service';
 import { paginationHelper } from '../../../helpers/paginationHelper';
 import { IPaginationOptions } from '../../../types/pagination';
+import { User } from './user.model';
+import { HelperService } from '../../../helpers/helper.service';
+import ApiError from '../../../errors/ApiError';
 
 const createUser = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -56,39 +59,39 @@ const updateProfile = catchAsync(
   }
 );
 const getAllUsers = catchAsync(async (req: Request, res: Response) => {
-  const paginationOptions = {
-    page: Number(req.query.page),
-    limit: Number(req.query.limit),
-    sortBy: req.query.sortBy as string,
-    sortOrder: req.query.sortOrder as 'asc' | 'desc',
-  };
-
-  const { page, limit, skip, sortBy, sortOrder } =
-    paginationHelper.calculatePagination(paginationOptions);
-
-  const result = await UserService.getAllUsersFromDB({
-    limit,
-    skip,
-    sortBy,
-    sortOrder,
-  });
+  const query = req.query;
+  const result = await HelperService.getAllDataFromDB(query, User);
 
   sendResponse(res, {
     success: true,
     statusCode: StatusCodes.OK,
     message: 'Users data retrieved successfully',
     pagination: {
-      page: page,
-      limit: limit,
-      totalPage: result.totalPage,
-      total: result.total,
+      page: Number(query.page) || 1,
+      limit: Number(query.limit) || 10,
+      totalPage: result.totalPages,
+      total: result.data.length,
     },
     data: result.data,
   });
 });
+const getSingleUser = catchAsync(async (req: Request, res: Response) => {
+  const id = (req.params.id as string) || (req.user.id as string);
+  if (!id) throw new ApiError(StatusCodes.BAD_REQUEST, 'User not found');
+  const result = await HelperService.getSingleDataFromDB(id, User);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: StatusCodes.OK,
+    message: 'User retrieved successfully',
+    data: result,
+  });
+});
+
 export const UserController = {
   createUser,
   getUserProfile,
   updateProfile,
   getAllUsers,
+  getSingleUser,
 };
