@@ -5,6 +5,9 @@ import fileUploadHandler from '../../middlewares/fileUploadHandler';
 import validateRequest from '../../middlewares/validateRequest';
 import { UserController } from './user.controller';
 import { UserValidation } from './user.validation';
+import { AdminRoutes } from './admins/admin.route';
+import { DoctorRoutes } from './doctor/doctors.route';
+import { PharmecyRoutes } from './pharmecy/pharmecy.route';
 const router = express.Router();
 
 router.get(
@@ -25,5 +28,7 @@ router
     UserController.updateProfile
   );
 router.get('/all', auth(USER_ROLES.ADMIN), UserController.getAllUsers);
-
+router.use('/admins', AdminRoutes);
+router.use('/doctors', DoctorRoutes);
+router.use('/pharmecy', PharmecyRoutes);
 export const UserRoutes = router;

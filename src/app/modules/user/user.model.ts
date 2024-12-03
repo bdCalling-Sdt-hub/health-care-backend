@@ -30,7 +30,8 @@ const userSchema = new Schema<IUser, UserModal>(
     gender: {
       type: String,
       enum: Object.values(GENDER),
-      required: true,
+      required: false,
+      default: GENDER.MALE,
     },
     contact: {
       type: String,
@@ -44,11 +45,11 @@ const userSchema = new Schema<IUser, UserModal>(
     },
     location: {
       type: String,
-      required: true,
+      required: false,
     },
     dateOfBirth: {
       type: String,
-      required: true,
+      required: false,
     },
     profile: {
       type: String,
