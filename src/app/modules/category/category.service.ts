@@ -3,8 +3,10 @@ import ApiError from '../../../errors/ApiError';
 import { Category } from './category.model';
 import { ICategory } from './category.interface';
 import unlinkFile from '../../../shared/unlinkFile';
+import { CategoryValidation } from './category.validation';
 
 const createCategory = async (payload: ICategory): Promise<ICategory> => {
+  await CategoryValidation.createCategoryZodSchema.parseAsync(payload);
   const result = await Category.create(payload);
   if (!result) {
     throw new ApiError(StatusCodes.BAD_REQUEST, 'Failed to create category!');
@@ -47,6 +49,7 @@ const updateCategory = async (
   id: string,
   payload: ICategory
 ): Promise<ICategory | null> => {
+  await CategoryValidation.updateCategoryZodSchema.parseAsync(payload);
   const isExistCategory = await getCategoryById(id);
   if (!isExistCategory) {
     throw new ApiError(StatusCodes.BAD_REQUEST, 'Category not found!');
