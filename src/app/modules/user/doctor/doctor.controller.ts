@@ -1,7 +1,6 @@
 import catchAsync from '../../../../shared/catchAsync';
 import { StatusCodes } from 'http-status-codes';
 import ApiError from '../../../../errors/ApiError';
-import { DoctorService } from './doctor.service';
 import sendResponse from '../../../../shared/sendResponse';
 import { Request, Response } from 'express';
 import { UserService } from '../user.service';
