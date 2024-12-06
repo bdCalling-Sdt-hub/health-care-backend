@@ -26,7 +26,11 @@ const myFormat = printf(
 
 const logger = createLogger({
   level: 'info',
-  format: combine(label({ label: 'SERVER-NAME' }), timestamp(), myFormat),
+  format: combine(
+    label({ label: 'HEALTH-CARE-BACKEND' }),
+    timestamp(),
+    myFormat
+  ),
   transports: [
     new transports.Console(),
     new DailyRotateFile({
@@ -45,7 +49,11 @@ const logger = createLogger({
 
 const errorLogger = createLogger({
   level: 'error',
-  format: combine(label({ label: 'SERVER-NAME' }), timestamp(), myFormat),
+  format: combine(
+    label({ label: 'HEALTH-CARE-BACKEND' }),
+    timestamp(),
+    myFormat
+  ),
   transports: [
     new transports.Console(),
     new DailyRotateFile({
