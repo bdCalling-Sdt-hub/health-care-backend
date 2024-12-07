@@ -58,7 +58,7 @@ const deleteDiscount = async (id: string): Promise<IDiscount | null> => {
     throw new ApiError(StatusCodes.BAD_REQUEST, 'Discount not found!');
   }
   const deleteCoupon = await stripe.coupons.del(
-    isExistDiscount.stripeCouponId as string
+    isExistDiscount?.stripeCouponId?.toString()!
   );
   if (!deleteCoupon) {
     throw new ApiError(StatusCodes.BAD_REQUEST, 'Failed to delete discount!');
