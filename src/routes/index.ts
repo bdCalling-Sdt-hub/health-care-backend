@@ -5,6 +5,7 @@ import { CategoryRoutes } from '../app/modules/category/category.route';
 import { SubCategoryRoutes } from '../app/modules/subCategory/subCategory.route';
 import { MedicineRoutes } from '../app/modules/medicine/medicine.route';
 import { ShippingDetailsRoutes } from '../app/modules/shippingDetails/shippingDetails.route';
+import { DiscountRoutes } from '../app/modules/discount/discount.route';
 const router = express.Router();
 
 const apiRoutes = [
@@ -31,6 +32,10 @@ const apiRoutes = [
   {
     path: '/shippingdetails',
     route: ShippingDetailsRoutes,
+  },
+  {
+    path: '/discount',
+    route: DiscountRoutes,
   },
 ];
 

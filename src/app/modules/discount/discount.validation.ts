@@ -10,13 +10,13 @@ const createDiscountZodSchema = z.object({
       required_error: 'code is required',
       invalid_type_error: 'code should be type string',
     }),
-    startDate: z.date({
+    startDate: z.string({
       required_error: 'startDate is required',
-      invalid_type_error: 'startDate should be type date',
+      invalid_type_error: 'startDate should be type string',
     }),
-    endDate: z.date({
+    endDate: z.string({
       required_error: 'endDate is required',
-      invalid_type_error: 'endDate should be type date',
+      invalid_type_error: 'endDate should be type string',
     }),
     rate: z.number({
       required_error: 'rate is required',
@@ -34,10 +34,10 @@ const updateDiscountZodSchema = z.object({
       .string({ invalid_type_error: 'code should be type string' })
       .optional(),
     startDate: z
-      .date({ invalid_type_error: 'startDate should be type date' })
+      .string({ invalid_type_error: 'startDate should be type string' })
       .optional(),
     endDate: z
-      .date({ invalid_type_error: 'endDate should be type date' })
+      .string({ invalid_type_error: 'endDate should be type string' })
       .optional(),
     rate: z
       .number({ invalid_type_error: 'rate should be type number' })

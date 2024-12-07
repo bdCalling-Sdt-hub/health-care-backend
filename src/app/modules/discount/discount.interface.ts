@@ -6,6 +6,7 @@ export type IDiscount = {
   startDate: Date;
   endDate: Date;
   rate: number;
+  stripeCouponId?: string;
 };
 
 export type DiscountModel = Model<IDiscount>;

@@ -2,9 +2,18 @@ import { StatusCodes } from 'http-status-codes';
 import ApiError from '../../../errors/ApiError';
 import { Discount } from './discount.model';
 import { IDiscount } from './discount.interface';
+import { calculateRedemptionTime } from '../../../helpers/calculateRedemtionTime';
+import { stripeHelper } from '../../../helpers/stripeHelper';
+import stripe from '../../../config/stripe';
 
 const createDiscount = async (payload: IDiscount): Promise<IDiscount> => {
-  const result = await Discount.create(payload);
+  console.log(payload);
+  const redemptionTime = calculateRedemptionTime(
+    new Date().toString(),
+    payload.endDate.toString()
+  );
+  const data = await stripeHelper.createCoupon(payload.rate, 1, redemptionTime);
+  const result = await Discount.create({ stripeCouponId: data.id, ...payload });
   if (!result) {
     throw new ApiError(StatusCodes.BAD_REQUEST, 'Failed to create discount!');
   }
