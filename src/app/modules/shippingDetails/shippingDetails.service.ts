@@ -33,7 +33,12 @@ const getAllShippingDetailss = async (
   delete queryFields.page;
   delete queryFields.limit;
   queryBuilder.find(queryFields);
-  return await queryBuilder;
+  const result = await queryBuilder.populate({
+    path: 'pharmecy',
+    select: 'pharmecyName location',
+  });
+
+  return result;
 };
 
 const getShippingDetailsById = async (
