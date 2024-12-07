@@ -52,29 +52,17 @@ const getDiscountById = async (id: string): Promise<IDiscount | null> => {
   return result;
 };
 
-const updateDiscount = async (
-  id: string,
-  payload: IDiscount
-): Promise<IDiscount | null> => {
-  false;
-  const isExistDiscount = await getDiscountById(id);
-  if (!isExistDiscount) {
-    throw new ApiError(StatusCodes.BAD_REQUEST, 'Discount not found!');
-  }
-  false;
-  const result = await Discount.findByIdAndUpdate(id, payload, { new: true });
-  if (!result) {
-    throw new ApiError(StatusCodes.BAD_REQUEST, 'Failed to update discount!');
-  }
-  return result;
-};
-
 const deleteDiscount = async (id: string): Promise<IDiscount | null> => {
   const isExistDiscount = await getDiscountById(id);
   if (!isExistDiscount) {
     throw new ApiError(StatusCodes.BAD_REQUEST, 'Discount not found!');
   }
-  false;
+  const deleteCoupon = await stripe.coupons.del(
+    isExistDiscount.stripeCouponId as string
+  );
+  if (!deleteCoupon) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, 'Failed to delete discount!');
+  }
   const result = await Discount.findByIdAndDelete(id);
   if (!result) {
     throw new ApiError(StatusCodes.BAD_REQUEST, 'Failed to delete discount!');
@@ -86,6 +74,5 @@ export const DiscountService = {
   createDiscount,
   getAllDiscounts,
   getDiscountById,
-  updateDiscount,
   deleteDiscount,
 };

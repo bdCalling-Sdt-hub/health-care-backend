@@ -15,12 +15,7 @@ router.post(
 );
 router.get('/', DiscountController.getAllDiscounts);
 router.get('/:id', DiscountController.getDiscountById);
-router.patch(
-  '/:id',
-  auth(...rolesOfAccess),
-  validateRequest(DiscountValidation.updateDiscountZodSchema),
-  DiscountController.updateDiscount
-);
+
 router.delete(
   '/:id',
   auth(...rolesOfAccess),
