@@ -19,7 +19,7 @@ const createMedicine = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getAllMedicines = catchAsync(async (req: Request, res: Response) => {
-  const query = req.query;
+  const query: Record<string, any> = req.query;
 
   const result = await MedicineService.getAllMedicines(query);
   sendResponse(res, {

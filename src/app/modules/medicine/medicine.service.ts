@@ -15,7 +15,7 @@ const createMedicine = async (payload: IMedicine): Promise<IMedicine> => {
 };
 
 const getAllMedicines = async (
-  queryFields: Record<string, number>
+  queryFields: Record<string, any>
 ): Promise<IMedicine[]> => {
   const { search, page, limit } = queryFields;
   const query = search
