@@ -9,30 +9,7 @@ const createPaymentLink = async (product: Stripe.Product) => {
         quantity: 1,
       },
     ],
-    allow_promotion_codes: true,
-    payment_method_types: ['card', 'us_bank_account'],
-    after_completion: {
-      type: 'redirect',
-      redirect: {
-        url: 'http://medspaceconnect.com',
-      },
-    },
-    custom_fields: [
-      {
-        key: 'payment_method',
-        label: {
-          type: 'custom',
-          custom: 'Preferred Payment Method',
-        },
-        type: 'dropdown',
-        dropdown: {
-          options: [
-            { label: 'Credit Card (Visa)', value: 'visa' },
-            { label: 'Bank Transfer', value: 'bank_transfer' },
-          ],
-        },
-      },
-    ],
+    payment_method_types: ['card'],
   });
 
   return paymentLink.url;
@@ -46,7 +23,7 @@ const createStripeProduct = async (
     name,
     description,
     default_price_data: {
-      currency: 'usd',
+      currency: 'eur',
       unit_amount: price * 100,
     },
   });

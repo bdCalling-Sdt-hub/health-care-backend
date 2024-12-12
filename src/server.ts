@@ -5,6 +5,7 @@ import app from './app';
 import config from './config';
 import { socketHelper } from './helpers/socketHelper';
 import { errorLogger, logger } from './shared/logger';
+import seedProduct from './seed/seedProduct';
 
 //uncaught exception
 process.on('uncaughtException', error => {
@@ -26,7 +27,7 @@ async function main() {
         colors.yellow(`♻️  Application listening on port:${config.port}`)
       );
     });
-
+    await seedProduct();
     //socket
     const io = new Server(server, {
       pingTimeout: 60000,
@@ -38,6 +39,7 @@ async function main() {
     //@ts-ignore
     global.io = io;
   } catch (error) {
+    console.log(error);
     errorLogger.error(colors.red('🤢 Failed to connect Database'));
   }
 
