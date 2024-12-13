@@ -8,6 +8,7 @@ import { ShippingDetailsRoutes } from '../app/modules/shippingDetails/shippingDe
 import { DiscountRoutes } from '../app/modules/discount/discount.route';
 import { ProductRoutes } from '../app/modules/product/product.route';
 import { ArticleRoutes } from '../app/modules/article/article.route';
+import { FaqRoutes } from '../app/modules/faq/faq.route';
 const router = express.Router();
 
 const apiRoutes = [
@@ -46,6 +47,10 @@ const apiRoutes = [
   {
     path: '/consultation',
     route: ProductRoutes,
+  },
+  {
+    path: '/faq',
+    route: FaqRoutes,
   },
 ];
 
