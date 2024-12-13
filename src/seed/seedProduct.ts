@@ -1,12 +1,11 @@
 import { Product } from '../app/modules/product/product.model';
 import { stripeHelper } from '../helpers/stripeHelper';
-
+export const productData = {
+  name: 'Consultation Service',
+  description: 'A consultation service to help you get better',
+  price: 25,
+};
 export default async function seedProduct() {
-  const productData = {
-    name: 'Consultation Service',
-    description: 'A consultation service to help you get better',
-    price: 25,
-  };
   const isExistProduct = await Product.findOne({ name: productData.name });
   if (isExistProduct) {
     return {};

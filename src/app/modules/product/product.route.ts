@@ -13,14 +13,6 @@ router.post(
   validateRequest(ProductValidation.createProductZodSchema),
   ProductController.createProduct
 );
-router.get('/', ProductController.getAllProducts);
-router.get('/:id', ProductController.getProductById);
-router.patch(
-  '/:id',
-  auth(...rolesOfAccess),
-  validateRequest(ProductValidation.updateProductZodSchema),
-  ProductController.updateProduct
-);
-router.delete('/:id', auth(...rolesOfAccess), ProductController.deleteProduct);
+router.get('/link', ProductController.getProductById);
 
 export const ProductRoutes = router;
