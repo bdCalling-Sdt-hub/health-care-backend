@@ -4,8 +4,14 @@ import { StatusCodes } from 'http-status-codes';
 import globalErrorHandler from './app/middlewares/globalErrorHandler';
 import router from './routes';
 import { Morgan } from './shared/morgen';
+import handleStripeWebhook from './webhook/handleStripeWebhook';
 const app = express();
-
+// Stripe webhook route with raw body parsing
+app.post(
+  '/api/stripe/webhook',
+  express.raw({ type: 'application/json' }),
+  handleStripeWebhook
+);
 //morgan
 app.use(Morgan.successHandler);
 app.use(Morgan.errorHandler);

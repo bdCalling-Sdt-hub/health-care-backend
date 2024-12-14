@@ -15,6 +15,7 @@ export default {
   stripe: {
     secret_key: process.env.STRIPE_SECRET_KEY,
     publishable_key: process.env.STRIPE_PUBLISHABLE_KEY,
+    webhook_secret: process.env.STRIPE_WEBHOOK_SECRET,
   },
   email: {
     from: process.env.EMAIL_FROM,
