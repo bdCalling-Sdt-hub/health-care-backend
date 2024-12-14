@@ -6,10 +6,7 @@ import ApiError from '../errors/ApiError';
 import { StatusCodes } from 'http-status-codes';
 import { logger } from '../shared/logger';
 import colors from 'colors';
-import { handleSubscriptionCreated } from '../handlers/handleSubscriptionCreated';
-import { handleSubscriptionUpdated } from '../handlers/handleSubscriptionUpdated';
-import { handleSubscriptionDeleted } from '../handlers/handleSubscriptionDeleted';
-import { handleAccountUpdatedEvent } from '../handlers/handleAccountUpdatedEvent';
+import { handleCheckoutCompleted } from '../handlers/handleCheckoutCompleted';
 
 const handleStripeWebhook = async (req: Request, res: Response) => {
   console.log(req.headers);
@@ -47,18 +44,8 @@ const handleStripeWebhook = async (req: Request, res: Response) => {
   try {
     switch (eventType) {
       case 'customer.subscription.created':
-        await handleSubscriptionCreated(data as Stripe.Subscription);
+        await handleCheckoutCompleted(data as Stripe.Subscription);
         break;
-      case 'customer.subscription.updated':
-        await handleSubscriptionUpdated(data as Stripe.Subscription);
-        break;
-      case 'customer.subscription.deleted':
-        await handleSubscriptionDeleted(data as Stripe.Subscription);
-        break;
-      case 'account.updated':
-        await handleAccountUpdatedEvent(data as Stripe.Account);
-        break;
-
       default:
         // Log unhandled event types
         logger.warn(colors.bgGreen.bold(`Unhandled event type: ${eventType}`));
