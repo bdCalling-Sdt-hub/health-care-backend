@@ -17,6 +17,10 @@ export default {
     publishable_key: process.env.STRIPE_PUBLISHABLE_KEY,
     webhook_secret: process.env.STRIPE_WEBHOOK_SECRET,
   },
+  admin: {
+    email: process.env.ADMIN_EMAIL,
+    password: process.env.ADMIN_PASSWORD,
+  },
   email: {
     from: process.env.EMAIL_FROM,
     user: process.env.EMAIL_USER,
