@@ -1,4 +1,4 @@
-import { Product } from '../app/modules/product/product.model';
+import { Product } from '../app/modules/consultation/consultationProduct/product.model';
 import { stripeHelper } from '../helpers/stripeHelper';
 export const productData = {
   name: 'Consultation Service',

@@ -2,6 +2,7 @@ import { StatusCodes } from 'http-status-codes';
 import ApiError from '../../../errors/ApiError';
 import { Consultation } from './consultation.model';
 import { IConsultation } from './consultation.interface';
+import { ProductService } from './consultationProduct/product.service';
 const createConsultation = async (
   payload: IConsultation
 ): Promise<IConsultation> => {
@@ -12,7 +13,9 @@ const createConsultation = async (
       'Failed to create consultation!'
     );
   }
-  return result;
+  const consultationLink = await ProductService.getConsultationLink();
+
+  return consultationLink;
 };
 export const ConsultationService = {
   createConsultation,

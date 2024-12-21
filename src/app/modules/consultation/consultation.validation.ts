@@ -24,6 +24,7 @@ const createConsultationZodSchema = z.object({
         invalid_type_error: 'medicins should be type string',
       })
     ),
+
     status: z
       .string({
         required_error: 'status is required',

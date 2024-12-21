@@ -1,8 +1,8 @@
 import { StatusCodes } from 'http-status-codes';
-import ApiError from '../../../errors/ApiError';
+import ApiError from '../../../../errors/ApiError';
 import { Product } from './product.model';
 import { IProduct } from './product.interface';
-import { productData } from '../../../seed/seedProduct';
+import { productData } from '../../../../seed/seedProduct';
 
 const createProduct = async (payload: IProduct): Promise<IProduct> => {
   const result = await Product.create(payload);
@@ -12,7 +12,7 @@ const createProduct = async (payload: IProduct): Promise<IProduct> => {
   return result;
 };
 
-const getProductById = async (): Promise<any> => {
+const getConsultationLink = async (): Promise<any> => {
   const result = await Product.findOne({ name: productData.name });
   if (!result) {
     throw new ApiError(StatusCodes.BAD_REQUEST, 'Product not found!');
@@ -22,5 +22,5 @@ const getProductById = async (): Promise<any> => {
 
 export const ProductService = {
   createProduct,
-  getProductById,
+  getConsultationLink,
 };

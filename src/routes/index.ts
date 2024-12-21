@@ -6,9 +6,9 @@ import { SubCategoryRoutes } from '../app/modules/subCategory/subCategory.route'
 import { MedicineRoutes } from '../app/modules/medicine/medicine.route';
 import { ShippingDetailsRoutes } from '../app/modules/shippingDetails/shippingDetails.route';
 import { DiscountRoutes } from '../app/modules/discount/discount.route';
-import { ProductRoutes } from '../app/modules/product/product.route';
 import { ArticleRoutes } from '../app/modules/article/article.route';
 import { FaqRoutes } from '../app/modules/faq/faq.route';
+import { ConsultationRoutes } from '../app/modules/consultation/consultation.route';
 const router = express.Router();
 
 const apiRoutes = [
@@ -46,7 +46,7 @@ const apiRoutes = [
   },
   {
     path: '/consultation',
-    route: ProductRoutes,
+    route: ConsultationRoutes,
   },
   {
     path: '/faq',
