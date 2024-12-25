@@ -15,11 +15,18 @@ const createFaq = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getAllFaqs = catchAsync(async (req: Request, res: Response) => {
-  const result = await FaqService.getAllFaqs();
+  const query = req.query;
+  const result = await FaqService.getAllFaqs(query);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     success: true,
     message: 'Faqs fetched successfully',
+    pagination: {
+      limit: Number(query.limit) || 10,
+      page: Number(query.page) || 1,
+      total: result.length,
+      totalPage: Math.ceil(result.length / (Number(query.limit) || 10)),
+    },
     data: result,
   });
 });

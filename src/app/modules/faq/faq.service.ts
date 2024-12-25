@@ -11,13 +11,14 @@ const createFaq = async (payload: IFaq): Promise<IFaq> => {
   return result;
 };
 
-const getAllFaqs = async (): Promise<IFaq[]> => {
-  const result = Faq.find();
+const getAllFaqs = async (query: any): Promise<IFaq[]> => {
+  const result = await Faq.find()
+    .limit(Number(query.limit) || 10)
+    .skip(Number(query.page) || 0);
   if (!result) {
-    throw new ApiError(StatusCodes.BAD_REQUEST, 'There is not FAQ');
+    throw new ApiError(StatusCodes.BAD_REQUEST, 'Failed to fetch faqs!');
   }
-
-  return await result;
+  return result;
 };
 
 const getFaqById = async (id: string): Promise<IFaq | null> => {
