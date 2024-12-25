@@ -7,6 +7,9 @@ export type IConsultation = {
   category: Types.ObjectId;
   subCategory: Types.ObjectId;
   medicins: [Types.ObjectId];
+  consultationType?: string;
+  pdfFile: string;
+  link?: string;
   status?: string;
   doctorId?: Types.ObjectId;
 };

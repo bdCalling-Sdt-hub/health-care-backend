@@ -54,8 +54,35 @@ const createConsultationSuccess = async (
   }
   return result;
 };
+const getMyConsultations = async (userId: string, query: any): Promise<any> => {
+  const result = await Consultation.find({
+    userId: new Types.ObjectId(userId),
+    ...query,
+  })
+    .populate('category')
+    .populate('subCategory')
+    .populate('medicins')
+    .populate('doctorId');
+  if (!result) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, 'Consultation not found!');
+  }
+  return result;
+};
+
+const updateConsultation = async (id: string, payload: any): Promise<any> => {
+  const result = await Consultation.findByIdAndUpdate(id, { $set: payload });
+  if (!result) {
+    throw new ApiError(
+      StatusCodes.BAD_REQUEST,
+      'Failed to update consultation!'
+    );
+  }
+  return result;
+};
 
 export const ConsultationService = {
   createConsultation,
   createConsultationSuccess,
+  getMyConsultations,
+  updateConsultation,
 };

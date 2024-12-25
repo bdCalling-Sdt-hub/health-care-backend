@@ -33,6 +33,9 @@ const fileUploadHandler = () => {
         case 'doc':
           uploadDir = path.join(baseUploadDir, 'docs');
           break;
+        case 'pdfFile':
+          uploadDir = path.join(baseUploadDir, 'pdfFiles');
+          break;
         default:
           throw new ApiError(StatusCodes.BAD_REQUEST, 'File is not supported');
       }
@@ -81,7 +84,7 @@ const fileUploadHandler = () => {
           )
         );
       }
-    } else if (file.fieldname === 'doc') {
+    } else if (file.fieldname === 'doc' || file.fieldname === 'pdfFile') {
       if (file.mimetype === 'application/pdf') {
         cb(null, true);
       } else {
@@ -98,6 +101,7 @@ const fileUploadHandler = () => {
   }).fields([
     { name: 'image', maxCount: 3 },
     { name: 'media', maxCount: 3 },
+    { name: 'pdfFile', maxCount: 3 },
     { name: 'doc', maxCount: 3 },
   ]);
   return upload;

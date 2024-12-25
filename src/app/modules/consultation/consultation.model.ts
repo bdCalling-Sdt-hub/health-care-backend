@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 import { IConsultation, ConsultationModel } from './consultation.interface';
-import { STATUS } from '../../../enums/consultation';
+import { CONSULTATION_TYPE, STATUS } from '../../../enums/consultation';
 
 const consultationSchema = new Schema<IConsultation, ConsultationModel>(
   {
@@ -27,6 +27,13 @@ const consultationSchema = new Schema<IConsultation, ConsultationModel>(
       type: Schema.Types.ObjectId,
       ref: 'SubCategory',
       required: true,
+    },
+    pdfFile: { type: String, required: false },
+    link: { type: String, required: false },
+    consultationType: {
+      type: String,
+      enum: Object.values(CONSULTATION_TYPE),
+      required: false,
     },
     doctorId: { type: Schema.Types.ObjectId, ref: 'User', required: false },
   },

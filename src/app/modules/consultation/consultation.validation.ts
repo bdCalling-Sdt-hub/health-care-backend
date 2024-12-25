@@ -36,6 +36,10 @@ const createConsultationZodSchema = z.object({
       required_error: 'subCategory is required',
       invalid_type_error: 'subCategory should be type string',
     }),
+    consultationType: z.string({
+      required_error: 'consultationType is required',
+      invalid_type_error: 'consultationType should be type string',
+    }),
   }),
 });
 

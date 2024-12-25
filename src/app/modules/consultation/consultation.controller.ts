@@ -35,7 +35,33 @@ const createConsultationSuccess = catchAsync(
     });
   }
 );
+const getMyConsultations = catchAsync(async (req: Request, res: Response) => {
+  const userId = req.user?.id;
+  const query = req.query;
+  const result = await ConsultationService.getMyConsultations(userId, query);
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'Consultations fetched successfully',
+    data: result,
+  });
+});
+const updateConsultation = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  if (req.files && 'pdfFile' in req.files && req.files.pdfFile) {
+    req.body.pdfFile = `/uploads/pdfFiles/${req.files.pdfFile[0].filename}`;
+  }
+  const result = await ConsultationService.updateConsultation(id, req.body);
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'Consultation updated successfully',
+    data: result,
+  });
+});
 export const ConsultationController = {
   createConsultation,
   createConsultationSuccess,
+  getMyConsultations,
+  updateConsultation,
 };
