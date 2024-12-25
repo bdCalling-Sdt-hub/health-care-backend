@@ -9,10 +9,11 @@ import { DiscountRoutes } from '../app/modules/discount/discount.route';
 import { ArticleRoutes } from '../app/modules/article/article.route';
 import { FaqRoutes } from '../app/modules/faq/faq.route';
 import { ConsultationRoutes } from '../app/modules/consultation/consultation.route';
+import { AboutRoutes } from '../app/modules/about/about.route';
 const router = express.Router();
 
 const apiRoutes = [
-  {
+{
     path: '/user',
     route: UserRoutes,
   },
@@ -52,6 +53,10 @@ const apiRoutes = [
     path: '/faq',
     route: FaqRoutes,
   },
+  {
+    path: '/about',
+    route: AboutRoutes,
+  }
 ];
 
 apiRoutes.forEach(route => router.use(route.path, route.route));
