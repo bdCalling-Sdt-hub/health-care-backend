@@ -11,10 +11,11 @@ import { FaqRoutes } from '../app/modules/faq/faq.route';
 import { ConsultationRoutes } from '../app/modules/consultation/consultation.route';
 import { AboutRoutes } from '../app/modules/about/about.route';
 import { ReviewRoutes } from '../app/modules/review/review.route';
+import { InfoRoutes } from '../app/modules/info/info.route';
 const router = express.Router();
 
 const apiRoutes = [
-  {
+{
     path: '/user',
     route: UserRoutes,
   },
@@ -62,6 +63,10 @@ const apiRoutes = [
     path: '/review',
     route: ReviewRoutes,
   },
+  {
+    path: '/info',
+    route: InfoRoutes,
+  }
 ];
 
 apiRoutes.forEach(route => router.use(route.path, route.route));
