@@ -26,7 +26,10 @@ const getAllReviews = async (
   delete queryFields.search;
   delete queryFields.page;
   delete queryFields.limit;
-  queryBuilder.find(queryFields);
+  queryBuilder.find(queryFields).populate({
+    path: 'user',
+    select: 'name email profile',
+  });
   return await queryBuilder;
 };
 

@@ -13,10 +13,11 @@ import { AboutRoutes } from '../app/modules/about/about.route';
 import { ReviewRoutes } from '../app/modules/review/review.route';
 import { InfoRoutes } from '../app/modules/info/info.route';
 import { SubscriberRoutes } from '../app/modules/subscriber/subscriber.route';
+import { MessageRoutes } from '../app/modules/message/message.route';
 const router = express.Router();
 
 const apiRoutes = [
-{
+  {
     path: '/user',
     route: UserRoutes,
   },
@@ -71,6 +72,10 @@ const apiRoutes = [
   {
     path: '/subscriber',
     route: SubscriberRoutes,
+  },
+  {
+    path: '/message',
+    route: MessageRoutes,
   },
 ];
 
