@@ -1,4 +1,4 @@
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { GENDER, USER_ROLES } from '../../../enums/user';
 
 export type IUser = {
@@ -9,7 +9,7 @@ export type IUser = {
   email: string;
   password: string;
   location: string;
-  doctorType?: string;
+  subCategory: Types.ObjectId;
   gender: GENDER;
   profile?: string;
   dateOfBirth?: string;

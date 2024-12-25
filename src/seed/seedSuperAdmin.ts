@@ -3,7 +3,6 @@ import { User } from '../app/modules/user/user.model';
 import config from '../config';
 import { USER_ROLES } from '../enums/user';
 import { logger } from '../shared/logger';
-import { IUser } from '../app/modules/user/user.interface';
 
 const superUser: any = {
   firstName: 'SUPER',

@@ -31,6 +31,8 @@ const getAllArticles = async (
 
   if (page && limit) {
     queryBuilder = queryBuilder.skip((page - 1) * limit).limit(limit);
+  } else {
+    queryBuilder = queryBuilder.skip((1 - 1) * 10).limit(10);
   }
   delete queryFields.search;
   delete queryFields.page;

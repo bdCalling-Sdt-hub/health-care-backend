@@ -22,6 +22,12 @@ const consultationSchema = new Schema<IConsultation, ConsultationModel>(
       required: false,
       default: STATUS.PENDING,
     },
+    category: { type: Schema.Types.ObjectId, ref: 'Category', required: true },
+    subCategory: {
+      type: Schema.Types.ObjectId,
+      ref: 'SubCategory',
+      required: true,
+    },
     doctorId: { type: Schema.Types.ObjectId, ref: 'User', required: false },
   },
   { timestamps: true }

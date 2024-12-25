@@ -27,8 +27,9 @@ const userSchema = new Schema<IUser, UserModal>(
       unique: true,
       lowercase: true,
     },
-    doctorType: {
-      type: String,
+    subCategory: {
+      type: Schema.Types.ObjectId,
+      ref: 'SubCategory',
       required: false,
     },
     gender: {

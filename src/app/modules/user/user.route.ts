@@ -17,6 +17,7 @@ router.get(
     USER_ROLES.USER,
     USER_ROLES.DOCTOR,
     USER_ROLES.PHARMACY,
+    USER_ROLES.SUPERADMIN,
     USER_ROLES.USER
   ),
   UserController.getUserProfile

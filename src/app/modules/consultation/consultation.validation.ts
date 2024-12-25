@@ -14,10 +14,7 @@ const createConsultationZodSchema = z.object({
         }),
       })
     ),
-    userId: z.string({
-      required_error: 'userId is required',
-      invalid_type_error: 'userId should be type string',
-    }),
+
     medicins: z.array(
       z.string({
         required_error: 'medicins is required',
@@ -25,18 +22,20 @@ const createConsultationZodSchema = z.object({
       })
     ),
 
-    status: z
-      .string({
-        required_error: 'status is required',
-        invalid_type_error: 'status should be type string',
-      })
-      .optional(),
     doctorId: z
       .string({
         required_error: 'doctorId is required',
         invalid_type_error: 'doctorId should be type string',
       })
       .optional(),
+    category: z.string({
+      required_error: 'category is required',
+      invalid_type_error: 'category should be type string',
+    }),
+    subCategory: z.string({
+      required_error: 'subCategory is required',
+      invalid_type_error: 'subCategory should be type string',
+    }),
   }),
 });
 

@@ -11,6 +11,7 @@ import { USER_ROLES } from '../../../../enums/user';
 const addDoctor = catchAsync(async (req: Request, res: Response) => {
   const doctorData = {
     role: USER_ROLES.DOCTOR,
+    verified: true,
     ...req.body,
   };
   const result = await HelperService.addDataToDB(doctorData, User);

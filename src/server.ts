@@ -5,7 +5,6 @@ import app from './app';
 import config from './config';
 import { socketHelper } from './helpers/socketHelper';
 import { errorLogger, logger } from './shared/logger';
-import seedProduct from './seed/seedProduct';
 import seedSuperAdmin from './seed/seedSuperAdmin';
 
 //uncaught exception
@@ -28,7 +27,6 @@ async function main() {
         colors.yellow(`♻️  Application listening on port:${config.port}`)
       );
     });
-    await seedProduct();
     //socket
     const io = new Server(server, {
       pingTimeout: 60000,

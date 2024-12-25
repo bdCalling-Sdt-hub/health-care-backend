@@ -1,6 +1,30 @@
 import Stripe from 'stripe';
 import stripe from '../config/stripe';
-// Product Related Functions
+const createCheckoutSession = async (userId: string, id: string) => {
+  const session = await stripe.checkout.sessions.create({
+    payment_method_types: ['card'],
+    line_items: [
+      {
+        price_data: {
+          currency: 'eur',
+          product_data: {
+            name: 'Consultation service.',
+            description: 'Consultation service from dokter for you',
+          },
+          unit_amount: 2500,
+        },
+        quantity: 1,
+      },
+    ],
+    mode: 'payment',
+    success_url: `${process.env.FRONTEND}/checkout/success?session_id={CHECKOUT_SESSION_ID}&id=${id}`,
+    cancel_url: `${process.env.FRONTEND}/checkout/cancel`,
+    metadata: {
+      userId,
+    },
+  });
+  return session;
+};
 const createPaymentLink = async (product: Stripe.Product) => {
   const paymentLink = await stripe.paymentLinks.create({
     line_items: [
@@ -78,4 +102,5 @@ export const stripeHelper = {
   createPromotionCode,
   deleteCoupon,
   createStripeProduct,
+  createCheckoutSession,
 };

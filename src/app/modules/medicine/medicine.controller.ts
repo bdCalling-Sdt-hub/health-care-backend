@@ -26,6 +26,12 @@ const getAllMedicines = catchAsync(async (req: Request, res: Response) => {
     statusCode: StatusCodes.OK,
     success: true,
     message: 'Medicines fetched successfully',
+    pagination: {
+      limit: Number(query.limit) || 10,
+      page: Number(query.page) || 1,
+      total: result.length,
+      totalPage: Math.ceil(result.length / (Number(query.limit) || 10)),
+    },
     data: result,
   });
 });
