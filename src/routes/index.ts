@@ -14,6 +14,7 @@ import { ReviewRoutes } from '../app/modules/review/review.route';
 import { InfoRoutes } from '../app/modules/info/info.route';
 import { SubscriberRoutes } from '../app/modules/subscriber/subscriber.route';
 import { MessageRoutes } from '../app/modules/message/message.route';
+import { PdfRouter } from '../app/modules/pdf/pdf.route';
 const router = express.Router();
 
 const apiRoutes = [
@@ -76,6 +77,10 @@ const apiRoutes = [
   {
     path: '/message',
     route: MessageRoutes,
+  },
+  {
+    path: '/pdf',
+    route: PdfRouter,
   },
 ];
 
