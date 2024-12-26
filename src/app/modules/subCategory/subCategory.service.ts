@@ -34,7 +34,8 @@ const getAllSubCategorys = async (
         ],
       }
     : {};
-  let queryBuilder = SubCategory.find(query, queryFields);
+
+  let queryBuilder = SubCategory.find({ ...query, ...queryFields });
 
   if (page && limit) {
     queryBuilder = queryBuilder.skip((page - 1) * limit).limit(limit);
