@@ -55,6 +55,8 @@ const createConsultationSuccess = async (
   return result;
 };
 const getMyConsultations = async (userId: string, query: any): Promise<any> => {
+  console.log(query);
+
   const result = await Consultation.find({
     userId: new Types.ObjectId(userId),
     ...query,
@@ -64,7 +66,9 @@ const getMyConsultations = async (userId: string, query: any): Promise<any> => {
     .populate('medicins')
     .populate('doctorId')
     .skip(Number(query.limit) * (Number(query.page) - 1));
-  if (!result) {
+
+  console.log('data', result);
+  if (!result.length) {
     throw new ApiError(StatusCodes.BAD_REQUEST, 'Consultation not found!');
   }
   return result;
