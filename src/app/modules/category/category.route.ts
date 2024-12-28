@@ -2,8 +2,6 @@ import express from 'express';
 import { CategoryController } from './category.controller';
 import { USER_ROLES } from '../../../enums/user';
 import auth from '../../middlewares/auth';
-import validateRequest from '../../middlewares/validateRequest';
-import { CategoryValidation } from './category.validation';
 import fileUploadHandler from '../../middlewares/fileUploadHandler';
 
 const router = express.Router();
@@ -27,5 +25,4 @@ router.delete(
   auth(USER_ROLES.ADMIN, USER_ROLES.SUPERADMIN),
   CategoryController.deleteCategory
 );
-
 export const CategoryRoutes = router;

@@ -15,10 +15,11 @@ import { InfoRoutes } from '../app/modules/info/info.route';
 import { SubscriberRoutes } from '../app/modules/subscriber/subscriber.route';
 import { MessageRoutes } from '../app/modules/message/message.route';
 import { PdfRouter } from '../app/modules/pdf/pdf.route';
+import { NotificationRoutes } from '../app/modules/notification/notification.route';
 const router = express.Router();
 
 const apiRoutes = [
-  {
+{
     path: '/user',
     route: UserRoutes,
   },
@@ -81,6 +82,10 @@ const apiRoutes = [
   {
     path: '/pdf',
     route: PdfRouter,
+  },
+  {
+    path: '/notification',
+    route: NotificationRoutes,
   },
 ];
 
