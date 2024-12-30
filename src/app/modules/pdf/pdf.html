@@ -12,8 +12,15 @@
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
     body {
-      background-color: #eef9ff;
-      padding: 20px;
+      background-image: url("https://res.cloudinary.com/dulgs9eba/image/upload/v1735533787/Untitled_design_zrnqak.png");
+      background-size: 800px 1000px;
+      background-position: center;
+      background-repeat: no-repeat;
+      
+      padding-top: 20px;
+      padding-left: 20px;
+      padding-right: 20px;
+      padding-bottom: 10px;
       min-height: 100vh;
       display: flex;
       align-items: center;
@@ -106,7 +113,6 @@
     }
     .footer {
       padding: 15px;
-      background: rgba(0, 112, 192, 0.08);
       border-radius: 10px;
     }
     .pdf-image{
@@ -131,7 +137,7 @@
       font-size: 12px;
       color: #555;
       padding: 10px;
-      background: rgba(64, 180, 170, 0.08);
+      background: rgb(255, 255, 255);
       border-radius: 10px;
       border: 1px solid rgba(64, 180, 170, 0.2);
       margin-top: 10px;
@@ -139,7 +145,11 @@
     @media print {
       body {
         padding: 0;
-        background: white;
+        margin: 0;
+        background-image: url("https://res.cloudinary.com/dulgs9eba/image/upload/v1735533787/Untitled_design_zrnqak.png");
+        background-size: 800px 1140px;
+        background-position: center;
+        background-repeat: no-repeat;
       }
       .prescription-form {
         box-shadow: none;
@@ -154,8 +164,12 @@
       <path fill="#40B4AA" fill-opacity="0.4" d="M0,120 C480,200 960,120 1440,120 L1440,0 L0,0 Z"></path>
     </svg> -->
     <div class="logo-section">
-      <img src="./pdf.png" class="pdf-image" alt="" srcset="">
+      <img src="https://res.cloudinary.com/dulgs9eba/image/upload/v1735388552/pdf_o25ezj.png" class="pdf-image" alt="" srcset="">
     </div>
+    <br>
+    <br>
+    <br>
+    <br>
     <div class="info-grid">
       <div>
         <div class="info-item">
@@ -174,7 +188,7 @@
       <div>
         <div class="info-item">
           <span class="info-label">Type of Prescription:</span>
-          <div class="info-value">General Medicine</div>
+          <div class="info-value">Copy</div>
         </div>
         <div class="info-item">
           <span class="info-label">Date of Birth:</span>

@@ -57,6 +57,10 @@ const createMedicineZodSchema = z.object({
     required_error: 'addedBy is required',
     invalid_type_error: 'addedBy should be type objectID or string',
   }),
+  category: z.string({
+    required_error: 'category is required',
+    invalid_type_error: 'category should be type string',
+  }),
 });
 
 const updateMedicineZodSchema = z.object({

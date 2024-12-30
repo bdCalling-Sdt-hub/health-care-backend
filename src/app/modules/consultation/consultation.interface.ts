@@ -12,5 +12,13 @@ export type IConsultation = {
   link?: string;
   status?: string;
   doctorId?: Types.ObjectId;
+  address?: {
+    firstname: string;
+    lastname: string;
+    streetAndHouseNo: string;
+    postalCode: string;
+    country: string;
+    place: string;
+  };
 };
 export type ConsultationModel = Model<IConsultation>;

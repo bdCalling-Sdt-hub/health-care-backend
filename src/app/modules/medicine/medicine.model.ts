@@ -31,6 +31,11 @@ const medicineSchema = new Schema<IMedicine, MedicineModel>(
       type: String,
       required: true,
     },
+    category: {
+      type: Schema.Types.ObjectId,
+      ref: 'Category',
+      required: true,
+    },
     form: {
       type: String,
       required: true,

@@ -36,6 +36,35 @@ const consultationSchema = new Schema<IConsultation, ConsultationModel>(
       required: false,
     },
     doctorId: { type: Schema.Types.ObjectId, ref: 'User', required: false },
+    address: {
+      type: {
+        firstname: {
+          type: String,
+          required: true,
+        },
+        lastname: {
+          type: String,
+          required: true,
+        },
+        streetAndHouseNo: {
+          type: String,
+          required: true,
+        },
+        postalCode: {
+          type: String,
+          required: true,
+        },
+        country: {
+          type: String,
+          required: true,
+        },
+        place: {
+          type: String,
+          required: true,
+        },
+      },
+      required: false,
+    },
   },
   { timestamps: true }
 );

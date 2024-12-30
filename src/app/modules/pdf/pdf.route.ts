@@ -9,8 +9,7 @@ const router = express.Router();
 
 router.post('/generate-pdf', async (req, res) => {
   try {
-    const htmlContent = `
-   <!DOCTYPE html>
+    const htmlContent = `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -24,8 +23,15 @@ router.post('/generate-pdf', async (req, res) => {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
     body {
-      background-color: #eef9ff;
-      padding: 20px;
+      background-image: url("https://res.cloudinary.com/dulgs9eba/image/upload/v1735533787/Untitled_design_zrnqak.png");
+      background-size: 800px 1000px;
+      background-position: center;
+      background-repeat: no-repeat;
+      
+      padding-top: 20px;
+      padding-left: 20px;
+      padding-right: 20px;
+      padding-bottom: 10px;
       min-height: 100vh;
       display: flex;
       align-items: center;
@@ -110,9 +116,7 @@ router.post('/generate-pdf', async (req, res) => {
     .prescription-area {
       flex-grow: 1;
       padding: 20px;
-      background: #e6f7ff;
       border-radius: 10px;
-      border: 1px solid #b3e5fc;
       color: #005075;
       font-size: 14px;
       font-weight: bold;
@@ -120,7 +124,6 @@ router.post('/generate-pdf', async (req, res) => {
     }
     .footer {
       padding: 15px;
-      background: rgba(0, 112, 192, 0.08);
       border-radius: 10px;
     }
     .pdf-image{
@@ -145,7 +148,7 @@ router.post('/generate-pdf', async (req, res) => {
       font-size: 12px;
       color: #555;
       padding: 10px;
-      background: rgba(64, 180, 170, 0.08);
+      background: rgb(255, 255, 255);
       border-radius: 10px;
       border: 1px solid rgba(64, 180, 170, 0.2);
       margin-top: 10px;
@@ -153,7 +156,11 @@ router.post('/generate-pdf', async (req, res) => {
     @media print {
       body {
         padding: 0;
-        background: white;
+        margin: 0;
+        background-image: url("https://res.cloudinary.com/dulgs9eba/image/upload/v1735533787/Untitled_design_zrnqak.png");
+        background-size: 800px 1140px;
+        background-position: center;
+        background-repeat: no-repeat;
       }
       .prescription-form {
         box-shadow: none;
@@ -170,6 +177,10 @@ router.post('/generate-pdf', async (req, res) => {
     <div class="logo-section">
       <img src="https://res.cloudinary.com/dulgs9eba/image/upload/v1735388552/pdf_o25ezj.png" class="pdf-image" alt="" srcset="">
     </div>
+    <br>
+    <br>
+    <br>
+    <br>
     <div class="info-grid">
       <div>
         <div class="info-item">
@@ -188,7 +199,7 @@ router.post('/generate-pdf', async (req, res) => {
       <div>
         <div class="info-item">
           <span class="info-label">Type of Prescription:</span>
-          <div class="info-value">General Medicine</div>
+          <div class="info-value">Copy</div>
         </div>
         <div class="info-item">
           <span class="info-label">Date of Birth:</span>
@@ -223,8 +234,7 @@ router.post('/generate-pdf', async (req, res) => {
     </div>
   </div>
 </body>
-</html>
-`;
+</html>`;
 
     // Create PDF directory if not exists
     const pdfDir = path.join(process.cwd(), 'uploads', 'pdfFiles');
@@ -244,7 +254,7 @@ router.post('/generate-pdf', async (req, res) => {
     const pdf = await page.pdf({
       format: 'A4',
       printBackground: true,
-      margin: { top: '20px', right: '20px', bottom: '20px', left: '20px' },
+      margin: { top: '0px', right: '0px', bottom: '0px', left: '0px' },
     });
 
     await browser.close();

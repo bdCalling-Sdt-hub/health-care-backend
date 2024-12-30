@@ -40,6 +40,34 @@ const createConsultationZodSchema = z.object({
       required_error: 'consultationType is required',
       invalid_type_error: 'consultationType should be type string',
     }),
+    address: z
+      .object({
+        firstname: z.string({
+          required_error: 'Firstname is required',
+          invalid_type_error: 'Firstname should be a string',
+        }),
+        lastname: z.string({
+          required_error: 'Lastname is required',
+          invalid_type_error: 'Lastname should be a string',
+        }),
+        streetAndHouseNo: z.string({
+          required_error: 'Street and house number are required',
+          invalid_type_error: 'Street and house number should be a string',
+        }),
+        postalCode: z.string({
+          required_error: 'Postal code is required',
+          invalid_type_error: 'Postal code should be a string',
+        }),
+        country: z.string({
+          required_error: 'Country is required',
+          invalid_type_error: 'Country should be a string',
+        }),
+        place: z.string({
+          required_error: 'Place is required',
+          invalid_type_error: 'Place should be a string',
+        }),
+      })
+      .optional(),
   }),
 });
 
