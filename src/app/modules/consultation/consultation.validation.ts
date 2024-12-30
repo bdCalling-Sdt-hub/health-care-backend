@@ -16,9 +16,21 @@ const createConsultationZodSchema = z.object({
     ),
 
     medicins: z.array(
-      z.string({
-        required_error: 'medicins is required',
-        invalid_type_error: 'medicins should be type string',
+      z.object({
+        _id: z
+          .string({
+            required_error: '_id is required',
+            invalid_type_error: '_id must be a string',
+          })
+          .optional(),
+        count: z.number({
+          required_error: 'Count is required',
+          invalid_type_error: 'Count must be a number',
+        }),
+        total: z.string({
+          required_error: 'Total is required',
+          invalid_type_error: 'Total must be a string',
+        }),
       })
     ),
 

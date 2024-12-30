@@ -6,7 +6,13 @@ export type IConsultation = {
   userId: Types.ObjectId;
   category: Types.ObjectId;
   subCategory: Types.ObjectId;
-  medicins: [Types.ObjectId];
+  medicins?: [
+    {
+      _id: Types.ObjectId;
+      count: number;
+      total: string;
+    }
+  ];
   consultationType?: string;
   pdfFile: string;
   link?: string;

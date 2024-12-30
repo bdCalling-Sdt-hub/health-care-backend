@@ -12,9 +12,24 @@ const consultationSchema = new Schema<IConsultation, ConsultationModel>(
     ],
     userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     medicins: {
-      type: [Schema.Types.ObjectId],
-      ref: 'Medicine',
-      required: true,
+      type: [
+        {
+          _id: {
+            type: Schema.Types.ObjectId,
+            ref: 'Medicine',
+            required: true,
+          },
+          count: {
+            type: Number,
+            required: true,
+          },
+          total: {
+            type: String,
+            required: true,
+          },
+        },
+      ],
+      required: false,
     },
     status: {
       type: String,
