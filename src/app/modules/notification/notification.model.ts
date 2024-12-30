@@ -1,20 +1,17 @@
-import { model, Schema, Types } from 'mongoose';
+import { Schema, model } from 'mongoose';
 import { INotification, NotificationModel } from './notification.interface';
+import { NOTIFICATION_STATUS } from './notification.constant';
 
 const notificationSchema = new Schema<INotification, NotificationModel>(
   {
-    title: {
+    title: { type: String, required: false },
+    description: { type: String, required: true },
+    reciever: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    status: {
       type: String,
-      required: [true, 'Title is required'],
-    },
-    description: {
-      type: String,
+      enum: Object.values(NOTIFICATION_STATUS),
+      default: NOTIFICATION_STATUS.UNREAD,
       required: false,
-    },
-    recieverId: {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
-      required: [true, 'Title is required'],
     },
   },
   { timestamps: true }

@@ -1,21 +1,39 @@
 import { z } from 'zod';
 
-const sendNotificationZodSchema = z.object({
+const createNotificationZodSchema = z.object({
   body: z.object({
-    title: z.string({
-      required_error: 'Title is required',
-      invalid_type_error: 'Title must be string',
-    }),
-    description: z
-      .string({ invalid_type_error: 'Description must be string' })
+    title: z
+      .string({ invalid_type_error: 'title should be type string' })
       .optional(),
-    recieverId: z.string({
-      required_error: 'reciever id is required',
-      invalid_type_error: 'reciever id should be string',
+    description: z.string({
+      required_error: 'description is required',
+      invalid_type_error: 'description should be type string',
+    }),
+    reciever: z.string({
+      required_error: 'reciever is required',
+      invalid_type_error: 'reciever should be type objectID or string',
     }),
   }),
 });
 
+const updateNotificationZodSchema = z.object({
+  body: z.object({
+    title: z
+      .string({ invalid_type_error: 'title should be type string' })
+      .optional(),
+    description: z
+      .string({ invalid_type_error: 'description should be type string' })
+      .optional(),
+    reciever: z
+      .string({ invalid_type_error: 'reciever should be type string' })
+      .optional(),
+    status: z
+      .string({ invalid_type_error: 'status should be type string' })
+      .optional(),
+  }),
+});
+
 export const NotificationValidation = {
-  sendNotificationZodSchema,
+  createNotificationZodSchema,
+  updateNotificationZodSchema,
 };
