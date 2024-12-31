@@ -17,7 +17,7 @@ const createCheckoutSession = async (userId: string, id: string) => {
       },
     ],
     mode: 'payment',
-    success_url: `${process.env.FRONTEND}/checkout/success?session_id={CHECKOUT_SESSION_ID}&id=${id}`,
+    success_url: `${process.env.FRONTEND}/profile?session_id={CHECKOUT_SESSION_ID}&id=${id}`,
     cancel_url: `${process.env.FRONTEND}/checkout/cancel`,
     metadata: {
       userId,

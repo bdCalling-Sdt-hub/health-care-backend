@@ -63,7 +63,7 @@ const getMyConsultations = async (userId: string, query: any): Promise<any> => {
   })
     .populate('category')
     .populate('subCategory')
-    .populate('medicins')
+    .populate('medicins._id')
     .populate('doctorId')
     .skip(Number(query.limit) * (Number(query.page) - 1));
 
