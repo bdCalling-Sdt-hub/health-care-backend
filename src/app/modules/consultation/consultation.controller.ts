@@ -65,9 +65,20 @@ const updateConsultation = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+const prescribeMedicine = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const result = await ConsultationService.prescribeMedicine(id, req.body);
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'Medicine prescribed successfully',
+    data: result,
+  });
+});
 export const ConsultationController = {
   createConsultation,
   createConsultationSuccess,
   getMyConsultations,
   updateConsultation,
+  prescribeMedicine,
 };

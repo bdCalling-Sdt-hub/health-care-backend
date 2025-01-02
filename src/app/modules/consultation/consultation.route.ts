@@ -33,4 +33,9 @@ router.patch(
   fileUploadHandler(),
   ConsultationController.updateConsultation
 );
+router.patch(
+  '/prescribe/:id',
+  auth(USER_ROLES.DOCTOR),
+  ConsultationController.prescribeMedicine
+);
 export const ConsultationRoutes = router;

@@ -50,7 +50,28 @@ const consultationSchema = new Schema<IConsultation, ConsultationModel>(
       enum: Object.values(CONSULTATION_TYPE),
       required: false,
     },
+    opinion: { type: String, required: false },
     doctorId: { type: Schema.Types.ObjectId, ref: 'User', required: false },
+    suggestedMedicine: {
+      type: [
+        {
+          _id: {
+            type: Schema.Types.ObjectId,
+            ref: 'Medicine',
+            required: true,
+          },
+          count: {
+            type: Number,
+            required: true,
+          },
+          total: {
+            type: String,
+            required: true,
+          },
+        },
+      ],
+      required: false,
+    },
     address: {
       type: {
         firstname: {

@@ -33,6 +33,24 @@ const createConsultationZodSchema = z.object({
         }),
       })
     ),
+    suggestedMedicine: z.array(
+      z.object({
+        _id: z
+          .string({
+            required_error: '_id is required',
+            invalid_type_error: '_id must be a string',
+          })
+          .optional(),
+        count: z.number({
+          required_error: 'Count is required',
+          invalid_type_error: 'Count must be a number',
+        }),
+        total: z.string({
+          required_error: 'Total is required',
+          invalid_type_error: 'Total must be a string',
+        }),
+      })
+    ),
 
     doctorId: z
       .string({
@@ -44,6 +62,11 @@ const createConsultationZodSchema = z.object({
       required_error: 'category is required',
       invalid_type_error: 'category should be type string',
     }),
+    opinion: z
+      .string({
+        invalid_type_error: 'opinion should be type string',
+      })
+      .optional(),
     subCategory: z.string({
       required_error: 'subCategory is required',
       invalid_type_error: 'subCategory should be type string',

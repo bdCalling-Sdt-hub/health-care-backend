@@ -84,10 +84,20 @@ const updateConsultation = async (id: string, payload: any): Promise<any> => {
   }
   return result;
 };
-
+const prescribeMedicine = async (id: string, payload: any): Promise<any> => {
+  const result = await Consultation.findByIdAndUpdate(id, { $set: payload });
+  if (!result) {
+    throw new ApiError(
+      StatusCodes.BAD_REQUEST,
+      'Failed to update consultation!'
+    );
+  }
+  return result;
+};
 export const ConsultationService = {
   createConsultation,
   createConsultationSuccess,
   getMyConsultations,
   updateConsultation,
+  prescribeMedicine,
 };
