@@ -1,6 +1,7 @@
 import { Model } from 'mongoose';
 import ApiError from '../errors/ApiError';
 import { StatusCodes } from 'http-status-codes';
+import { User } from '../app/modules/user/user.model';
 
 const getAllDataFromDB = async (query: any, model: Model<any>) => {
   const {
@@ -72,9 +73,28 @@ const addDataToDB = async (data: any, model: Model<any>) => {
 
   return result;
 };
+
+const getWebsiteStatus = async () => {
+  const allUsers: any = await User.find();
+  const oneYearAgo = new Date(Date.now() - 1000 * 60 * 60 * 24 * 365);
+  const oneMonthAgo = new Date(Date.now() - 1000 * 60 * 60 * 24 * 30);
+  const totalUsersLastYear = allUsers.filter(
+    (user: any) => user.createdAt > oneYearAgo
+  ).length;
+  const totalUsersLastMonth = allUsers.filter(
+    (user: any) => user.createdAt > oneMonthAgo
+  ).length;
+  return {
+    totalUsers: allUsers.length,
+    totalUsersLastYear,
+    totalUsersLastMonth,
+  };
+};
+
 export const HelperService = {
   getAllDataFromDB,
   getSingleDataFromDB,
   deleteDataByIDFromDB,
   addDataToDB,
+  getWebsiteStatus,
 };

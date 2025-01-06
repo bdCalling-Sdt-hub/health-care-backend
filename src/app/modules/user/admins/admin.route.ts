@@ -17,6 +17,11 @@ router.get(
   AdminController.getAllAdmins
 );
 router.get(
+  '/status',
+  auth(USER_ROLES.SUPERADMIN, USER_ROLES.ADMIN),
+  AdminController.getWebsiteStatus
+);
+router.get(
   '/:id',
   auth(USER_ROLES.SUPERADMIN, USER_ROLES.ADMIN),
   AdminController.getSingleAdmin

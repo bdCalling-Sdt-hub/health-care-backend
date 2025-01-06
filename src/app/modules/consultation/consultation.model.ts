@@ -35,7 +35,7 @@ const consultationSchema = new Schema<IConsultation, ConsultationModel>(
       type: String,
       enum: Object.values(STATUS),
       required: false,
-      default: STATUS.PENDING,
+      default: STATUS.DRAFT,
     },
     category: { type: Schema.Types.ObjectId, ref: 'Category', required: true },
     subCategory: {

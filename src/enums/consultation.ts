@@ -1,4 +1,5 @@
 export enum STATUS {
+  DRAFT = 'draft',
   PENDING = 'pending',
   ACCEPTED = 'accepted',
   REJECTED = 'rejected',

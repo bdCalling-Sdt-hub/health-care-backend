@@ -63,9 +63,20 @@ const deleteAdmin = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+const getWebsiteStatus = catchAsync(async (req: Request, res: Response) => {
+  const result = await HelperService.getWebsiteStatus();
+
+  sendResponse(res, {
+    success: true,
+    statusCode: StatusCodes.OK,
+    message: 'Website status retrieved successfully',
+    data: result,
+  });
+});
 export const AdminController = {
   addAdmin,
   getAllAdmins,
   getSingleAdmin,
   deleteAdmin,
+  getWebsiteStatus,
 };

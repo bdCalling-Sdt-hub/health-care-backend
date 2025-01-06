@@ -6,6 +6,7 @@ import { stripeHelper } from '../../../helpers/stripeHelper';
 import { Types } from 'mongoose';
 import stripe from '../../../config/stripe';
 import { User } from '../user/user.model';
+import { STATUS } from '../../../enums/consultation';
 
 const createConsultation = async (
   payload: IConsultation,
@@ -41,9 +42,16 @@ const createConsultationSuccess = async (
     });
     const selectRandomDoctor =
       allDoctors[Math.floor(Math.random() * allDoctors.length)];
-    const updateConsultation = await Consultation.findByIdAndUpdate(id, {
-      $set: { doctorId: selectRandomDoctor._id },
-    });
+    const updateConsultation = await Consultation.findByIdAndUpdate(
+      id,
+      {
+        $set: {
+          doctorId: selectRandomDoctor._id,
+          status: STATUS.DRAFT,
+        },
+      },
+      { new: true }
+    );
     if (!updateConsultation) {
       throw new ApiError(
         StatusCodes.BAD_REQUEST,
