@@ -61,6 +61,7 @@ const updateProfile = catchAsync(
 );
 const getAllUsers = catchAsync(async (req: Request, res: Response) => {
   const query = req.query;
+  query.role = USER_ROLES.USER;
   const result = await HelperService.getAllDataFromDB(query, User);
 
   sendResponse(res, {

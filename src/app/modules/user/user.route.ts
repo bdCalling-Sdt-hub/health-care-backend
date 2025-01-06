@@ -34,7 +34,11 @@ router
     fileUploadHandler(),
     UserController.updateProfile
   );
-router.get('/all', auth(USER_ROLES.ADMIN), UserController.getAllUsers);
+router.get(
+  '/all',
+  auth(USER_ROLES.ADMIN, USER_ROLES.SUPERADMIN),
+  UserController.getAllUsers
+);
 router.use('/admins', AdminRoutes);
 router.use('/doctors', DoctorRoutes);
 router.use('/pharmecy', PharmecyRoutes);
