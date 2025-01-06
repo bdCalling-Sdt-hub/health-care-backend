@@ -8,10 +8,12 @@ import { IPaginationOptions } from '../../../types/pagination';
 import { User } from './user.model';
 import { HelperService } from '../../../helpers/helper.service';
 import ApiError from '../../../errors/ApiError';
+import { USER_ROLES } from '../../../enums/user';
 
 const createUser = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { ...userData } = req.body;
+    userData.role = USER_ROLES.USER;
     const result = await UserService.createUserToDB(userData);
 
     sendResponse(res, {

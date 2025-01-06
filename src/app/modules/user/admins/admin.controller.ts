@@ -11,6 +11,7 @@ import { USER_ROLES } from '../../../../enums/user';
 const addAdmin = catchAsync(async (req: Request, res: Response) => {
   const { ...adminData } = req.body;
   adminData.verified = true;
+  adminData.role = USER_ROLES.ADMIN;
   const result = await HelperService.addDataToDB(adminData, User);
   sendResponse(res, {
     success: true,
