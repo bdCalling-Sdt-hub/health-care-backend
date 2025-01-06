@@ -10,7 +10,7 @@ export type IUser = {
   password: string;
   location: string;
   city: string;
-  postalCode: string;
+  postcode: string;
   country: string;
   subCategory: Types.ObjectId;
   gender: GENDER;

@@ -77,7 +77,7 @@ const userSchema = new Schema<IUser, UserModal>(
       type: String,
       required: false,
     },
-    postalCode: {
+    postcode: {
       type: String,
       required: false,
     },
