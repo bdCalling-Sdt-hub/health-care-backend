@@ -14,6 +14,9 @@ const createUserZodSchema = z.object({
     }),
     dateOfBirth: z.string().optional(),
     profile: z.string().optional(),
+    city: z.string().optional(),
+    postCode: z.string().optional(),
+    country: z.string().optional(),
   }),
 });
 

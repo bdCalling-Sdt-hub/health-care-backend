@@ -73,6 +73,18 @@ const userSchema = new Schema<IUser, UserModal>(
       type: String,
       required: false,
     },
+    city: {
+      type: String,
+      required: false,
+    },
+    postalCode: {
+      type: String,
+      required: false,
+    },
+    country: {
+      type: String,
+      required: false,
+    },
     authentication: {
       type: {
         isResetPassword: {

@@ -9,6 +9,9 @@ export type IUser = {
   email: string;
   password: string;
   location: string;
+  city: string;
+  postalCode: string;
+  country: string;
   subCategory: Types.ObjectId;
   gender: GENDER;
   profile?: string;
