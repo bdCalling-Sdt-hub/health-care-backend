@@ -7,4 +7,6 @@ export enum STATUS {
 export enum CONSULTATION_TYPE {
   REGULAR = 'regular',
   VIDEO = 'video',
+  FORWARDTO = 'forwardto',
+  MEDICATION = 'medication',
 }

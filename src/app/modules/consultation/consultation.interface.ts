@@ -15,6 +15,7 @@ export type IConsultation = {
   consultationType?: string;
   pdfFile: string;
   link?: string;
+  forwardToPartner?: boolean;
   status?: string;
   doctorId?: Types.ObjectId;
   suggestedMedicine?: [IMedicineItem];

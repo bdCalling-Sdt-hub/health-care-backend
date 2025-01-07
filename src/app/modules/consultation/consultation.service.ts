@@ -6,7 +6,7 @@ import { stripeHelper } from '../../../helpers/stripeHelper';
 import { Types } from 'mongoose';
 import stripe from '../../../config/stripe';
 import { User } from '../user/user.model';
-import { STATUS } from '../../../enums/consultation';
+import { CONSULTATION_TYPE, STATUS } from '../../../enums/consultation';
 
 const createConsultation = async (
   payload: IConsultation,
@@ -104,6 +104,13 @@ const prescribeMedicine = async (id: string, payload: any): Promise<any> => {
 };
 
 const getAllConsultations = async (query: any): Promise<any> => {
+  if (query.consultationType) {
+    if (query.consultationType === CONSULTATION_TYPE.FORWARDTO) {
+      query.forwardToPartner = true;
+    } else if (query.consultationType === CONSULTATION_TYPE.MEDICATION) {
+      query.medicins = { $exists: true, $ne: [] };
+    }
+  }
   const result = await Consultation.find({
     ...query,
   })
