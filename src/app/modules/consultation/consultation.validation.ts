@@ -81,6 +81,11 @@ const createConsultationZodSchema = z.object({
       required_error: 'forwardToPartner is required',
       invalid_type_error: 'forwardToPartner should be type boolean',
     }),
+    pharmecyAccepted: z
+      .boolean({
+        invalid_type_error: 'pharmecyAccepted should be type boolean',
+      })
+      .optional(),
     address: z
       .object({
         firstname: z.string({

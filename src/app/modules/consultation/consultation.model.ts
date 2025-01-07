@@ -73,6 +73,7 @@ const consultationSchema = new Schema<IConsultation, ConsultationModel>(
       required: false,
     },
     forwardToPartner: { type: Boolean, default: false, required: false },
+    pharmecyAccepted: { type: Boolean, default: false, required: false },
     address: {
       type: {
         firstname: {

@@ -17,6 +17,7 @@ export type IConsultation = {
   link?: string;
   forwardToPartner?: boolean;
   status?: string;
+  pharmecyAccepted: boolean;
   doctorId?: Types.ObjectId;
   suggestedMedicine?: [IMedicineItem];
   opinion?: string;

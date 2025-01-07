@@ -157,6 +157,20 @@ const getWebsiteStatus = async () => {
       earnings: monthConsultations * 25,
     });
   }
+  const [
+    totalPendingConsultation,
+    totalFinishedConsultation,
+    totalConsultationPharmecy,
+    totalConsultationPharmecyAccepted,
+  ] = await Promise.all([
+    Consultation.countDocuments({ status: STATUS.PENDING }),
+    Consultation.countDocuments({ status: STATUS.ACCEPTED }),
+    Consultation.countDocuments({ medicins: { $exists: true, $ne: [] } }),
+    Consultation.countDocuments({
+      medicins: { $exists: true, $ne: [] },
+      pharmecyAccepted: true,
+    }),
+  ]);
 
   return {
     totalUsers,
@@ -164,6 +178,14 @@ const getWebsiteStatus = async () => {
     currentYearData: currentYearUsers,
     last12MonthsEarnings,
     last12YearsEarnings,
+    workload: {
+      pending: totalPendingConsultation,
+      finished: totalFinishedConsultation,
+    },
+    workActivity: {
+      consult: totalConsultationPharmecy,
+      pharmecy: totalConsultationPharmecyAccepted,
+    },
   };
 };
 
