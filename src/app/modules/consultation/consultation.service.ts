@@ -119,6 +119,7 @@ const getAllConsultations = async (query: any): Promise<any> => {
     .populate('subCategory')
     .populate('medicins._id')
     .populate('doctorId')
+    .populate('userId')
     .skip(Number(query.limit || 10) * (Number(query.page || 1) - 1));
   if (!result.length) {
     throw new ApiError(StatusCodes.BAD_REQUEST, 'Consultation not found!');
