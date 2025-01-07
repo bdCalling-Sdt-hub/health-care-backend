@@ -102,10 +102,27 @@ const prescribeMedicine = async (id: string, payload: any): Promise<any> => {
   }
   return result;
 };
+
+const getAllConsultations = async (query: any): Promise<any> => {
+  const result = await Consultation.find({
+    ...query,
+  })
+    .populate('category')
+    .populate('subCategory')
+    .populate('medicins._id')
+    .populate('doctorId')
+    .skip(Number(query.limit || 10) * (Number(query.page || 1) - 1));
+  if (!result.length) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, 'Consultation not found!');
+  }
+  return result;
+};
+
 export const ConsultationService = {
   createConsultation,
   createConsultationSuccess,
   getMyConsultations,
   updateConsultation,
   prescribeMedicine,
+  getAllConsultations,
 };

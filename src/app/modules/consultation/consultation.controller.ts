@@ -75,10 +75,29 @@ const prescribeMedicine = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+
+const getAllConsultations = catchAsync(async (req: Request, res: Response) => {
+  const query = req.query;
+  const result = await ConsultationService.getAllConsultations(query);
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'Consultations fetched successfully',
+    pagination: {
+      limit: Number(query.limit) || 10,
+      page: Number(query.page) || 1,
+      total: result.length,
+      totalPage: Math.ceil(result.length / (Number(query.limit) || 10)),
+    },
+    data: result,
+  });
+});
+
 export const ConsultationController = {
   createConsultation,
   createConsultationSuccess,
   getMyConsultations,
   updateConsultation,
   prescribeMedicine,
+  getAllConsultations,
 };
