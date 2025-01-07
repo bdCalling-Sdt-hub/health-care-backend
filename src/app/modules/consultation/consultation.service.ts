@@ -7,6 +7,7 @@ import { Types } from 'mongoose';
 import stripe from '../../../config/stripe';
 import { User } from '../user/user.model';
 import { CONSULTATION_TYPE, STATUS } from '../../../enums/consultation';
+import { populate } from 'dotenv';
 
 const createConsultation = async (
   payload: IConsultation,
@@ -129,7 +130,8 @@ const getConsultationByID = async (id: string): Promise<any> => {
     .populate('category')
     .populate('subCategory')
     .populate('medicins._id')
-    .populate('doctorId');
+    .populate('doctorId')
+    .populate('userId');
   if (!result) {
     throw new ApiError(StatusCodes.BAD_REQUEST, 'Consultation not found!');
   }
