@@ -124,7 +124,17 @@ const getAllConsultations = async (query: any): Promise<any> => {
   }
   return result;
 };
-
+const getConsultationByID = async (id: string): Promise<any> => {
+  const result = await Consultation.findById(id)
+    .populate('category')
+    .populate('subCategory')
+    .populate('medicins._id')
+    .populate('doctorId');
+  if (!result) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, 'Consultation not found!');
+  }
+  return result;
+};
 export const ConsultationService = {
   createConsultation,
   createConsultationSuccess,
@@ -132,4 +142,5 @@ export const ConsultationService = {
   updateConsultation,
   prescribeMedicine,
   getAllConsultations,
+  getConsultationByID,
 };

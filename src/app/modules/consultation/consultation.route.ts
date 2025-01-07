@@ -32,6 +32,11 @@ router.get(
   auth(...rolesOfAccess),
   ConsultationController.getAllConsultations
 );
+router.get(
+  '/:id',
+  auth(...rolesOfAccess),
+  ConsultationController.getConsultationByID
+);
 router.patch(
   '/:id',
   auth(USER_ROLES.DOCTOR, USER_ROLES.SUPERADMIN, USER_ROLES.ADMIN),

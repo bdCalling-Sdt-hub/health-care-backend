@@ -93,6 +93,17 @@ const getAllConsultations = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getConsultationByID = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const result = await ConsultationService.getConsultationByID(id);
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'Consultation fetched successfully',
+    data: result,
+  });
+});
+
 export const ConsultationController = {
   createConsultation,
   createConsultationSuccess,
@@ -100,4 +111,5 @@ export const ConsultationController = {
   updateConsultation,
   prescribeMedicine,
   getAllConsultations,
+  getConsultationByID,
 };
