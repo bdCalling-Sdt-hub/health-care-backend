@@ -15,6 +15,7 @@ export type IUser = {
   subCategory: Types.ObjectId;
   gender: GENDER;
   profile?: string;
+  designation?: string;
   dateOfBirth?: string;
   status: 'active' | 'delete';
   verified: boolean;

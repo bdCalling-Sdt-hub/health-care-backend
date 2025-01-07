@@ -21,6 +21,10 @@ const userSchema = new Schema<IUser, UserModal>(
       enum: Object.values(USER_ROLES),
       required: true,
     },
+    designation: {
+      type: String,
+      required: false,
+    },
     email: {
       type: String,
       required: true,
