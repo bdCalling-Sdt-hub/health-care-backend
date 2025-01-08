@@ -12,7 +12,7 @@ const medicineSchema = new Schema<IMedicine, MedicineModel>(
       required: true,
     },
     dosage: {
-      type: String,
+      type: [String],
       required: true,
     },
     country: {
@@ -24,7 +24,7 @@ const medicineSchema = new Schema<IMedicine, MedicineModel>(
       required: true,
     },
     unitPerBox: {
-      type: String,
+      type: [String],
       required: true,
     },
     medicineType: {

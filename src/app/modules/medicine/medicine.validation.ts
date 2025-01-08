@@ -9,10 +9,12 @@ const createMedicineZodSchema = z.object({
     required_error: 'company is required',
     invalid_type_error: 'company should be type string',
   }),
-  dosage: z.string({
-    required_error: 'dosage is required',
-    invalid_type_error: 'dosage should be type string',
-  }),
+  dosage: z.array(
+    z.string({
+      required_error: 'dosage is required',
+      invalid_type_error: 'dosage should be type string',
+    })
+  ),
   country: z.string({
     required_error: 'country is required',
     invalid_type_error: 'country should be type string',
@@ -21,10 +23,12 @@ const createMedicineZodSchema = z.object({
     required_error: 'image is required',
     invalid_type_error: 'image should be type string',
   }),
-  unitPerBox: z.string({
-    required_error: 'unitPerBox is required',
-    invalid_type_error: 'unitPerBox should be type string',
-  }),
+  unitPerBox: z.array(
+    z.string({
+      required_error: 'unitPerBox is required',
+      invalid_type_error: 'unitPerBox should be type string',
+    })
+  ),
   medicineType: z.string({
     required_error: 'medicineType is required',
     invalid_type_error: 'medicineType should be type string',
@@ -70,18 +74,20 @@ const updateMedicineZodSchema = z.object({
   company: z
     .string({ invalid_type_error: 'company should be type string' })
     .optional(),
-  dosage: z
-    .string({ invalid_type_error: 'dosage should be type string' })
-    .optional(),
+  dosage: z.array(
+    z.string({ invalid_type_error: 'dosage should be type string' }).optional()
+  ),
   country: z
     .string({ invalid_type_error: 'country should be type string' })
     .optional(),
   image: z
     .string({ invalid_type_error: 'image should be type string' })
     .optional(),
-  unitPerBox: z
-    .string({ invalid_type_error: 'unitPerBox should be type string' })
-    .optional(),
+  unitPerBox: z.array(
+    z
+      .string({ invalid_type_error: 'unitPerBox should be type string' })
+      .optional()
+  ),
   medicineType: z
     .string({ invalid_type_error: 'medicineType should be type string' })
     .optional(),
