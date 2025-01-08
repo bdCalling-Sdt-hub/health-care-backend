@@ -104,7 +104,7 @@
     }
     .prescription-area {
       flex-grow: 1;
-      padding: 20px;
+      padding: 0px;
       border-radius: 10px;
       color: #005075;
       font-size: 14px;
@@ -155,6 +155,33 @@
         box-shadow: none;
       }
     }
+    .medicine-table {
+        margin-top: 10px;
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .medicine-table td, .medicine-table th {
+        border: 1px solid #ddd;
+        padding: 8px;
+      }
+      .medicine-table tr {
+        font-size: 14px;
+
+      }
+      .medicine-table th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: left;
+
+      }
+      .medicine-name {
+        font-weight: normal;
+      }
+      .text-header{
+        color: #0070C0;
+        font-size: 15px;
+        font-weight: 550;
+      }
   </style>
 </head>
 <body>
@@ -173,7 +200,7 @@
     <div class="info-grid">
       <div>
         <div class="info-item">
-          <span class="info-label">S No:</span>
+          <span class="info-label">SNo:</span>
           <div class="info-value">PRE-2024-001</div>
         </div>
         <div class="info-item">
@@ -200,10 +227,50 @@
         </div>
       </div>
     </div>
-    <div class="divider"></div>
-    <div class="prescription-area">
-      Prescription details go here.
+    <div class="">
+      <table class="medicine-table">
+        <thead>
+          <tr>
+            <th class="text-header">Medicine Name</th>
+            <th class="text-header">Dosage</th>
+            <th class="text-header">Contents of the box</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="medicine-name">Paracetamol</td>
+            <td>3x a day</td>
+            <td>10 tablets</td>
+          </tr>
+          <tr>
+            <td class="medicine-name">Antibiotic</td>
+            <td>2x a day</td>
+            <td>20 capsules</td>
+          </tr>
+          <tr>
+            <td class="medicine-name">Ibuprofen</td>
+            <td>4x a day</td>
+            <td>30 tablets</td>
+          </tr>
+          <tr>
+            <td class="medicine-name">Vitamin C</td>
+            <td>1x a day</td>
+            <td>60 tablets</td>
+          </tr>
+          <tr>
+            <td class="medicine-name">Omeprazole</td>
+            <td>2x a day</td>
+            <td>28 capsules</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
+    <div class="divider"></div>
+    
+    <div class="prescription-area">
+      ved not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets
+    </div>
+    <br>
     <div class="footer">
       <div class="doctor-section">
         <div>

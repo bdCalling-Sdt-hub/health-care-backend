@@ -1,14 +1,12 @@
-import express from 'express';
-import path from 'path';
-import fs from 'fs';
+import express, { Request, Response } from 'express';
 import puppeteer from 'puppeteer';
 import { StatusCodes } from 'http-status-codes';
 import ApiError from '../../../errors/ApiError';
 
-const router = express.Router();
-
-export const generatePdf = async (data: any) => {
+export const generatePdf = async (req: Request, res: Response) => {
+  let browser = null;
   try {
+    // Your existing HTML content
     const htmlContent = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -115,7 +113,7 @@ export const generatePdf = async (data: any) => {
     }
     .prescription-area {
       flex-grow: 1;
-      padding: 20px;
+      padding: 0px;
       border-radius: 10px;
       color: #005075;
       font-size: 14px;
@@ -166,6 +164,33 @@ export const generatePdf = async (data: any) => {
         box-shadow: none;
       }
     }
+    .medicine-table {
+        margin-top: 10px;
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .medicine-table td, .medicine-table th {
+        border: 1px solid #ddd;
+        padding: 8px;
+      }
+      .medicine-table tr {
+        font-size: 14px;
+
+      }
+      .medicine-table th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: left;
+
+      }
+      .medicine-name {
+        font-weight: normal;
+      }
+      .text-header{
+        color: #0070C0;
+        font-size: 15px;
+        font-weight: 550;
+      }
   </style>
 </head>
 <body>
@@ -184,7 +209,7 @@ export const generatePdf = async (data: any) => {
     <div class="info-grid">
       <div>
         <div class="info-item">
-          <span class="info-label">S No:</span>
+          <span class="info-label">SNo:</span>
           <div class="info-value">PRE-2024-001</div>
         </div>
         <div class="info-item">
@@ -211,10 +236,50 @@ export const generatePdf = async (data: any) => {
         </div>
       </div>
     </div>
-    <div class="divider"></div>
-    <div class="prescription-area">
-      Prescription details go here.
+    <div class="">
+      <table class="medicine-table">
+        <thead>
+          <tr>
+            <th class="text-header">Medicine Name</th>
+            <th class="text-header">Dosage</th>
+            <th class="text-header">Contents of the box</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="medicine-name">Paracetamol</td>
+            <td>3x a day</td>
+            <td>10 tablets</td>
+          </tr>
+          <tr>
+            <td class="medicine-name">Antibiotic</td>
+            <td>2x a day</td>
+            <td>20 capsules</td>
+          </tr>
+          <tr>
+            <td class="medicine-name">Ibuprofen</td>
+            <td>4x a day</td>
+            <td>30 tablets</td>
+          </tr>
+          <tr>
+            <td class="medicine-name">Vitamin C</td>
+            <td>1x a day</td>
+            <td>60 tablets</td>
+          </tr>
+          <tr>
+            <td class="medicine-name">Omeprazole</td>
+            <td>2x a day</td>
+            <td>28 capsules</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
+    <div class="divider"></div>
+    
+    <div class="prescription-area">
+      ved not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets
+    </div>
+    <br>
     <div class="footer">
       <div class="doctor-section">
         <div>
@@ -234,42 +299,60 @@ export const generatePdf = async (data: any) => {
     </div>
   </div>
 </body>
-</html>`;
+</html>`; // Keep your existing HTML content here
 
-    // Create PDF directory if not exists
-    const pdfDir = path.join(process.cwd(), 'uploads', 'pdfFiles');
-    if (!fs.existsSync(pdfDir)) {
-      fs.mkdirSync(pdfDir, { recursive: true });
-    }
+    // Launch browser with specific options for better stability
+    browser = await puppeteer.launch({
+      headless: true, // Use new headless mode
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    });
 
-    // Generate unique filename
-    const fileName = `pdf-${Date.now()}.pdf`;
-    const filePath = path.join(pdfDir, fileName);
-
-    // Generate PDF
-    const browser = await puppeteer.launch();
     const page = await browser.newPage();
-    await page.setContent(htmlContent);
 
+    // Set viewport for consistent rendering
+    await page.setViewport({
+      width: 794, // A4 width in pixels (roughly)
+      height: 1123, // A4 height in pixels (roughly)
+      deviceScaleFactor: 1,
+    });
+
+    await page.setContent(htmlContent, {
+      waitUntil: 'networkidle0', // Wait for all network connections to finish
+    });
+
+    // Generate PDF with specific options
     const pdf = await page.pdf({
       format: 'A4',
       printBackground: true,
       margin: { top: '0px', right: '0px', bottom: '0px', left: '0px' },
+      preferCSSPageSize: true,
     });
 
-    await browser.close();
-
-    // Save PDF to file
-    fs.writeFileSync(filePath, pdf);
-
-    // Return file path
-    return {
-      filePath: `/pdfFiles/${fileName}`,
-    };
-  } catch (error) {
-    throw new ApiError(
-      StatusCodes.INTERNAL_SERVER_ERROR,
-      'Failed to generate PDF'
+    // Set response headers
+    res.contentType('application/pdf');
+    res.setHeader(
+      'Content-Disposition',
+      'attachment; filename=prescription.pdf'
     );
+    res.setHeader('Content-Length', pdf.length);
+
+    // End the response with the PDF buffer
+    res.end(pdf);
+  } catch (error: any) {
+    console.error('PDF Generation Error:', error);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      message: 'Failed to generate PDF',
+      error: error.message,
+    });
+  } finally {
+    // Always close the browser
+    if (browser) {
+      await browser.close();
+    }
   }
+};
+
+export const pdfController = {
+  generatePdf,
 };
