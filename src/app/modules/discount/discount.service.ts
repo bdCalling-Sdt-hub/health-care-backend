@@ -2,18 +2,9 @@ import { StatusCodes } from 'http-status-codes';
 import ApiError from '../../../errors/ApiError';
 import { Discount } from './discount.model';
 import { IDiscount } from './discount.interface';
-import { calculateRedemptionTime } from '../../../helpers/calculateRedemtionTime';
-import { stripeHelper } from '../../../helpers/stripeHelper';
-import stripe from '../../../config/stripe';
 
 const createDiscount = async (payload: IDiscount): Promise<IDiscount> => {
-  console.log(payload);
-  const redemptionTime = calculateRedemptionTime(
-    new Date().toString(),
-    payload.endDate.toString()
-  );
-  const data = await stripeHelper.createCoupon(payload.rate, 1, redemptionTime);
-  const result = await Discount.create({ stripeCouponId: data.id, ...payload });
+  const result = await Discount.create(payload);
   if (!result) {
     throw new ApiError(StatusCodes.BAD_REQUEST, 'Failed to create discount!');
   }
@@ -27,8 +18,8 @@ const getAllDiscounts = async (
   const query = search
     ? {
         $or: [
+          { country: { $regex: search, $options: 'i' } },
           { name: { $regex: search, $options: 'i' } },
-          { code: { $regex: search, $options: 'i' } },
         ],
       }
     : {};
@@ -52,17 +43,28 @@ const getDiscountById = async (id: string): Promise<IDiscount | null> => {
   return result;
 };
 
+const updateDiscount = async (
+  id: string,
+  payload: IDiscount
+): Promise<IDiscount | null> => {
+  const isExistDiscount = await getDiscountById(id);
+  if (!isExistDiscount) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, 'Discount not found!');
+  }
+
+  const result = await Discount.findByIdAndUpdate(id, payload, { new: true });
+  if (!result) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, 'Failed to update discount!');
+  }
+  return result;
+};
+
 const deleteDiscount = async (id: string): Promise<IDiscount | null> => {
   const isExistDiscount = await getDiscountById(id);
   if (!isExistDiscount) {
     throw new ApiError(StatusCodes.BAD_REQUEST, 'Discount not found!');
   }
-  const deleteCoupon = await stripe.coupons.del(
-    isExistDiscount?.stripeCouponId?.toString()!
-  );
-  if (!deleteCoupon) {
-    throw new ApiError(StatusCodes.BAD_REQUEST, 'Failed to delete discount!');
-  }
+
   const result = await Discount.findByIdAndDelete(id);
   if (!result) {
     throw new ApiError(StatusCodes.BAD_REQUEST, 'Failed to delete discount!');
@@ -74,5 +76,6 @@ export const DiscountService = {
   createDiscount,
   getAllDiscounts,
   getDiscountById,
+  updateDiscount,
   deleteDiscount,
 };

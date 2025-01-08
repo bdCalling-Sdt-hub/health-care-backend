@@ -6,7 +6,11 @@ import validateRequest from '../../middlewares/validateRequest';
 import { DiscountValidation } from './discount.validation';
 
 const router = express.Router();
-const rolesOfAccess = [USER_ROLES.ADMIN, USER_ROLES.SUPERADMIN];
+const rolesOfAccess = [
+  USER_ROLES.ADMIN,
+  USER_ROLES.USER,
+  USER_ROLES.SUPERADMIN,
+];
 router.post(
   '/create',
   auth(...rolesOfAccess),
@@ -15,7 +19,12 @@ router.post(
 );
 router.get('/', DiscountController.getAllDiscounts);
 router.get('/:id', DiscountController.getDiscountById);
-
+router.patch(
+  '/:id',
+  auth(...rolesOfAccess),
+  validateRequest(DiscountValidation.updateDiscountZodSchema),
+  DiscountController.updateDiscount
+);
 router.delete(
   '/:id',
   auth(...rolesOfAccess),

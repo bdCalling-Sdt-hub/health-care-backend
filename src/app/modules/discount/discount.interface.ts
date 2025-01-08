@@ -1,12 +1,11 @@
 import { Model, Types } from 'mongoose';
 
 export type IDiscount = {
+  country: string;
   name: string;
-  code: string;
   startDate: Date;
   endDate: Date;
-  rate: number;
-  stripeCouponId?: string;
+  amount: number;
 };
 
 export type DiscountModel = Model<IDiscount>;
