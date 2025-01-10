@@ -16,6 +16,7 @@ import { SubscriberRoutes } from '../app/modules/subscriber/subscriber.route';
 import { MessageRoutes } from '../app/modules/message/message.route';
 import { PdfRouter } from '../app/modules/pdf/pdf.route';
 import { NotificationRoutes } from '../app/modules/notification/notification.route';
+import { QuestionRoutes } from '../app/modules/question/question.route';
 const router = express.Router();
 
 const apiRoutes = [
@@ -86,6 +87,10 @@ const apiRoutes = [
   {
     path: '/notification',
     route: NotificationRoutes,
+  },
+  {
+    path: '/question',
+    route: QuestionRoutes,
   },
 ];
 
