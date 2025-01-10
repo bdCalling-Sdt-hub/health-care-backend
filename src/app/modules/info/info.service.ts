@@ -3,7 +3,12 @@ import ApiError from '../../../errors/ApiError';
 import { Info } from './info.model';
 import { IInfo } from './info.interface';
 
-const createInfo = async (payload: IInfo): Promise<IInfo> => {
+const createInfo = async (payload: IInfo, name: string): Promise<any> => {
+  const isExistInfo = await Info.findOne({ name });
+  if (isExistInfo) {
+    const result = await Info.findByIdAndUpdate(isExistInfo._id, payload);
+    return result;
+  }
   const result = await Info.create(payload);
   if (!result) {
     throw new ApiError(StatusCodes.BAD_REQUEST, 'Failed to create info!');

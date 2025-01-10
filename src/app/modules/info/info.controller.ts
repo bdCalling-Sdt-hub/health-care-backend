@@ -5,7 +5,8 @@ import { StatusCodes } from 'http-status-codes';
 import { InfoService } from './info.service';
 
 const createInfo = catchAsync(async (req: Request, res: Response) => {
-  const result = await InfoService.createInfo(req.body);
+  const name = req.query.name;
+  const result = await InfoService.createInfo(req.body, name as string);
   sendResponse(res, {
     statusCode: StatusCodes.CREATED,
     success: true,
