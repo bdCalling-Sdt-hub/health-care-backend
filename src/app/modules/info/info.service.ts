@@ -9,6 +9,7 @@ const createInfo = async (payload: IInfo, name: string): Promise<any> => {
     const result = await Info.findByIdAndUpdate(isExistInfo._id, payload);
     return result;
   }
+  payload.name = payload.name || name;
   const result = await Info.create(payload);
   if (!result) {
     throw new ApiError(StatusCodes.BAD_REQUEST, 'Failed to create info!');
