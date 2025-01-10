@@ -4,6 +4,7 @@ import { SubCategory } from './subCategory.model';
 import { ISubCategory } from './subCategory.interface';
 import unlinkFile from '../../../shared/unlinkFile';
 import { SubCategoryValidation } from './subCategory.validation';
+import { Question } from '../question/question.model';
 
 const createSubCategory = async (
   payload: ISubCategory
@@ -93,6 +94,7 @@ const deleteSubCategory = async (id: string): Promise<ISubCategory | null> => {
       'Failed to delete subCategory!'
     );
   }
+  await Question.deleteMany({ subCategory: id });
   return result;
 };
 
