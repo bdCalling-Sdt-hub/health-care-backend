@@ -2,6 +2,7 @@ import { StatusCodes } from 'http-status-codes';
 import ApiError from '../../../errors/ApiError';
 import { Review } from './review.model';
 import { IReview } from './review.interface';
+import { USER_ROLES } from '../../../enums/user';
 
 const createReview = async (payload: IReview): Promise<IReview> => {
   const result = await Review.create(payload);
@@ -12,8 +13,12 @@ const createReview = async (payload: IReview): Promise<IReview> => {
 };
 
 const getAllReviews = async (
-  queryFields: Record<string, any>
+  queryFields: Record<string, any>,
+  role: string
 ): Promise<IReview[]> => {
+  if (role === USER_ROLES.USER) {
+    queryFields.status = 'accepted';
+  }
   const { search, page, limit } = queryFields;
   const query = search
     ? { $or: [{ description: { $regex: search, $options: 'i' } }] }

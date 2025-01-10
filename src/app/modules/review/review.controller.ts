@@ -3,6 +3,7 @@ import catchAsync from '../../../shared/catchAsync';
 import sendResponse from '../../../shared/sendResponse';
 import { StatusCodes } from 'http-status-codes';
 import { ReviewService } from './review.service';
+import { USER_ROLES } from '../../../enums/user';
 
 const createReview = catchAsync(async (req: Request, res: Response) => {
   const data = {
@@ -20,8 +21,9 @@ const createReview = catchAsync(async (req: Request, res: Response) => {
 
 const getAllReviews = catchAsync(async (req: Request, res: Response) => {
   const query = req.query;
+  const role = req.user.role || USER_ROLES.USER;
 
-  const result = await ReviewService.getAllReviews(query);
+  const result = await ReviewService.getAllReviews(query, role);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     success: true,
