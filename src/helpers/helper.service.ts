@@ -40,6 +40,7 @@ const getAllDataFromDB = async (query: any, model: Model<any>) => {
 
   const data = await model
     .find(whereConditions)
+    .populate('subCategory')
     .sort({ [sortBy]: sortOrder })
     .skip((Number(page) - 1) * Number(limit))
     .limit(Number(limit))
