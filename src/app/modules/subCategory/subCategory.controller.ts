@@ -57,6 +57,7 @@ const updateSubCategory = catchAsync(async (req: Request, res: Response) => {
     image = `/images/${req.files.image[0].filename}`;
     req.body.image = image;
   }
+  console.log(image);
   const result = await SubCategoryService.updateSubCategory(
     req.params.id,
     req.body

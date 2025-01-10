@@ -60,13 +60,14 @@ const updateSubCategory = async (
   payload: ISubCategory
 ): Promise<ISubCategory | null> => {
   await SubCategoryValidation.updateSubCategoryZodSchema.parseAsync(payload);
-  if (payload.image) {
-    await unlinkFile(payload.image);
-  }
-  const isExistSubCategory = await getSubCategoryById(id);
+  const isExistSubCategory = await SubCategory.findById(id);
   if (!isExistSubCategory) {
     throw new ApiError(StatusCodes.BAD_REQUEST, 'SubCategory not found!');
   }
+  if (payload.image) {
+    await unlinkFile(isExistSubCategory.image);
+  }
+
   const result = await SubCategory.findByIdAndUpdate(id, payload, {
     new: true,
   });
