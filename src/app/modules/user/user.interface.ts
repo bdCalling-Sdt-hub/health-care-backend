@@ -2,6 +2,7 @@ import { Model, Types } from 'mongoose';
 import { GENDER, USER_ROLES } from '../../../enums/user';
 
 export type IUser = {
+  _id: Types.ObjectId;
   firstName?: string;
   lastName?: string;
   role: USER_ROLES;

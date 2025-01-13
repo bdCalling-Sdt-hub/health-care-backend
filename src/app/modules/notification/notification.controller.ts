@@ -3,6 +3,7 @@ import catchAsync from '../../../shared/catchAsync';
 import sendResponse from '../../../shared/sendResponse';
 import { StatusCodes } from 'http-status-codes';
 import { NotificationService } from './notification.service';
+import ApiError from '../../../errors/ApiError';
 
 const createNotification = catchAsync(async (req: Request, res: Response) => {
   //@ts-ignore
@@ -74,6 +75,29 @@ const readAllNotification = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const sendNotificationToAllUsers = catchAsync(
+  async (req: Request, res: Response) => {
+    const role = req.params.role;
+    const message = req.body.message;
+    if (!message) {
+      throw new ApiError(
+        StatusCodes.BAD_REQUEST,
+        'Message is required please give the message'
+      );
+    }
+    const result = await NotificationService.sendNotificationToAllUsersOfARole(
+      role as string,
+      message as string
+    );
+    sendResponse(res, {
+      statusCode: StatusCodes.OK,
+      success: true,
+      message: 'Notification sent successfully',
+      data: result,
+    });
+  }
+);
+
 export const NotificationController = {
   createNotification,
   getAllNotifications,
@@ -81,4 +105,5 @@ export const NotificationController = {
   updateNotification,
   deleteNotification,
   readAllNotification,
+  sendNotificationToAllUsers,
 };

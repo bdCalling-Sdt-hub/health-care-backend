@@ -4,6 +4,9 @@ import { Notification } from './notification.model';
 import { INotification } from './notification.interface';
 import { Server } from 'socket.io';
 import { NOTIFICATION_STATUS } from './notification.constant';
+import { User } from '../user/user.model';
+import { USER_ROLES } from '../../../enums/user';
+import { IUser } from '../user/user.interface';
 
 const createNotification = async (
   payload: INotification,
@@ -108,6 +111,35 @@ const readNotificationFromDB = async (userId: string) => {
   return { message: 'Message read successfully' };
 };
 
+const sendNotificationToAllUsersOfARole = async (
+  role: string,
+  message: string
+) => {
+  const allUsers = await User.find({ role });
+  //@ts-ignore
+  const io = global.io;
+  await Promise.all(
+    allUsers.map(async (user: IUser) => {
+      const notification: INotification = {
+        title: 'Admin sent you a message',
+        description: message,
+        reciever: user._id,
+      };
+      const createdNotification = await Notification.create(notification);
+      if (!createdNotification) {
+        throw new ApiError(
+          StatusCodes.BAD_REQUEST,
+          'Failed to create notification!'
+        );
+      }
+      io.emit(`NEW_NOTIFICATION::${user._id}`, createdNotification);
+    })
+  );
+  return {
+    message: 'message sent successfully',
+  };
+};
+
 export const NotificationService = {
   createNotification,
   getAllNotifications,
@@ -115,4 +147,5 @@ export const NotificationService = {
   updateNotification,
   deleteNotification,
   readNotificationFromDB,
+  sendNotificationToAllUsersOfARole,
 };
