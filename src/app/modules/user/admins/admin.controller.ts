@@ -97,6 +97,18 @@ const getMonthlyUserCount = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+const getMonthlyWorkLoad = catchAsync(async (req: Request, res: Response) => {
+  const thisYear = new Date().getFullYear();
+  const result = await HelperService.getMonthlyWorkLoad(
+    Number(req.query.year) || thisYear
+  );
+  sendResponse(res, {
+    success: true,
+    statusCode: StatusCodes.OK,
+    message: 'Monthly workload retrived successfully',
+    data: result,
+  });
+});
 export const AdminController = {
   addAdmin,
   getAllAdmins,
@@ -105,4 +117,5 @@ export const AdminController = {
   getWebsiteStatus,
   getMonthlyUserCount,
   getEarningStatus,
+  getMonthlyWorkLoad,
 };

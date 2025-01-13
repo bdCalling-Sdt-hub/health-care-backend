@@ -32,7 +32,11 @@ router.get(
   auth(USER_ROLES.SUPERADMIN, USER_ROLES.ADMIN),
   AdminController.getMonthlyUserCount
 );
-
+router.get(
+  '/workload/status',
+  auth(USER_ROLES.SUPERADMIN, USER_ROLES.ADMIN),
+  AdminController.getMonthlyWorkLoad
+);
 router.get(
   '/:id',
   auth(USER_ROLES.SUPERADMIN, USER_ROLES.ADMIN),

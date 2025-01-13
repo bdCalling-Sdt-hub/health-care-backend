@@ -240,6 +240,69 @@ const getMonthlyUserCount = async (year: Number) => {
 
   return result;
 };
+const getMonthlyWorkLoad = async (year: number) => {
+  const monthlyWorkload = await Consultation.aggregate([
+    {
+      $match: {
+        createdAt: {
+          $gte: new Date(`${year}-01-01T00:00:00.000Z`),
+          $lt: new Date(`${year + 1}-01-01T00:00:00.000Z`),
+        },
+      },
+    },
+    {
+      $group: {
+        _id: {
+          month: { $month: '$createdAt' },
+          status: '$status',
+        },
+        count: { $sum: 1 },
+      },
+    },
+    {
+      $project: {
+        month: '$_id.month',
+        status: '$_id.status',
+        count: 1,
+        _id: 0,
+      },
+    },
+    {
+      $sort: { month: 1 },
+    },
+  ]);
+
+  const monthNames = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
+
+  return monthNames.map(month => ({
+    month,
+    pending:
+      monthlyWorkload.find(
+        m =>
+          m.month === monthNames.indexOf(month) + 1 &&
+          m.status === STATUS.PENDING
+      )?.count || 0,
+    accepted:
+      monthlyWorkload.find(
+        m =>
+          m.month === monthNames.indexOf(month) + 1 &&
+          m.status === STATUS.ACCEPTED
+      )?.count || 0,
+  }));
+};
 export const HelperService = {
   getAllDataFromDB,
   getSingleDataFromDB,
@@ -248,4 +311,5 @@ export const HelperService = {
   getWebsiteStatus,
   getMonthlyEarnings,
   getMonthlyUserCount,
+  getMonthlyWorkLoad,
 };
