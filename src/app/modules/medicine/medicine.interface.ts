@@ -11,7 +11,7 @@ export type IMedicine = {
   form: string;
   description: string;
   purchaseCost: number;
-  category: Types.ObjectId;
+  subCategory: Types.ObjectId;
   tax: number;
   externalExpenses: number;
   sellingPrice: number;
