@@ -21,9 +21,9 @@ const createReview = catchAsync(async (req: Request, res: Response) => {
 
 const getAllReviews = catchAsync(async (req: Request, res: Response) => {
   const query = req.query;
-  const role = req.user.role || USER_ROLES.USER;
+  const role = req?.user?.role || USER_ROLES.USER;
 
-  const result = await ReviewService.getAllReviews(query, role);
+  const result = await ReviewService.getAllReviews(query, role as string);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     success: true,

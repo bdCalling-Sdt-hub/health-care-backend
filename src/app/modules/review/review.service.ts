@@ -17,7 +17,7 @@ const getAllReviews = async (
   role: string
 ): Promise<IReview[]> => {
   if (role === USER_ROLES.USER) {
-    queryFields.status = 'accepted';
+    queryFields.status = 'approved';
   }
   const { search, page, limit } = queryFields;
   const query = search
