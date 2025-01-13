@@ -48,7 +48,7 @@ const getAllMedicines = async (
 };
 
 const getMedicineById = async (id: string): Promise<IMedicine | null> => {
-  const result = await Medicine.findById(id);
+  const result = await Medicine.findById(id).populate('subCategory');
   if (!result) {
     throw new ApiError(StatusCodes.BAD_REQUEST, 'Medicine not found!');
   }
