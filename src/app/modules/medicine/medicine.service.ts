@@ -43,7 +43,7 @@ const getAllMedicines = async (
   delete queryFields.search;
   delete queryFields.page;
   delete queryFields.limit;
-  queryBuilder.find(queryFields);
+  queryBuilder.find(queryFields).populate('subCategory');
   return await queryBuilder;
 };
 
