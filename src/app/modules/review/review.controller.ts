@@ -4,6 +4,9 @@ import sendResponse from '../../../shared/sendResponse';
 import { StatusCodes } from 'http-status-codes';
 import { ReviewService } from './review.service';
 import { USER_ROLES } from '../../../enums/user';
+import { jwtHelper } from '../../../helpers/jwtHelper';
+import config from '../../../config';
+import { Secret } from 'jsonwebtoken';
 
 const createReview = catchAsync(async (req: Request, res: Response) => {
   const data = {
@@ -21,8 +24,10 @@ const createReview = catchAsync(async (req: Request, res: Response) => {
 
 const getAllReviews = catchAsync(async (req: Request, res: Response) => {
   const query = req.query;
-  const role = req?.user?.role || USER_ROLES.USER;
-
+  const token = req.headers.authorization?.split(' ')[1];
+  const role = token
+    ? jwtHelper.verifyToken(token, config.jwt.jwt_secret as Secret).role
+    : USER_ROLES.USER;
   const result = await ReviewService.getAllReviews(query, role as string);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
