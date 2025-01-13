@@ -96,10 +96,19 @@ const getWebsiteStatus = async () => {
       pharmecyAccepted: true,
     }),
   ]);
-
+  const dailyConsultations = await Consultation.countDocuments({
+    status: { $ne: STATUS.DRAFT },
+    createdAt: {
+      $gte: new Date(currentDate.setHours(0, 0, 0, 0)),
+      $lt: new Date(currentDate.setHours(23, 59, 59, 999)),
+    },
+  });
   return {
     totalUsers,
-
+    totalEarnings: {
+      total: (totalPendingConsultation + totalFinishedConsultation) * 25,
+      daily: dailyConsultations * 25,
+    },
     workload: {
       pending: totalPendingConsultation,
       finished: totalFinishedConsultation,
@@ -111,13 +120,12 @@ const getWebsiteStatus = async () => {
   };
 };
 const getMonthlyEarnings = async (year: number) => {
-  const monthlyEarnings = await Consultation.aggregate([
+  const monthlyConsultations = await Consultation.aggregate([
     {
       $match: {
-        status: STATUS.ACCEPTED,
         createdAt: {
-          $gte: new Date(`${year}-01-01`),
-          $lt: new Date(`${year + 1}-01-01`),
+          $gte: new Date(`${year}-01-01T00:00:00.000Z`),
+          $lt: new Date(`${year + 1}-01-01T00:00:00.000Z`),
         },
       },
     },
@@ -130,7 +138,7 @@ const getMonthlyEarnings = async (year: number) => {
     {
       $project: {
         month: '$_id',
-        earnings: { $multiply: ['$totalConsultations', 25] },
+        totalConsultations: { $multiply: ['$totalConsultations', 25] },
         _id: 0,
       },
     },
@@ -139,7 +147,37 @@ const getMonthlyEarnings = async (year: number) => {
     },
   ]);
 
-  return monthlyEarnings;
+  const monthNames = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
+
+  // Create an array with all months
+  const allMonths = Array.from({ length: 12 }, (_, i) => ({
+    month: monthNames[i],
+    totalConsultations: 0,
+  }));
+
+  // Merge actual data with empty months
+  const result = allMonths.map((emptyMonth, index) => {
+    const actualMonth = monthlyConsultations.find(m => m.month === index + 1);
+    return {
+      month: emptyMonth.month,
+      totalEarnings: actualMonth ? actualMonth.totalConsultations : 0,
+    };
+  });
+
+  return result;
 };
 export const HelperService = {
   getAllDataFromDB,
