@@ -79,85 +79,9 @@ const addDataToDB = async (data: any, model: Model<any>) => {
 
 const getWebsiteStatus = async () => {
   const currentDate = new Date();
-  const currentYear = currentDate.getFullYear();
 
-  // Get users per year for last 12 years
-  const usersPerYear = await Promise.all(
-    Array.from({ length: 12 }, (_, i) => {
-      const year = currentYear - i;
-      return User.countDocuments({
-        createdAt: {
-          $gte: new Date(year, 0, 1),
-          $lt: new Date(year + 1, 0, 1),
-        },
-      });
-    })
-  );
-
-  // Get users per month for current year
-  const usersPerMonth = await Promise.all(
-    Array.from({ length: 12 }, (_, i) => {
-      return User.countDocuments({
-        createdAt: {
-          $gte: new Date(currentYear, i, 1),
-          $lt: new Date(currentYear, i + 1, 1),
-        },
-      });
-    })
-  );
-
-  // Get total users
   const totalUsers = await User.countDocuments();
 
-  // Format year data
-  const last12YearsUsers = usersPerYear.map((count, index) => ({
-    year: currentYear - index,
-    totalUsers: count,
-  }));
-
-  // Format month data
-  const currentYearUsers = usersPerMonth.map((count, index) => ({
-    month: index + 1,
-    year: currentYear,
-    totalUsers: count,
-  }));
-
-  // Get earnings data (keeping the existing logic)
-  const last12YearsEarnings: { year: number; earnings: number }[] = [];
-  const last12MonthsEarnings: {
-    month: number;
-    year: number;
-    earnings: number;
-  }[] = [];
-
-  for (let i = 0; i < 12; i++) {
-    const yearStart = new Date(currentYear - i, 0, 1);
-    const yearEnd = new Date(currentYear - i + 1, 0, 1);
-
-    const monthStart = new Date(currentYear, i, 1);
-    const monthEnd = new Date(currentYear, i + 1, 1);
-
-    const yearConsultations = await Consultation.countDocuments({
-      createdAt: { $gte: yearStart, $lt: yearEnd },
-      status: { $ne: STATUS.DRAFT },
-    });
-
-    const monthConsultations = await Consultation.countDocuments({
-      createdAt: { $gte: monthStart, $lt: monthEnd },
-      status: { $ne: STATUS.DRAFT },
-    });
-
-    last12YearsEarnings.push({
-      year: yearStart.getFullYear(),
-      earnings: yearConsultations * 25,
-    });
-
-    last12MonthsEarnings.push({
-      month: monthStart.getMonth() + 1,
-      year: monthStart.getFullYear(),
-      earnings: monthConsultations * 25,
-    });
-  }
   const [
     totalPendingConsultation,
     totalFinishedConsultation,
@@ -175,10 +99,7 @@ const getWebsiteStatus = async () => {
 
   return {
     totalUsers,
-    last12YearsData: last12YearsUsers,
-    currentYearData: currentYearUsers,
-    last12MonthsEarnings,
-    last12YearsEarnings,
+
     workload: {
       pending: totalPendingConsultation,
       finished: totalFinishedConsultation,
