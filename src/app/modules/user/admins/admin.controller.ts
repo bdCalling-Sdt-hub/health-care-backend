@@ -85,11 +85,24 @@ const getEarningStatus = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+const getMonthlyUserCount = catchAsync(async (req: Request, res: Response) => {
+  const thisYear = new Date().getFullYear();
+  const result = await HelperService.getMonthlyUserCount(
+    Number(req.query.year) || thisYear
+  );
+  sendResponse(res, {
+    success: true,
+    statusCode: StatusCodes.OK,
+    message: 'Monthly user count retrived successfully',
+    data: result,
+  });
+});
 export const AdminController = {
   addAdmin,
   getAllAdmins,
   getSingleAdmin,
   deleteAdmin,
   getWebsiteStatus,
+  getMonthlyUserCount,
   getEarningStatus,
 };

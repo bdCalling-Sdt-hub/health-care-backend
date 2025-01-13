@@ -27,6 +27,11 @@ router.get(
   auth(USER_ROLES.SUPERADMIN, USER_ROLES.ADMIN),
   AdminController.getEarningStatus
 );
+router.get(
+  '/users/status',
+  auth(USER_ROLES.SUPERADMIN, USER_ROLES.ADMIN),
+  AdminController.getMonthlyUserCount
+);
 
 router.get(
   '/:id',

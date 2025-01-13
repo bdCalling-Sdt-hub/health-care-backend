@@ -4,6 +4,7 @@ import { StatusCodes } from 'http-status-codes';
 import { User } from '../app/modules/user/user.model';
 import { Consultation } from '../app/modules/consultation/consultation.model';
 import { STATUS } from '../enums/consultation';
+import { USER_ROLES } from '../enums/user';
 
 const getAllDataFromDB = async (query: any, model: Model<any>) => {
   const {
@@ -103,8 +104,16 @@ const getWebsiteStatus = async () => {
       $lt: new Date(currentDate.setHours(23, 59, 59, 999)),
     },
   });
+  const dailyUsers = await User.countDocuments({
+    role: USER_ROLES.USER,
+    createdAt: {
+      $gte: new Date(currentDate.setHours(0, 0, 0, 0)),
+      $lt: new Date(currentDate.setHours(23, 59, 59, 999)),
+    },
+  });
   return {
     totalUsers,
+    dailyUsers,
     totalEarnings: {
       total: (totalPendingConsultation + totalFinishedConsultation) * 25,
       daily: dailyConsultations * 25,
@@ -179,6 +188,57 @@ const getMonthlyEarnings = async (year: number) => {
 
   return result;
 };
+const getMonthlyUserCount = async (year: Number) => {
+  const currentYear = Number(year) || new Date().getFullYear();
+  const monthlyUsers = await User.aggregate([
+    {
+      $match: {
+        role: 'USER',
+        createdAt: {
+          $gte: new Date(`${currentYear}-01-01T00:00:00.000Z`),
+          $lt: new Date(`${currentYear + 1}-01-01T00:00:00.000Z`),
+        },
+      },
+    },
+    {
+      $group: {
+        _id: { $month: '$createdAt' },
+        count: { $sum: 1 },
+      },
+    },
+    {
+      $project: {
+        month: '$_id',
+        count: 1,
+        _id: 0,
+      },
+    },
+    {
+      $sort: { month: 1 },
+    },
+  ]);
+
+  const monthNames = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
+  const result = monthNames.map((month, index) => ({
+    month,
+    count: monthlyUsers.find(m => m.month === index + 1)?.count || 0,
+  }));
+
+  return result;
+};
 export const HelperService = {
   getAllDataFromDB,
   getSingleDataFromDB,
@@ -186,4 +246,5 @@ export const HelperService = {
   addDataToDB,
   getWebsiteStatus,
   getMonthlyEarnings,
+  getMonthlyUserCount,
 };
