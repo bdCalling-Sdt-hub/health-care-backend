@@ -21,6 +21,13 @@ router.get(
   auth(USER_ROLES.SUPERADMIN, USER_ROLES.ADMIN),
   AdminController.getWebsiteStatus
 );
+
+router.get(
+  '/earning/status',
+  auth(USER_ROLES.SUPERADMIN, USER_ROLES.ADMIN),
+  AdminController.getEarningStatus
+);
+
 router.get(
   '/:id',
   auth(USER_ROLES.SUPERADMIN, USER_ROLES.ADMIN),

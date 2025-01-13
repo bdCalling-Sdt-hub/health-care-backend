@@ -110,11 +110,42 @@ const getWebsiteStatus = async () => {
     },
   };
 };
+const getMonthlyEarnings = async (year: number) => {
+  const monthlyEarnings = await Consultation.aggregate([
+    {
+      $match: {
+        status: STATUS.ACCEPTED,
+        createdAt: {
+          $gte: new Date(`${year}-01-01`),
+          $lt: new Date(`${year + 1}-01-01`),
+        },
+      },
+    },
+    {
+      $group: {
+        _id: { $month: '$createdAt' },
+        totalConsultations: { $sum: 1 },
+      },
+    },
+    {
+      $project: {
+        month: '$_id',
+        earnings: { $multiply: ['$totalConsultations', 25] },
+        _id: 0,
+      },
+    },
+    {
+      $sort: { month: 1 },
+    },
+  ]);
 
+  return monthlyEarnings;
+};
 export const HelperService = {
   getAllDataFromDB,
   getSingleDataFromDB,
   deleteDataByIDFromDB,
   addDataToDB,
   getWebsiteStatus,
+  getMonthlyEarnings,
 };

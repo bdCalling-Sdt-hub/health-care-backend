@@ -73,10 +73,23 @@ const getWebsiteStatus = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+const getEarningStatus = catchAsync(async (req: Request, res: Response) => {
+  const thisYear = new Date().getFullYear();
+  const result = await HelperService.getMonthlyEarnings(
+    Number(req.query.year) || thisYear
+  );
+  sendResponse(res, {
+    success: true,
+    statusCode: StatusCodes.OK,
+    message: 'Monthly earnign retrived successfully',
+    data: result,
+  });
+});
 export const AdminController = {
   addAdmin,
   getAllAdmins,
   getSingleAdmin,
   deleteAdmin,
   getWebsiteStatus,
+  getEarningStatus,
 };
