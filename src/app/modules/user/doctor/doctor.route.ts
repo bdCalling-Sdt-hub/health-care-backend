@@ -19,15 +19,16 @@ router.get(
   DoctorController.getAllDoctors
 );
 router.get(
-  '/:id',
-  auth(USER_ROLES.SUPERADMIN, USER_ROLES.ADMIN),
-  DoctorController.getSingleDoctor
-);
-router.get(
   '/status',
   auth(USER_ROLES.DOCTOR),
   DoctorController.getDoctorStatus
 );
+router.get(
+  '/:id',
+  auth(USER_ROLES.SUPERADMIN, USER_ROLES.ADMIN),
+  DoctorController.getSingleDoctor
+);
+
 router.delete(
   '/:id',
   auth(USER_ROLES.SUPERADMIN, USER_ROLES.ADMIN),
