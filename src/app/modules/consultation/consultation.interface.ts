@@ -16,6 +16,7 @@ export type IConsultation = {
   pdfFile: string;
   link?: string;
   forwardToPartner?: boolean;
+  paymentIntentID?: string;
   status?: string;
   pharmecyAccepted: boolean;
   doctorId?: Types.ObjectId;

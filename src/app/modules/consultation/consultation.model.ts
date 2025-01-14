@@ -52,6 +52,10 @@ const consultationSchema = new Schema<IConsultation, ConsultationModel>(
     },
     opinion: { type: String, required: false },
     doctorId: { type: Schema.Types.ObjectId, ref: 'User', required: false },
+    paymentIntentID: {
+      type: String,
+      required: false,
+    },
     suggestedMedicine: {
       type: [
         {

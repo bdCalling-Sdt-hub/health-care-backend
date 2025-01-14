@@ -34,6 +34,7 @@ const createConsultationSuccess = async (
 ): Promise<any> => {
   const result = await stripe.checkout.sessions.retrieve(session_id);
   if (result.payment_status === 'paid') {
+    const paymentIntentID = result.payment_intent;
     const isExistConsultation = await Consultation.findById(id);
     if (!isExistConsultation) {
       throw new ApiError(StatusCodes.BAD_REQUEST, 'Consultation not found!');
@@ -49,6 +50,7 @@ const createConsultationSuccess = async (
         $set: {
           doctorId: selectRandomDoctor._id,
           status: STATUS.DRAFT,
+          paymentIntentID,
         },
       },
       { new: true }
