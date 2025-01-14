@@ -8,19 +8,22 @@ const getDoctorStatus = async (id: string) => {
     totalMedicationByPatient,
     totalDigitalPrescription,
   ] = await Promise.all([
-    Consultation.find({
+    Consultation.countDocuments({
       doctorId: id,
       consultationType: CONSULTATION_TYPE.REGULAR,
     }),
-    Consultation.find({
+    Consultation.countDocuments({
       doctorId: id,
       consultationType: CONSULTATION_TYPE.VIDEO,
     }),
-    Consultation.find({
+    Consultation.countDocuments({
       doctorId: id,
       medicines: { $exists: true, $not: { $size: 0 } },
     }),
-    Consultation.find({ doctorId: id, medicines: { $exists: true, $size: 0 } }),
+    Consultation.countDocuments({
+      doctorId: id,
+      medicines: { $exists: true, $size: 0 },
+    }),
   ]);
   const totalAcceptedConsultation = await Consultation.countDocuments({
     doctorId: id,
