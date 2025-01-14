@@ -9,19 +9,15 @@ import { AdminRoutes } from './admins/admin.route';
 import { DoctorRoutes } from './doctor/doctor.route';
 import { PharmecyRoutes } from './pharmecy/pharmecy.route';
 const router = express.Router();
-
-router.get(
-  '/profile',
-  auth(
-    USER_ROLES.ADMIN,
-    USER_ROLES.USER,
-    USER_ROLES.DOCTOR,
-    USER_ROLES.PHARMACY,
-    USER_ROLES.SUPERADMIN,
-    USER_ROLES.USER
-  ),
-  UserController.getUserProfile
-);
+const rolesOfAccess = [
+  USER_ROLES.ADMIN,
+  USER_ROLES.USER,
+  USER_ROLES.DOCTOR,
+  USER_ROLES.PHARMACY,
+  USER_ROLES.SUPERADMIN,
+  USER_ROLES.USER,
+];
+router.get('/profile', auth(...rolesOfAccess), UserController.getUserProfile);
 
 router
   .route('/')
@@ -30,7 +26,7 @@ router
     UserController.createUser
   )
   .patch(
-    auth(USER_ROLES.ADMIN, USER_ROLES.USER),
+    auth(...rolesOfAccess),
     fileUploadHandler(),
     UserController.updateProfile
   );
