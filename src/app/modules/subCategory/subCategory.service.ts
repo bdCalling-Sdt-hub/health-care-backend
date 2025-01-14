@@ -24,9 +24,9 @@ const getAllSubCategorys = async (
   search: string,
   page: number | null,
   limit: number | null,
-  queryFields: any
+  queryFields: Record<string, unknown>
 ): Promise<ISubCategory[]> => {
-  const query = search
+  const searchQuery = search
     ? {
         $or: [
           { name: { $regex: search, $options: 'i' } },
@@ -36,15 +36,25 @@ const getAllSubCategorys = async (
       }
     : {};
 
-  let queryBuilder = SubCategory.find({ ...query, ...queryFields }).populate(
-    'category'
+  const query = { ...searchQuery, ...queryFields };
+  const skip = page && limit ? (page - 1) * limit : undefined;
+
+  const subCategories = await SubCategory.find(query)
+    .populate('category')
+    .skip(skip ?? 0)
+    .limit(limit ?? 0)
+    .lean();
+
+  const subCategoriesWithQuestions = await Promise.all(
+    subCategories.map(async subCategory => ({
+      ...subCategory,
+      totalQuestions: await Question.countDocuments({
+        subCategory: subCategory._id,
+      }),
+    }))
   );
 
-  if (page && limit) {
-    queryBuilder = queryBuilder.skip((page - 1) * limit).limit(limit);
-  }
-
-  return await queryBuilder;
+  return subCategoriesWithQuestions;
 };
 
 const getSubCategoryById = async (id: string): Promise<ISubCategory | null> => {
