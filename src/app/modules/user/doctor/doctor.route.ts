@@ -6,7 +6,11 @@ import { DoctorValidation } from './doctor.validation';
 import { DoctorController } from './doctor.controller';
 
 const router = Router();
-
+router.get(
+  '/status',
+  auth(USER_ROLES.DOCTOR),
+  DoctorController.getDoctorStatus
+);
 router.post(
   '/',
   auth(USER_ROLES.SUPERADMIN, USER_ROLES.ADMIN),
@@ -18,11 +22,7 @@ router.get(
   auth(USER_ROLES.SUPERADMIN, USER_ROLES.ADMIN),
   DoctorController.getAllDoctors
 );
-router.get(
-  '/status',
-  auth(USER_ROLES.DOCTOR),
-  DoctorController.getDoctorStatus
-);
+
 router.get(
   '/:id',
   auth(USER_ROLES.SUPERADMIN, USER_ROLES.ADMIN),
