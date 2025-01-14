@@ -24,7 +24,6 @@ const getDoctorStatus = async (id: string) => {
   ]);
   const totalAcceptedConsultation = await Consultation.countDocuments({
     doctorId: id,
-    status: 'accepted',
   });
 
   const today = new Date();
@@ -34,7 +33,6 @@ const getDoctorStatus = async (id: string) => {
 
   const dailyAcceptedConsultation = await Consultation.countDocuments({
     doctorId: id,
-    status: 'accepted',
     createdAt: {
       $gte: today,
       $lt: tomorrow,
