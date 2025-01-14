@@ -37,6 +37,11 @@ router.get(
   auth(...rolesOfAccess),
   ConsultationController.getConsultationByID
 );
+router.get(
+  '/refund/:id',
+  auth(USER_ROLES.ADMIN, USER_ROLES.SUPERADMIN),
+  ConsultationController.refundMoney
+);
 router.patch(
   '/:id',
   auth(USER_ROLES.DOCTOR, USER_ROLES.SUPERADMIN, USER_ROLES.ADMIN),

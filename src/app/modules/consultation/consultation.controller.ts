@@ -103,7 +103,16 @@ const getConsultationByID = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
-
+const refundMoney = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const result = await ConsultationService.refundByIDFromDB(id);
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'Consultation refunded successfully',
+    data: result,
+  });
+});
 export const ConsultationController = {
   createConsultation,
   createConsultationSuccess,
@@ -111,5 +120,6 @@ export const ConsultationController = {
   updateConsultation,
   prescribeMedicine,
   getAllConsultations,
+  refundMoney,
   getConsultationByID,
 };

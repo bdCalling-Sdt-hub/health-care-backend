@@ -140,6 +140,21 @@ const getConsultationByID = async (id: string): Promise<any> => {
   }
   return result;
 };
+
+const refundByIDFromDB = async (id: string) => {
+  const consultation = await Consultation.findById(id);
+  if (!consultation) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, 'Consultation does not exist');
+  }
+  const refund = await stripe.refunds.create({
+    payment_intent: consultation?.paymentIntentID as string,
+  });
+  if (!refund) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, 'Failed to process refund!');
+  }
+  return refund;
+};
+
 export const ConsultationService = {
   createConsultation,
   createConsultationSuccess,
@@ -148,4 +163,5 @@ export const ConsultationService = {
   prescribeMedicine,
   getAllConsultations,
   getConsultationByID,
+  refundByIDFromDB,
 };
