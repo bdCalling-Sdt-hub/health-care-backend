@@ -24,12 +24,12 @@ router.post(
 );
 router.get(
   '/my',
-  auth(...rolesOfAccess),
+  auth(...rolesOfAccess, USER_ROLES.DOCTOR),
   ConsultationController.getMyConsultations
 );
 router.get(
   '/all',
-  auth(...rolesOfAccess),
+  auth(...rolesOfAccess, USER_ROLES.DOCTOR),
   ConsultationController.getAllConsultations
 );
 router.get(

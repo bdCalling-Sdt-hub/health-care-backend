@@ -23,10 +23,14 @@ router.get(
   auth(USER_ROLES.SUPERADMIN, USER_ROLES.ADMIN),
   DoctorController.getSingleDoctor
 );
+router.get(
+  '/status',
+  auth(USER_ROLES.DOCTOR),
+  DoctorController.getDoctorStatus
+);
 router.delete(
   '/:id',
   auth(USER_ROLES.SUPERADMIN, USER_ROLES.ADMIN),
   DoctorController.deleteDoctor
 );
-
 export const DoctorRoutes = router;
