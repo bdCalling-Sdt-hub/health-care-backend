@@ -16,11 +16,21 @@ router.get(
   auth(USER_ROLES.DOCTOR),
   DoctorController.getDoctorActivityStatus
 );
+router.get(
+  '/earning/status',
+  auth(USER_ROLES.DOCTOR),
+  DoctorController.getDoctorEarningStatus
+);
 router.post(
   '/',
   auth(USER_ROLES.SUPERADMIN, USER_ROLES.ADMIN),
   validateRequest(DoctorValidation.createDoctorZodSchema),
   DoctorController.addDoctor
+);
+router.post(
+  '/setup-payment',
+  auth(USER_ROLES.SUPERADMIN, USER_ROLES.ADMIN),
+  DoctorController.setUpStripeConnectAccount
 );
 router.get(
   '/all',

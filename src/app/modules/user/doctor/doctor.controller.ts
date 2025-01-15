@@ -96,7 +96,35 @@ const getDoctorActivityStatus = catchAsync(
     });
   }
 );
+const setUpStripeConnectAccount = catchAsync(
+  async (req: Request, res: Response) => {
+    const { data } = req.body;
+    const result = DoctorService.setUpStripeConnectAccount(data);
+    sendResponse(res, {
+      success: true,
+      statusCode: StatusCodes.OK,
+      message: 'Doctor payment setup successfully',
+      data: result,
+    });
+  }
+);
+const getDoctorEarningStatus = catchAsync(
+  async (req: Request, res: Response) => {
+    const user = req.user.id;
+    const year = req.query.year;
 
+    const result = await DoctorService.getDoctorEarningStatusFromDB(
+      user,
+      Number(year)
+    );
+    sendResponse(res, {
+      success: true,
+      statusCode: StatusCodes.OK,
+      message: 'Doctor status retrived successfully',
+      data: result,
+    });
+  }
+);
 export const DoctorController = {
   addDoctor,
   getAllDoctors,
@@ -104,4 +132,6 @@ export const DoctorController = {
   deleteDoctor,
   getDoctorStatus,
   getDoctorActivityStatus,
+  setUpStripeConnectAccount,
+  getDoctorEarningStatus,
 };

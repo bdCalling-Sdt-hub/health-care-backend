@@ -52,7 +52,7 @@ const getDoctorStatus = async (id: string) => {
   };
 };
 
-const getDoctorActivityStatusFromDB = async (id: String, year: number) => {
+const getDoctorActivityStatusFromDB = async (id: string, year: number) => {
   const today = new Date();
   const currentYear = year || today.getFullYear();
   const currentMonth = today.getMonth();
@@ -157,8 +157,30 @@ const getDoctorActivityStatusFromDB = async (id: String, year: number) => {
     monthlyBreakdown: monthsData,
   };
 };
+const getDoctorEarningStatusFromDB = async (id: string, year: number) => {
+  const result = await getDoctorActivityStatusFromDB(id, year);
+  return {
+    lifetime: Object.fromEntries(
+      Object.entries(result.lifetime).map(([key, value]) => [
+        key,
+        typeof value === 'number' ? value * 25 : value,
+      ])
+    ),
+    monthlyBreakdown: result.monthlyBreakdown.map(month =>
+      Object.fromEntries(
+        Object.entries(month).map(([key, value]) => [
+          key,
+          typeof value === 'number' ? value * 25 : value,
+        ])
+      )
+    ),
+  };
+};
+const setUpStripeConnectAccount = async (data: any) => {};
 
 export const DoctorService = {
   getDoctorStatus,
   getDoctorActivityStatusFromDB,
+  getDoctorEarningStatusFromDB,
+  setUpStripeConnectAccount,
 };

@@ -21,6 +21,12 @@ export type IUser = {
   status: 'active' | 'delete';
   verified: boolean;
   pharmecyName?: string;
+  accountInformation?: {
+    bankAccountNumber?: string;
+    stripeAccountId?: string;
+    externalAccountId?: string;
+    status?: string;
+  };
   authentication?: {
     isResetPassword: boolean;
     oneTimeCode: number;
