@@ -112,6 +112,10 @@ const consultationSchema = new Schema<IConsultation, ConsultationModel>(
       },
       required: false,
     },
+    rejectedOpinion: {
+      type: String,
+      required: false,
+    },
   },
   { timestamps: true }
 );

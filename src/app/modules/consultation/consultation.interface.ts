@@ -22,6 +22,7 @@ export type IConsultation = {
   pharmecyAccepted: boolean;
   doctorId?: Types.ObjectId;
   suggestedMedicine?: [IMedicineItem];
+  rejectedOpinion?: string;
   opinion?: string;
   address?: {
     firstname: string;
