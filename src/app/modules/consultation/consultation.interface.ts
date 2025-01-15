@@ -2,6 +2,7 @@ import { Types, Model } from 'mongoose';
 type IQNA = { question: string; answer: string };
 export type IMedicineItem = {
   _id: Types.ObjectId;
+  dosage?: string;
   count: number;
   total: string;
 };

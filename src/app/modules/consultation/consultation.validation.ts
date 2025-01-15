@@ -27,6 +27,7 @@ const createConsultationZodSchema = z.object({
           required_error: 'Count is required',
           invalid_type_error: 'Count must be a number',
         }),
+
         total: z.string({
           required_error: 'Total is required',
           invalid_type_error: 'Total must be a string',
@@ -45,6 +46,10 @@ const createConsultationZodSchema = z.object({
           count: z.number({
             required_error: 'Count is required',
             invalid_type_error: 'Count must be a number',
+          }),
+          dosage: z.string({
+            required_error: 'Dosage is required',
+            invalid_type_error: 'Dosage must be a string',
           }),
           total: z.string({
             required_error: 'Total is required',
