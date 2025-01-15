@@ -116,7 +116,8 @@ const refundMoney = catchAsync(async (req: Request, res: Response) => {
 
 const rejectConsultation = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
-  const result = await ConsultationService.rejectConsultation(id);
+  const { opinion } = req.body;
+  const result = await ConsultationService.rejectConsultation(id, opinion);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     success: true,

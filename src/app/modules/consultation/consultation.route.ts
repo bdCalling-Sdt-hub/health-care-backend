@@ -22,7 +22,7 @@ router.post(
   auth(...rolesOfAccess),
   ConsultationController.createConsultationSuccess
 );
-router.get(
+router.post(
   '/reject/:id',
   auth(...rolesOfAccess, USER_ROLES.DOCTOR),
   ConsultationController.rejectConsultation

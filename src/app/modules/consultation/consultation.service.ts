@@ -156,7 +156,7 @@ const refundByIDFromDB = async (id: string) => {
   return refund;
 };
 
-const rejectConsultation = async (id: string) => {
+const rejectConsultation = async (id: string, opinion: string) => {
   const consultation = await getConsultationByID(id);
   const rejectConsultation = await Consultation.findByIdAndUpdate(
     id,
