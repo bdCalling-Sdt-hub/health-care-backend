@@ -113,6 +113,18 @@ const refundMoney = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+
+const rejectConsultation = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const result = await ConsultationService.rejectConsultation(id);
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'Consultation rejected successfully',
+    data: result,
+  });
+});
+
 export const ConsultationController = {
   createConsultation,
   createConsultationSuccess,
@@ -122,4 +134,5 @@ export const ConsultationController = {
   getAllConsultations,
   refundMoney,
   getConsultationByID,
+  rejectConsultation,
 };

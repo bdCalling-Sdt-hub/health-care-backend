@@ -23,6 +23,11 @@ router.post(
   ConsultationController.createConsultationSuccess
 );
 router.get(
+  '/reject/:id',
+  auth(...rolesOfAccess, USER_ROLES.DOCTOR),
+  ConsultationController.rejectConsultation
+);
+router.get(
   '/my',
   auth(...rolesOfAccess, USER_ROLES.DOCTOR),
   ConsultationController.getMyConsultations

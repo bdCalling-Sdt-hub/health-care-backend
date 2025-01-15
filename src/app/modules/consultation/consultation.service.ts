@@ -8,6 +8,7 @@ import stripe from '../../../config/stripe';
 import { User } from '../user/user.model';
 import { CONSULTATION_TYPE, STATUS } from '../../../enums/consultation';
 import { populate } from 'dotenv';
+import { NotificationService } from '../notification/notification.service';
 
 const createConsultation = async (
   payload: IConsultation,
@@ -155,6 +156,39 @@ const refundByIDFromDB = async (id: string) => {
   return refund;
 };
 
+const rejectConsultation = async (id: string) => {
+  const consultation = await getConsultationByID(id);
+  const rejectConsultation = await Consultation.findByIdAndUpdate(
+    id,
+    { status: STATUS.REJECTED },
+    { new: true }
+  );
+  if (!rejectConsultation) {
+    throw new ApiError(
+      StatusCodes.BAD_REQUEST,
+      'Failed to reject consultation!'
+    );
+  }
+  const refund = await refundByIDFromDB(id);
+  if (!refund) {
+    throw new ApiError(
+      StatusCodes.INTERNAL_SERVER_ERROR,
+      'Could not refund the money'
+    );
+  }
+  await NotificationService.createNotification(
+    {
+      title: 'Rejected Consultation',
+      description:
+        'Your consultation request has been rejected by doctor and the money is also successfully refunded to your account.',
+      reciever: consultation?.userId,
+    },
+    //@ts-ignore
+    global.io
+  );
+  return {};
+};
+
 export const ConsultationService = {
   createConsultation,
   createConsultationSuccess,
@@ -164,4 +198,5 @@ export const ConsultationService = {
   getAllConsultations,
   getConsultationByID,
   refundByIDFromDB,
+  rejectConsultation,
 };
