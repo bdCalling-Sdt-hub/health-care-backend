@@ -59,40 +59,6 @@ const getDoctorActivityStatusFromDB = async (id: String, year: number) => {
   const firstDay = new Date(currentYear, currentMonth, 1);
   const lastDay = new Date(currentYear, currentMonth + 1, 0);
 
-  // Monthly data
-  const [
-    monthlyRegularConsultation,
-    monthlyVideoConsultation,
-    monthlyConsultationWithMeds,
-    monthlyConsultationWithoutMeds,
-    totalMonthlyConsultation,
-  ] = await Promise.all([
-    Consultation.countDocuments({
-      doctorId: id,
-      consultationType: CONSULTATION_TYPE.REGULAR,
-      createdAt: { $gte: firstDay, $lte: lastDay },
-    }),
-    Consultation.countDocuments({
-      doctorId: id,
-      consultationType: CONSULTATION_TYPE.VIDEO,
-      createdAt: { $gte: firstDay, $lte: lastDay },
-    }),
-    Consultation.countDocuments({
-      doctorId: id,
-      medicines: { $exists: true, $not: { $size: 0 } },
-      createdAt: { $gte: firstDay, $lte: lastDay },
-    }),
-    Consultation.countDocuments({
-      doctorId: id,
-      medicines: { $exists: true, $size: 0 },
-      createdAt: { $gte: firstDay, $lte: lastDay },
-    }),
-    Consultation.countDocuments({
-      doctorId: id,
-      createdAt: { $gte: firstDay, $lte: lastDay },
-    }),
-  ]);
-
   // Lifetime data
   const [
     lifetimeRegularConsultation,
@@ -161,7 +127,6 @@ const getDoctorActivityStatusFromDB = async (id: String, year: number) => {
         }),
         Consultation.countDocuments({
           doctorId: id,
-          medicines: { $exists: true, $size: 0 },
           createdAt: { $gte: monthFirstDay, $lte: monthLastDay },
         }),
         Consultation.countDocuments({
@@ -182,13 +147,6 @@ const getDoctorActivityStatusFromDB = async (id: String, year: number) => {
   );
 
   return {
-    currentMonth: {
-      monthlyRegularConsultation,
-      monthlyVideoConsultation,
-      monthlyConsultationWithMeds,
-      monthlyConsultationWithoutMeds,
-      totalMonthlyConsultation,
-    },
     lifetime: {
       lifetimeRegularConsultation,
       lifetimeVideoConsultation,
