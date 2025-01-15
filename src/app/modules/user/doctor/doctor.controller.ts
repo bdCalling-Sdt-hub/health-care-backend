@@ -79,10 +79,29 @@ const getDoctorStatus = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getDoctorActivityStatus = catchAsync(
+  async (req: Request, res: Response) => {
+    const user = req.user.id;
+    const year = req.query.year;
+
+    const result = await DoctorService.getDoctorActivityStatusFromDB(
+      user,
+      Number(year)
+    );
+    sendResponse(res, {
+      success: true,
+      statusCode: StatusCodes.OK,
+      message: 'Doctor status retrived successfully',
+      data: result,
+    });
+  }
+);
+
 export const DoctorController = {
   addDoctor,
   getAllDoctors,
   getSingleDoctor,
   deleteDoctor,
   getDoctorStatus,
+  getDoctorActivityStatus,
 };

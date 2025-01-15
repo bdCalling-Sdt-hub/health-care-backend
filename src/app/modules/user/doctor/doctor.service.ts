@@ -52,6 +52,155 @@ const getDoctorStatus = async (id: string) => {
   };
 };
 
+const getDoctorActivityStatusFromDB = async (id: String, year: number) => {
+  const today = new Date();
+  const currentYear = year || today.getFullYear();
+  const currentMonth = today.getMonth();
+  const firstDay = new Date(currentYear, currentMonth, 1);
+  const lastDay = new Date(currentYear, currentMonth + 1, 0);
+
+  // Monthly data
+  const [
+    monthlyRegularConsultation,
+    monthlyVideoConsultation,
+    monthlyConsultationWithMeds,
+    monthlyConsultationWithoutMeds,
+    totalMonthlyConsultation,
+  ] = await Promise.all([
+    Consultation.countDocuments({
+      doctorId: id,
+      consultationType: CONSULTATION_TYPE.REGULAR,
+      createdAt: { $gte: firstDay, $lte: lastDay },
+    }),
+    Consultation.countDocuments({
+      doctorId: id,
+      consultationType: CONSULTATION_TYPE.VIDEO,
+      createdAt: { $gte: firstDay, $lte: lastDay },
+    }),
+    Consultation.countDocuments({
+      doctorId: id,
+      medicines: { $exists: true, $not: { $size: 0 } },
+      createdAt: { $gte: firstDay, $lte: lastDay },
+    }),
+    Consultation.countDocuments({
+      doctorId: id,
+      medicines: { $exists: true, $size: 0 },
+      createdAt: { $gte: firstDay, $lte: lastDay },
+    }),
+    Consultation.countDocuments({
+      doctorId: id,
+      createdAt: { $gte: firstDay, $lte: lastDay },
+    }),
+  ]);
+
+  // Lifetime data
+  const [
+    lifetimeRegularConsultation,
+    lifetimeVideoConsultation,
+    lifetimeConsultationWithMeds,
+    lifetimeConsultationWithoutMeds,
+    totalLifetimeConsultation,
+  ] = await Promise.all([
+    Consultation.countDocuments({
+      doctorId: id,
+      consultationType: CONSULTATION_TYPE.REGULAR,
+    }),
+    Consultation.countDocuments({
+      doctorId: id,
+      consultationType: CONSULTATION_TYPE.VIDEO,
+    }),
+    Consultation.countDocuments({
+      doctorId: id,
+      medicines: { $exists: true, $not: { $size: 0 } },
+    }),
+    Consultation.countDocuments({
+      doctorId: id,
+      medicines: { $exists: true, $size: 0 },
+    }),
+    Consultation.countDocuments({
+      doctorId: id,
+    }),
+  ]);
+
+  // Get all months data for the current year
+  const monthNames = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
+
+  const monthsData = await Promise.all(
+    Array.from({ length: 12 }, async (_, month) => {
+      const monthFirstDay = new Date(currentYear, month, 1);
+      const monthLastDay = new Date(currentYear, month + 1, 0);
+
+      const [regular, video, withMeds, withoutMeds, total] = await Promise.all([
+        Consultation.countDocuments({
+          doctorId: id,
+          consultationType: CONSULTATION_TYPE.REGULAR,
+          createdAt: { $gte: monthFirstDay, $lte: monthLastDay },
+        }),
+        Consultation.countDocuments({
+          doctorId: id,
+          consultationType: CONSULTATION_TYPE.VIDEO,
+          createdAt: { $gte: monthFirstDay, $lte: monthLastDay },
+        }),
+        Consultation.countDocuments({
+          doctorId: id,
+          medicines: { $exists: true, $not: { $size: 0 } },
+          createdAt: { $gte: monthFirstDay, $lte: monthLastDay },
+        }),
+        Consultation.countDocuments({
+          doctorId: id,
+          medicines: { $exists: true, $size: 0 },
+          createdAt: { $gte: monthFirstDay, $lte: monthLastDay },
+        }),
+        Consultation.countDocuments({
+          doctorId: id,
+          createdAt: { $gte: monthFirstDay, $lte: monthLastDay },
+        }),
+      ]);
+
+      return {
+        month: monthNames[month],
+        regular,
+        video,
+        withMeds,
+        withoutMeds,
+        total,
+      };
+    })
+  );
+
+  return {
+    currentMonth: {
+      monthlyRegularConsultation,
+      monthlyVideoConsultation,
+      monthlyConsultationWithMeds,
+      monthlyConsultationWithoutMeds,
+      totalMonthlyConsultation,
+    },
+    lifetime: {
+      lifetimeRegularConsultation,
+      lifetimeVideoConsultation,
+      lifetimeConsultationWithMeds,
+      lifetimeConsultationWithoutMeds,
+      totalLifetimeConsultation,
+    },
+    monthlyBreakdown: monthsData,
+  };
+};
+
 export const DoctorService = {
   getDoctorStatus,
+  getDoctorActivityStatusFromDB,
 };

@@ -11,6 +11,11 @@ router.get(
   auth(USER_ROLES.DOCTOR),
   DoctorController.getDoctorStatus
 );
+router.get(
+  '/activity/status',
+  auth(USER_ROLES.DOCTOR),
+  DoctorController.getDoctorActivityStatus
+);
 router.post(
   '/',
   auth(USER_ROLES.SUPERADMIN, USER_ROLES.ADMIN),
