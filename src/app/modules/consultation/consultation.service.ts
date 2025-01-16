@@ -130,6 +130,7 @@ const getAllConsultations = async (query: any): Promise<any> => {
     .populate('category')
     .populate('subCategory')
     .populate('medicins._id')
+    .populate('suggestedMedicine._id')
     .populate('doctorId')
     .populate('userId')
     .skip(Number(query.limit || 10) * (Number(query.page || 1) - 1));
