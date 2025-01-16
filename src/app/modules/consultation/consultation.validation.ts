@@ -91,6 +91,7 @@ const createConsultationZodSchema = z.object({
         invalid_type_error: 'pharmecyAccepted should be type boolean',
       })
       .optional(),
+    scheduledDate: z.string({ invalid_type_error: 'scheduledDate' }).optional(),
     address: z
       .object({
         firstname: z.string({

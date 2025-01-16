@@ -24,6 +24,7 @@ export type IConsultation = {
   suggestedMedicine?: [IMedicineItem];
   rejectedOpinion?: string;
   opinion?: string;
+  scheduledDate?: Date;
   address?: {
     firstname: string;
     lastname: string;

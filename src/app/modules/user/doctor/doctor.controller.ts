@@ -98,12 +98,32 @@ const getDoctorActivityStatus = catchAsync(
 );
 const setUpStripeConnectAccount = catchAsync(
   async (req: Request, res: Response) => {
-    const { data } = req.body;
-    const result = DoctorService.setUpStripeConnectAccount(data);
+    const data = req.body.data;
+    let paths: any[] = [];
+
+    const ip = req.ip || '0.0.0.0';
+    if (req.files && 'KYC' in req.files && req.files.KYC) {
+      for (const file of req.files.KYC) {
+        paths.push(`/KYCs/${file.filename}`);
+      }
+    }
+    console.log(data);
+    const user = req.user;
+    if (!req.user.email) {
+      throw new ApiError(StatusCodes.BAD_REQUEST, "User doesn't exist!");
+    }
+    const result = await DoctorService.setUpStripeConnectAccount(
+      data,
+      req.files,
+      user,
+      paths,
+      ip
+    );
+
     sendResponse(res, {
       success: true,
       statusCode: StatusCodes.OK,
-      message: 'Doctor payment setup successfully',
+      message: 'Connected account created successfully',
       data: result,
     });
   }

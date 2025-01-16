@@ -4,6 +4,7 @@ import auth from '../../../middlewares/auth';
 import { USER_ROLES } from '../../../../enums/user';
 import { DoctorValidation } from './doctor.validation';
 import { DoctorController } from './doctor.controller';
+import fileUploadHandler from '../../../middlewares/fileUploadHandler';
 
 const router = Router();
 router.get(
@@ -30,6 +31,7 @@ router.post(
 router.post(
   '/setup-payment',
   auth(USER_ROLES.SUPERADMIN, USER_ROLES.ADMIN),
+  fileUploadHandler(),
   DoctorController.setUpStripeConnectAccount
 );
 router.get(

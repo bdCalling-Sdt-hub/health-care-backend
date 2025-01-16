@@ -44,6 +44,10 @@ const consultationSchema = new Schema<IConsultation, ConsultationModel>(
       ref: 'SubCategory',
       required: true,
     },
+    scheduledDate: {
+      type: Date,
+      required: false,
+    },
     pdfFile: { type: String, required: false },
     link: { type: String, required: false },
     consultationType: {
