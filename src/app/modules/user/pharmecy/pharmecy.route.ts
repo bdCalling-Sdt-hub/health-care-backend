@@ -23,7 +23,11 @@ router.get(
   auth(USER_ROLES.PHARMACY),
   PharmecyController.GetPharmecyStatus
 );
-// router.get("/work")
+router.get(
+  '/workload',
+  auth(USER_ROLES.PHARMACY),
+  PharmecyController.GetPharmecyWorkload
+);
 router.get(
   '/:id',
   auth(USER_ROLES.SUPERADMIN, USER_ROLES.ADMIN),

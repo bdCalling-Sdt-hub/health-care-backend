@@ -77,11 +77,22 @@ const GetPharmecyStatus = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
-
+const GetPharmecyWorkload = catchAsync(async (req: Request, res: Response) => {
+  const user = req.user.id;
+  const year = req.query.year;
+  const result = await PharmecyService.getPharmecyWorkload(Number(year));
+  sendResponse(res, {
+    success: true,
+    statusCode: StatusCodes.OK,
+    message: 'Pharmecy workload retrieved successfully',
+    data: result,
+  });
+});
 export const PharmecyController = {
   addPharmecy,
   getAllPharmecy,
   getSinglePharmecy,
   deletePharmecy,
   GetPharmecyStatus,
+  GetPharmecyWorkload,
 };
