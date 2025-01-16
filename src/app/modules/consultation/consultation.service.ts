@@ -57,7 +57,7 @@ const createConsultationSuccess = async (
       {
         $set: {
           doctorId: selectRandomDoctor._id,
-          status: STATUS.DRAFT,
+          status: STATUS.PENDING,
           paymentIntentID,
         },
       },
@@ -323,7 +323,7 @@ const buyMedicineSuccess = async (
         paid: true,
         paymentIntentID: session.payment_intent,
         orderDate: todaysDate,
-        status: 'accepted',
+        status: 'processing',
       },
     });
   }

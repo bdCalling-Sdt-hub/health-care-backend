@@ -2,6 +2,7 @@ export enum STATUS {
   DRAFT = 'draft',
   PENDING = 'pending',
   PRESCRIBED = 'prescribed',
+  PROCESSING = 'processing',
   ACCEPTED = 'accepted',
   REJECTED = 'rejected',
 }
