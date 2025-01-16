@@ -139,7 +139,16 @@ const scheduleConsultation = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
-
+const addLink = catchAsync(async (req: Request, res: Response) => {
+  const id = req.params.id;
+  const result = await ConsultationService.addLinkToConsultation(req.body, id);
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'Link added to consultation successfully',
+    data: result,
+  });
+});
 export const ConsultationController = {
   createConsultation,
   createConsultationSuccess,
@@ -151,4 +160,5 @@ export const ConsultationController = {
   getConsultationByID,
   rejectConsultation,
   scheduleConsultation,
+  addLink,
 };

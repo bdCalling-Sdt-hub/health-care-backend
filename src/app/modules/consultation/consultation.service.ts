@@ -217,6 +217,24 @@ const scheduleConsultationToDB = async (data: IConsultation, id: string) => {
   };
 };
 
+const addLinkToConsultation = async (data: IConsultation, id: string) => {
+  const consultation = await getConsultationByID(id);
+  await updateConsultation(id, data);
+  //@ts-ignore
+  const io = global.io;
+  await NotificationService.createNotification(
+    {
+      title: `Doctor ${consultation.doctorId.name} sent a meeting link for consultation`,
+      description: `Doctor ${consultation.doctorId.name} sent a meeting link for consultation on ${consultation.subCategory.name}`,
+      reciever: consultation.userId._id,
+    },
+    io
+  );
+  return {
+    message: 'consultation scheduled successfully',
+  };
+};
+
 export const ConsultationService = {
   createConsultation,
   createConsultationSuccess,
@@ -228,4 +246,5 @@ export const ConsultationService = {
   refundByIDFromDB,
   rejectConsultation,
   scheduleConsultationToDB,
+  addLinkToConsultation,
 };
