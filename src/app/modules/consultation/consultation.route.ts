@@ -5,6 +5,7 @@ import { USER_ROLES } from '../../../enums/user';
 import auth from '../../middlewares/auth';
 import validateRequest from '../../middlewares/validateRequest';
 import fileUploadHandler from '../../middlewares/fileUploadHandler';
+import { ConsultationService } from './consultation.service';
 const router = express.Router();
 const rolesOfAccess = [
   USER_ROLES.ADMIN,
@@ -22,9 +23,14 @@ router.post(
   auth(...rolesOfAccess),
   ConsultationController.createConsultationSuccess
 );
+router.get(
+  '/withdraw',
+  auth(USER_ROLES.DOCTOR),
+  ConsultationController.withdrawDoctorMoney
+);
 router.post(
   '/reject/:id',
-  auth(...rolesOfAccess, USER_ROLES.DOCTOR),
+  auth(...rolesOfAccess, USER_ROLES.DOCTOR, USER_ROLES.PHARMACY),
   ConsultationController.rejectConsultation
 );
 router.get(
@@ -47,6 +53,7 @@ router.get(
   auth(USER_ROLES.ADMIN, USER_ROLES.SUPERADMIN),
   ConsultationController.refundMoney
 );
+
 router.patch(
   '/:id',
   auth(USER_ROLES.DOCTOR, USER_ROLES.SUPERADMIN, USER_ROLES.ADMIN),

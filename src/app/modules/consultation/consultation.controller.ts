@@ -149,6 +149,16 @@ const addLink = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+const withdrawDoctorMoney = catchAsync(async (req: Request, res: Response) => {
+  const userId = req.user.id;
+  const result = await ConsultationService.withdrawDoctorMoney(userId);
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'Money withdraw successfully',
+    data: result,
+  });
+});
 export const ConsultationController = {
   createConsultation,
   createConsultationSuccess,
@@ -161,4 +171,5 @@ export const ConsultationController = {
   rejectConsultation,
   scheduleConsultation,
   addLink,
+  withdrawDoctorMoney,
 };

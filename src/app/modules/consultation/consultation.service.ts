@@ -9,6 +9,9 @@ import { User } from '../user/user.model';
 import { CONSULTATION_TYPE, STATUS } from '../../../enums/consultation';
 import { populate } from 'dotenv';
 import { NotificationService } from '../notification/notification.service';
+import catchAsync from '../../../shared/catchAsync';
+import { Request, Response } from 'express';
+import { DoctorService } from '../user/doctor/doctor.service';
 
 const createConsultation = async (
   payload: IConsultation,
@@ -238,6 +241,31 @@ const addLinkToConsultation = async (data: IConsultation, id: string) => {
     message: 'consultation scheduled successfully',
   };
 };
+
+const withdrawDoctorMoney = async (id: string) => {
+  const doctor = await User.findById(id);
+  const allDoctorConsultation = await Consultation.countDocuments({
+    status: 'accepted',
+    doctorId: id,
+  });
+  const totalAmount = 25 * allDoctorConsultation * 0.15;
+  const teacherStripeAccountId = doctor?.accountInformation?.stripeAccountId;
+  if (!teacherStripeAccountId) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, 'Teacher payment not setup');
+  }
+  const transfer = await stripe.transfers.create({
+    amount: totalAmount * 100,
+    currency: 'usd',
+    destination: teacherStripeAccountId,
+  });
+
+  if (!transfer) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, 'Failed to transfer money!');
+  }
+
+  return {};
+};
+
 export const ConsultationService = {
   createConsultation,
   createConsultationSuccess,
@@ -250,4 +278,5 @@ export const ConsultationService = {
   rejectConsultation,
   scheduleConsultationToDB,
   addLinkToConsultation,
+  withdrawDoctorMoney,
 };
