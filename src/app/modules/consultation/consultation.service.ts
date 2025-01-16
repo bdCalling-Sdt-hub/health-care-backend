@@ -15,6 +15,7 @@ import { DoctorService } from '../user/doctor/doctor.service';
 import { UserService } from '../user/user.service';
 import { HelperService } from '../../../helpers/helper.service';
 import { IMedicine } from '../medicine/medicine.interface';
+import config from '../../../config';
 
 const createConsultation = async (
   payload: IConsultation,
@@ -300,8 +301,8 @@ const buyMedicine = async (userId: string, id: string) => {
       },
     ],
     mode: 'payment',
-    success_url: `${process.env.FRONTEND}/profile?session_id={CHECKOUT_SESSION_ID}&id=${id}`,
-    cancel_url: `${process.env.FRONTEND}/checkout/cancel`,
+    success_url: `http://${config.ip_address}:${config.port}/api/v1/consultation/buySuccess?session_id={CHECKOUT_SESSION_ID}&id=${id}`,
+    cancel_url: `http://${process.env.FRONTEND}/profile`,
     metadata: {
       userId,
     },
