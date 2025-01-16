@@ -7,6 +7,8 @@ import { UserService } from '../user.service';
 import { User } from '../user.model';
 import { HelperService } from '../../../../helpers/helper.service';
 import { USER_ROLES } from '../../../../enums/user';
+import { ConsultationService } from '../../consultation/consultation.service';
+import { PharmecyService } from './pharmecy.service';
 
 const addPharmecy = catchAsync(async (req: Request, res: Response) => {
   const { ...pharmecyData } = req.body;
@@ -65,9 +67,21 @@ const deletePharmecy = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const GetPharmecyStatus = catchAsync(async (req: Request, res: Response) => {
+  const user = req.user.id;
+  const result = await PharmecyService.getPharmecyStatus(user);
+  sendResponse(res, {
+    success: true,
+    statusCode: StatusCodes.OK,
+    message: 'Pharmecy status retrieved successfully',
+    data: result,
+  });
+});
+
 export const PharmecyController = {
   addPharmecy,
   getAllPharmecy,
   getSinglePharmecy,
   deletePharmecy,
+  GetPharmecyStatus,
 };

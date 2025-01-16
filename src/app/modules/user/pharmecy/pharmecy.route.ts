@@ -19,6 +19,11 @@ router.get(
   PharmecyController.getAllPharmecy
 );
 router.get(
+  '/status',
+  auth(USER_ROLES.PHARMACY),
+  PharmecyController.GetPharmecyStatus
+);
+router.get(
   '/:id',
   auth(USER_ROLES.SUPERADMIN, USER_ROLES.ADMIN),
   PharmecyController.getSinglePharmecy

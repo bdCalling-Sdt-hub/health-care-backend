@@ -34,7 +34,7 @@ router.get(
 );
 router.get(
   '/all',
-  auth(...rolesOfAccess, USER_ROLES.DOCTOR),
+  auth(...rolesOfAccess, USER_ROLES.DOCTOR, USER_ROLES.PHARMACY),
   ConsultationController.getAllConsultations
 );
 router.get(

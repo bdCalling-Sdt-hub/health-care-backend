@@ -236,7 +236,6 @@ const addLinkToConsultation = async (data: IConsultation, id: string) => {
     message: 'consultation scheduled successfully',
   };
 };
-
 export const ConsultationService = {
   createConsultation,
   createConsultationSuccess,
