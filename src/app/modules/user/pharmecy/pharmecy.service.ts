@@ -10,6 +10,7 @@ const getPharmecyStatus = async (id: string) => {
     forwardToPartner: true,
     status: { $ne: 'accepted' },
   });
+
   return {
     totalRemaining,
     totalResolved,

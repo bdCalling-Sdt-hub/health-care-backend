@@ -137,7 +137,9 @@ const getConsultationByID = async (id: string): Promise<any> => {
     .populate('subCategory')
     .populate('medicins._id')
     .populate('doctorId')
-    .populate('userId');
+    .populate('userId')
+    .populate('suggestedMedicine._id')
+    .populate('medicins._id');
   if (!result) {
     throw new ApiError(StatusCodes.BAD_REQUEST, 'Consultation not found!');
   }

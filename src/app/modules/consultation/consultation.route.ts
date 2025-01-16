@@ -39,7 +39,7 @@ router.get(
 );
 router.get(
   '/:id',
-  auth(...rolesOfAccess, USER_ROLES.DOCTOR),
+  auth(...rolesOfAccess, USER_ROLES.DOCTOR, USER_ROLES.PHARMACY),
   ConsultationController.getConsultationByID
 );
 router.get(
