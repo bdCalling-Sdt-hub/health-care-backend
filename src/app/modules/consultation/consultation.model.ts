@@ -11,6 +11,10 @@ const consultationSchema = new Schema<IConsultation, ConsultationModel>(
       },
     ],
     userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    totalAmount: {
+      type: Number,
+      required: false,
+    },
     medicins: {
       type: [
         {

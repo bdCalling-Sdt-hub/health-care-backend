@@ -14,6 +14,7 @@ export type IConsultation = {
   subCategory: Types.ObjectId;
   medicins?: [IMedicineItem];
   consultationType?: string;
+  totalAmount?: number;
   pdfFile: string;
   link?: string;
   forwardToPartner?: boolean;
