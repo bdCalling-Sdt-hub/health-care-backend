@@ -174,7 +174,8 @@ const buyMedicineSuccess = catchAsync(async (req: Request, res: Response) => {
   const { session_id, id } = req.query;
   const result = await ConsultationService.buyMedicineSuccess(
     session_id as string,
-    id as string
+    id as string,
+    res
   );
   sendResponse(res, {
     statusCode: StatusCodes.OK,

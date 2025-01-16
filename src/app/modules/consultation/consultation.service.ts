@@ -309,7 +309,11 @@ const buyMedicine = async (userId: string, id: string) => {
   });
   return session.url;
 };
-const buyMedicineSuccess = async (session_id: string, id: string) => {
+const buyMedicineSuccess = async (
+  session_id: string,
+  id: string,
+  res: Response
+) => {
   const session = await stripe.checkout.sessions.retrieve(session_id);
   const isExistConsultation = await getConsultationByID(id);
   if (session?.payment_status === 'paid') {
@@ -317,7 +321,7 @@ const buyMedicineSuccess = async (session_id: string, id: string) => {
       $set: { paid: true, paymentIntentID: session.payment_intent },
     });
   }
-  return {};
+  return res.redirect(`http://${process.env.FRONTEND}/profile`);
 };
 export const ConsultationService = {
   createConsultation,
