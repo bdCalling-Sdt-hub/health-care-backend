@@ -33,6 +33,11 @@ router.post(
   auth(...rolesOfAccess, USER_ROLES.DOCTOR, USER_ROLES.PHARMACY),
   ConsultationController.rejectConsultation
 );
+router.post(
+  '/buyMedicine/:id',
+  auth(USER_ROLES.USER),
+  ConsultationController.buyMedicine
+);
 router.get(
   '/my',
   auth(...rolesOfAccess, USER_ROLES.DOCTOR),

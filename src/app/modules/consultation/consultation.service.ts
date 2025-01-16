@@ -12,6 +12,9 @@ import { NotificationService } from '../notification/notification.service';
 import catchAsync from '../../../shared/catchAsync';
 import { Request, Response } from 'express';
 import { DoctorService } from '../user/doctor/doctor.service';
+import { UserService } from '../user/user.service';
+import { HelperService } from '../../../helpers/helper.service';
+import { IMedicine } from '../medicine/medicine.interface';
 
 const createConsultation = async (
   payload: IConsultation,
@@ -266,6 +269,46 @@ const withdrawDoctorMoney = async (id: string) => {
   return {};
 };
 
+const buyMedicine = async (userId: string, id: string) => {
+  const user = await User.findById(userId);
+  if (!user) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, 'User not found');
+  }
+  const isExistConsultation = await getConsultationByID(id);
+  const allMedicinsPrice = isExistConsultation.suggestedMedicine
+    .map((medicine: any) => {
+      return {
+        price: medicine?._id?.sellingPrice
+          ? medicine?._id?.sellingPrice * medicine.count
+          : 0,
+      };
+    })
+    .reduce((prev: number, current: any) => prev + current.price, 0);
+  const session = await stripe.checkout.sessions.create({
+    payment_method_types: ['card'],
+    line_items: [
+      {
+        price_data: {
+          currency: 'eur',
+          product_data: {
+            name: 'Consultation service Medicins.',
+            description: 'Prescription medicins',
+          },
+          unit_amount: allMedicinsPrice * 100,
+        },
+        quantity: 1,
+      },
+    ],
+    mode: 'payment',
+    success_url: `${process.env.FRONTEND}/profile?session_id={CHECKOUT_SESSION_ID}&id=${id}`,
+    cancel_url: `${process.env.FRONTEND}/checkout/cancel`,
+    metadata: {
+      userId,
+    },
+  });
+  return session.url;
+};
+
 export const ConsultationService = {
   createConsultation,
   createConsultationSuccess,
@@ -279,4 +322,5 @@ export const ConsultationService = {
   scheduleConsultationToDB,
   addLinkToConsultation,
   withdrawDoctorMoney,
+  buyMedicine,
 };
