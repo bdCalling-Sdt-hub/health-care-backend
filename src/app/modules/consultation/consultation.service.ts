@@ -97,7 +97,9 @@ const updateConsultation = async (id: string, payload: any): Promise<any> => {
   return result;
 };
 const prescribeMedicine = async (id: string, payload: any): Promise<any> => {
-  const result = await Consultation.findByIdAndUpdate(id, { $set: payload });
+  const result = await Consultation.findByIdAndUpdate(id, {
+    $set: { ...payload, status: STATUS.PRESCRIBED },
+  });
   if (!result) {
     throw new ApiError(
       StatusCodes.BAD_REQUEST,
