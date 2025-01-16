@@ -314,11 +314,17 @@ const buyMedicineSuccess = async (
   id: string,
   res: Response
 ) => {
+  const todaysDate = new Date();
   const session = await stripe.checkout.sessions.retrieve(session_id);
   const isExistConsultation = await getConsultationByID(id);
   if (session?.payment_status === 'paid') {
     await Consultation.findByIdAndUpdate(isExistConsultation._id, {
-      $set: { paid: true, paymentIntentID: session.payment_intent },
+      $set: {
+        paid: true,
+        paymentIntentID: session.payment_intent,
+        orderDate: todaysDate,
+        status: 'accepted',
+      },
     });
   }
   return res.redirect(`http://${process.env.FRONTEND}/profile`);

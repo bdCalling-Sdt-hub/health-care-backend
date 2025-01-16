@@ -21,6 +21,8 @@ export type IConsultation = {
   status?: string;
   pharmecyAccepted: boolean;
   doctorId?: Types.ObjectId;
+  trackingNo?: string;
+  orderDate?: Date;
   suggestedMedicine?: [IMedicineItem];
   rejectedOpinion?: string;
   opinion?: string;

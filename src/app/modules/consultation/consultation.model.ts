@@ -38,6 +38,14 @@ const consultationSchema = new Schema<IConsultation, ConsultationModel>(
       required: false,
       default: STATUS.DRAFT,
     },
+    trackingNo: {
+      type: String,
+      required: false,
+    },
+    orderDate: {
+      type: Date,
+      required: false,
+    },
     category: { type: Schema.Types.ObjectId, ref: 'Category', required: true },
     subCategory: {
       type: Schema.Types.ObjectId,
