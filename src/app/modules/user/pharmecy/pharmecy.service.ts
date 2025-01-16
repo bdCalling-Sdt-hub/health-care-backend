@@ -10,23 +10,39 @@ const getPharmecyStatus = async (id: string) => {
     forwardToPartner: true,
     status: { $ne: 'accepted' },
   });
-  const totalEarning = await Consultation.countDocuments({ paid: true });
-  const totalDailyEarning = await Consultation.aggregate([
-    {
-      $match: {
-        paid: true,
-        createdAt: {
-          $gte: new Date(new Date().setDate(new Date().getDate() - 1)),
+  const totalEarning =
+    (
+      await Consultation.aggregate([
+        {
+          $match: { paid: true },
         },
-      },
-    },
-    {
-      $group: {
-        _id: null,
-        total: { $sum: '$earning' },
-      },
-    },
-  ]);
+        {
+          $group: {
+            _id: null,
+            total: { $sum: '$totalAmount' },
+          },
+        },
+      ])
+    )[0]?.total || 0;
+  const totalDailyEarning =
+    (
+      await Consultation.aggregate([
+        {
+          $match: {
+            paid: true,
+            orderDate: {
+              $gte: new Date(new Date().setDate(new Date().getDate() - 1)),
+            },
+          },
+        },
+        {
+          $group: {
+            _id: null,
+            total: { $sum: '$totalAmount' },
+          },
+        },
+      ])
+    )[0]?.total || 1;
   return {
     totalRemaining,
     totalResolved,
