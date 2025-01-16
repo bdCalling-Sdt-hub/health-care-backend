@@ -30,7 +30,7 @@ const getPharmecyStatus = async (id: string) => {
   return {
     totalRemaining,
     totalResolved,
-    totalDailyEarning,
+    totalDailyEarning: totalDailyEarning.length,
     totalEarning,
   };
 };
