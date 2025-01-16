@@ -309,7 +309,16 @@ const buyMedicine = async (userId: string, id: string) => {
   });
   return session.url;
 };
-
+const buyMedicineSuccess = async (session_id: string, id: string) => {
+  const session = await stripe.checkout.sessions.retrieve(session_id);
+  const isExistConsultation = await getConsultationByID(id);
+  if (session?.payment_status === 'paid') {
+    await Consultation.findByIdAndUpdate(isExistConsultation._id, {
+      $set: { paid: true, paymentIntentID: session.payment_intent },
+    });
+  }
+  return {};
+};
 export const ConsultationService = {
   createConsultation,
   createConsultationSuccess,
@@ -324,4 +333,5 @@ export const ConsultationService = {
   addLinkToConsultation,
   withdrawDoctorMoney,
   buyMedicine,
+  buyMedicineSuccess,
 };

@@ -24,6 +24,8 @@ export type IConsultation = {
   suggestedMedicine?: [IMedicineItem];
   rejectedOpinion?: string;
   opinion?: string;
+  paid?: boolean;
+  paymentIntent?: string;
   scheduledDate?: Date;
   address?: {
     firstname: string;

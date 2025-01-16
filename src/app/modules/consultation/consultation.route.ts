@@ -38,6 +38,7 @@ router.post(
   auth(USER_ROLES.USER),
   ConsultationController.buyMedicine
 );
+router.get('/buySuccess', ConsultationController.buyMedicineSuccess);
 router.get(
   '/my',
   auth(...rolesOfAccess, USER_ROLES.DOCTOR),

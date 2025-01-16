@@ -170,6 +170,19 @@ const buyMedicine = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+const buyMedicineSuccess = catchAsync(async (req: Request, res: Response) => {
+  const { session_id, id } = req.query;
+  const result = await ConsultationService.buyMedicineSuccess(
+    session_id as string,
+    id as string
+  );
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'Medicine bought successfully',
+    data: result,
+  });
+});
 export const ConsultationController = {
   createConsultation,
   createConsultationSuccess,
@@ -184,4 +197,5 @@ export const ConsultationController = {
   addLink,
   withdrawDoctorMoney,
   buyMedicine,
+  buyMedicineSuccess,
 };
