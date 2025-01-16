@@ -189,6 +189,34 @@ const rejectConsultation = async (id: string, opinion: string) => {
   return {};
 };
 
+const scheduleConsultationToDB = async (data: IConsultation, id: string) => {
+  const consultation = await getConsultationByID(id);
+  await updateConsultation(id, data);
+  //@ts-ignore
+  const io = global.io;
+  await NotificationService.createNotification(
+    {
+      title: `Your consultation on ${consultation.subCategory.name} is scheduled`,
+      description: `Your consultation on ${
+        consultation.subCategory.name
+      } with doctor ${
+        consultation.doctorId.name
+      } was scheduled on ${data?.scheduledDate?.toLocaleString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      })}`,
+      reciever: consultation.userId._id,
+    },
+    io
+  );
+  return {
+    message: 'consultation scheduled successfully',
+  };
+};
+
 export const ConsultationService = {
   createConsultation,
   createConsultationSuccess,
@@ -199,4 +227,5 @@ export const ConsultationService = {
   getConsultationByID,
   refundByIDFromDB,
   rejectConsultation,
+  scheduleConsultationToDB,
 };

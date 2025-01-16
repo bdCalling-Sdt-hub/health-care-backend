@@ -58,4 +58,9 @@ router.patch(
   auth(USER_ROLES.DOCTOR),
   ConsultationController.prescribeMedicine
 );
+router.patch(
+  '/schedule/:id',
+  auth(USER_ROLES.DOCTOR),
+  ConsultationController.scheduleConsultation
+);
 export const ConsultationRoutes = router;

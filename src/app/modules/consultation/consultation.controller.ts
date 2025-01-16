@@ -126,6 +126,20 @@ const rejectConsultation = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const scheduleConsultation = catchAsync(async (req: Request, res: Response) => {
+  const id = req.params.id;
+  const result = await ConsultationService.scheduleConsultationToDB(
+    req?.body,
+    id
+  );
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'Consultation scheduled successfully',
+    data: result,
+  });
+});
+
 export const ConsultationController = {
   createConsultation,
   createConsultationSuccess,
@@ -136,4 +150,5 @@ export const ConsultationController = {
   refundMoney,
   getConsultationByID,
   rejectConsultation,
+  scheduleConsultation,
 };
