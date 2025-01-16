@@ -29,6 +29,11 @@ router.get(
   PharmecyController.GetPharmecyWorkload
 );
 router.get(
+  '/earnings',
+  auth(USER_ROLES.PHARMACY),
+  PharmecyController.getPharmecyEarnings
+);
+router.get(
   '/:id',
   auth(USER_ROLES.SUPERADMIN, USER_ROLES.ADMIN),
   PharmecyController.getSinglePharmecy

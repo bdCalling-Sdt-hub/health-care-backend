@@ -86,7 +86,61 @@ const getPharmecyWorkload = async (year: number) => {
   });
   return data;
 };
+const getPharmecyEarnings = async (year: number) => {
+  const currentYear = year || new Date().getFullYear();
+  const result = await Consultation.aggregate([
+    {
+      $match: {
+        paid: true,
+        orderDate: {
+          $gte: new Date(currentYear, 0, 1),
+          $lte: new Date(currentYear, 11, 31),
+        },
+      },
+    },
+    {
+      $group: {
+        _id: { $month: '$orderDate' },
+        total: { $sum: '$totalAmount' },
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        month: '$_id',
+        total: 1,
+      },
+    },
+    {
+      $sort: { month: 1 },
+    },
+  ]);
+  const months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
+  const data = months.map((month, index) => {
+    const found = result.find(item => item.month === index + 1);
+    return {
+      month,
+      total: found ? found.total : 0,
+    };
+  });
+  return data;
+};
+
 export const PharmecyService = {
   getPharmecyStatus,
   getPharmecyWorkload,
+  getPharmecyEarnings,
 };
