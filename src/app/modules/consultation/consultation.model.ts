@@ -32,6 +32,7 @@ const consultationSchema = new Schema<IConsultation, ConsultationModel>(
       ],
       required: false,
     },
+    paid: { type: Boolean, required: false, default: false },
     status: {
       type: String,
       enum: Object.values(STATUS),
