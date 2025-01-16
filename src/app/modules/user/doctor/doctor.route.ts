@@ -30,7 +30,7 @@ router.post(
 );
 router.post(
   '/setup-payment',
-  auth(USER_ROLES.SUPERADMIN, USER_ROLES.ADMIN),
+  auth(USER_ROLES.DOCTOR),
   fileUploadHandler(),
   DoctorController.setUpStripeConnectAccount
 );

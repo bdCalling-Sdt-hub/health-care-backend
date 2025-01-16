@@ -101,46 +101,6 @@ const deleteCoupon = async (couponId: string) => {
   }
 };
 
-const uploadFileToStripe = async (filePath: string): Promise<string> => {
-  try {
-    const fileBuffer = fs.readFileSync(filePath);
-    const fileName = path.basename(filePath);
-    const fileExtension = path.extname(filePath).toLowerCase();
-
-    let mimeType: string;
-    switch (fileExtension) {
-      case '.jpg':
-      case '.jpeg':
-        mimeType = 'image/jpeg';
-        break;
-      case '.png':
-        mimeType = 'image/png';
-        break;
-      case '.pdf':
-        mimeType = 'application/pdf';
-        break;
-      default:
-        throw new Error(`Unsupported file type: ${fileExtension}`);
-    }
-
-    const file = await stripe.files.create({
-      purpose: 'identity_document',
-      file: {
-        data: fileBuffer,
-        name: fileName,
-        type: mimeType,
-      },
-    });
-    return file.id;
-  } catch (error) {
-    console.error('Error uploading file to Stripe:', error);
-    throw new ApiError(
-      StatusCodes.INTERNAL_SERVER_ERROR,
-      'Failed to upload file to Stripe'
-    );
-  }
-};
-
 export const stripeHelper = {
   createCoupon,
   createPromotionCode,

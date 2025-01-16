@@ -1,6 +1,13 @@
+import { StatusCodes } from 'http-status-codes';
 import { CONSULTATION_TYPE } from '../../../../enums/consultation';
+import ApiError from '../../../../errors/ApiError';
 import { Consultation } from '../../consultation/consultation.model';
-
+import { User } from '../user.model';
+import path from 'path';
+import { stripeHelper } from '../../../../helpers/stripeHelper';
+import stripe from '../../../../config/stripe';
+import { config } from 'dotenv';
+import fs from 'fs';
 const getDoctorStatus = async (id: string) => {
   const [
     totalRegularConsultation,
@@ -176,6 +183,45 @@ const getDoctorEarningStatusFromDB = async (id: string, year: number) => {
     ),
   };
 };
+const uploadFileToStripe = async (filePath: string): Promise<string> => {
+  try {
+    const fileBuffer = fs.readFileSync(filePath);
+    const fileName = path.basename(filePath);
+    const fileExtension = path.extname(filePath).toLowerCase();
+
+    let mimeType: string;
+    switch (fileExtension) {
+      case '.jpg':
+      case '.jpeg':
+        mimeType = 'image/jpeg';
+        break;
+      case '.png':
+        mimeType = 'image/png';
+        break;
+      case '.pdf':
+        mimeType = 'application/pdf';
+        break;
+      default:
+        throw new Error(`Unsupported file type: ${fileExtension}`);
+    }
+
+    const file = await stripe.files.create({
+      purpose: 'identity_document',
+      file: {
+        data: fileBuffer,
+        name: fileName,
+        type: mimeType,
+      },
+    });
+    return file.id;
+  } catch (error) {
+    console.error('Error uploading file to Stripe:', error);
+    throw new ApiError(
+      StatusCodes.INTERNAL_SERVER_ERROR,
+      'Failed to upload file to Stripe'
+    );
+  }
+};
 const setUpStripeConnectAccount = async (
   data: any,
   files: any,
@@ -185,13 +231,14 @@ const setUpStripeConnectAccount = async (
 ): Promise<string> => {
   const values = await JSON.parse(data);
 
-  const isExistUser = await Teacher.findOne({ email: user?.email });
+  const isExistUser = await User.findOne({ email: user?.email });
   if (!isExistUser) {
     throw new ApiError(StatusCodes.BAD_REQUEST, "User doesn't exist!");
   }
   if (isExistUser.email !== user.email) {
     throw new ApiError(StatusCodes.BAD_REQUEST, "Email doesn't match");
   }
+
   const dob = new Date(values.dateOfBirth);
 
   // Process KYC
@@ -199,7 +246,7 @@ const setUpStripeConnectAccount = async (
   if (!KYCFiles || KYCFiles.length < 2) {
     throw new ApiError(StatusCodes.BAD_REQUEST, 'Two KYC files are required!');
   }
-  const uploadsPath = path.join(__dirname, '../../../..');
+  const uploadsPath = path.join(__dirname, '../../../../../');
 
   // File upload to Stripe
   const frontFileId = await uploadFileToStripe(
@@ -219,14 +266,8 @@ const setUpStripeConnectAccount = async (
           year: dob.getFullYear(),
         },
         id_number: values.idNumber,
-        first_name:
-          values.name.split(' ')[0] ||
-          isExistUser.name.split(' ')[0] ||
-          isExistUser.name,
-        last_name:
-          values.name.split(' ')[1] ||
-          isExistUser.name.split(' ')[1] ||
-          isExistUser.name,
+        first_name: values.name.split(' ')[0] || isExistUser.firstName,
+        last_name: values.name.split(' ')[1] || isExistUser.lastName,
         email: user.email,
         phone: values.phoneNumber,
         address: {
@@ -248,6 +289,7 @@ const setUpStripeConnectAccount = async (
       tos_shown_and_accepted: true,
     },
   });
+
   // Create account
   const account = await stripe.accounts.create({
     type: 'custom',
@@ -259,8 +301,8 @@ const setUpStripeConnectAccount = async (
     },
     business_profile: {
       mcc: '5734',
-      name: `${isExistUser.name}`,
-      url: 'https://medspaceconnect.com',
+      name: `${isExistUser.firstName}`,
+      url: 'https://dokter-for-you.vercel.app',
     },
     external_account: {
       object: 'bank_account',
@@ -273,7 +315,7 @@ const setUpStripeConnectAccount = async (
     },
     tos_acceptance: {
       date: Math.floor(Date.now() / 1000),
-      ip: ip, // Replace with the user's actual IP address
+      ip: ip,
     },
   });
 
@@ -284,23 +326,26 @@ const setUpStripeConnectAccount = async (
 
   // Save to the DB
   if (account.id && account?.external_accounts?.data.length) {
-    //@ts-ignore
-    isExistUser.accountInformation.stripeAccountId = account.id;
-    //@ts-ignore
-    isExistUser.accountInformation.bankAccountNumber =
-      values.bank_info.account_number;
-    //@ts-ignore
-    isExistUser.accountInformation.externalAccountId =
-      account.external_accounts.data[0].id;
-    //@ts-ignore
-    isExistUser.accountInformation.status = 'active';
-    await Teacher.findByIdAndUpdate(user.id, isExistUser);
+    // Create update object with nested accountInformation
+    const updateData = {
+      accountInformation: {
+        stripeAccountId: account.id,
+        bankAccountNumber: values.bank_info.account_number,
+        externalAccountId: account.external_accounts.data[0].id,
+        status: 'active',
+      },
+    };
+
+    // Update the user document with the new data
+    await User.findByIdAndUpdate(user.id, { $set: updateData }, { new: true });
   }
 
   // Create account link for onboarding
   const accountLink = await stripe.accountLinks.create({
     account: account.id,
+    //@ts-ignore
     refresh_url: config.stripe_refresh_url || 'https://example.com/reauth',
+    //@ts-ignore
     return_url: config.stripe_return_url || 'https://example.com/return',
     type: 'account_onboarding',
     collect: 'eventually_due',
