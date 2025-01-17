@@ -89,7 +89,7 @@ const GetPharmecyWorkload = catchAsync(async (req: Request, res: Response) => {
   });
 });
 const getPharmecyEarnings = catchAsync(async (req: Request, res: Response) => {
-  const user = req.user.id;
+  // const user = req.user.id;
   const year = req.query.year;
   const result = await PharmecyService.getPharmecyEarnings(Number(year));
   sendResponse(res, {

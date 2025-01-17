@@ -43,8 +43,8 @@ const getAllDataFromDB = async (query: any, model: Model<any>) => {
     .find(whereConditions)
     .populate('subCategory')
     .sort({ [sortBy]: sortOrder })
-    .skip((Number(page) - 1) * Number(limit))
-    .limit(Number(limit))
+    // .skip((Number(page) - 1) * Number(limit))
+    // .limit(Number(limit))
     .select('-password');
 
   const totalPages = Math.ceil(
