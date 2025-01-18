@@ -49,6 +49,8 @@ const getAllNotifications = async (
   const result = await queryBuilder;
   const unreadCount = await Notification.countDocuments({
     ...queryFields,
+    status: NOTIFICATION_STATUS.UNREAD,
+    reciever: userId,
   });
   return {
     data: result,
