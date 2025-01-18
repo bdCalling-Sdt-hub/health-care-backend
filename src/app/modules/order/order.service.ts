@@ -73,7 +73,7 @@ const deleteOrder = async (id: string): Promise<IOrder | null> => {
   return result;
 };
 
-const importOrders = async (req: Request, res: Response): Promise<IOrder[]> => {
+const importOrders = async (req: Request, res: Response): Promise<any[]> => {
   if (!req?.file?.buffer) {
     throw new ApiError(StatusCodes.BAD_REQUEST, 'No file uploaded!');
   }
@@ -107,6 +107,7 @@ const importOrders = async (req: Request, res: Response): Promise<IOrder[]> => {
   });
 
   const submitAllOrder = await Promise.all(promises);
+
   return submitAllOrder;
 };
 
