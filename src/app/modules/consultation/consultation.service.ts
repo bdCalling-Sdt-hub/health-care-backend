@@ -40,6 +40,9 @@ const createConsultationSuccess = async (
   session_id: string,
   id: string
 ): Promise<any> => {
+  const consultation: any = await Consultation.findById(id)
+    .populate('userId')
+    .populate('subCategory');
   const result = await stripe.checkout.sessions.retrieve(session_id);
   if (result.payment_status === 'paid') {
     const paymentIntentID = result.payment_intent;
@@ -69,8 +72,21 @@ const createConsultationSuccess = async (
         'Failed to update consultation!'
       );
     }
+    const doctor = await User.findById(selectRandomDoctor._id);
+    //@ts-ignore
+    const io = global.io;
+    await NotificationService.createNotification(
+      {
+        title: `A new consultation request by ${consultation?.userId?.firstname}`,
+        description: `A new consultation request by ${consultation?.userId?.firstname} on ${consultation?.subCategory?.name}`,
+
+        reciever: selectRandomDoctor._id,
+      },
+      io
+    );
     return updateConsultation;
   }
+
   return result;
 };
 const getMyConsultations = async (userId: string, query: any): Promise<any> => {

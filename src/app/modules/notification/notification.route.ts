@@ -18,8 +18,16 @@ router.post(
   auth(...rolesOfAccess),
   NotificationController.sendNotificationToAllUsers
 );
-router.get('/', NotificationController.getAllNotifications);
-router.get('/:id', NotificationController.getNotificationById);
+router.get(
+  '/',
+  auth(...rolesOfAccess),
+  NotificationController.getAllNotifications
+);
+router.get(
+  '/:id',
+  auth(...rolesOfAccess),
+  NotificationController.getNotificationById
+);
 router.patch(
   '/read',
   auth(...rolesOfAccess),

@@ -19,8 +19,8 @@ const createNotification = catchAsync(async (req: Request, res: Response) => {
 
 const getAllNotifications = catchAsync(async (req: Request, res: Response) => {
   const query = req.query;
-
-  const result = await NotificationService.getAllNotifications(query);
+  const userId = req.user.id;
+  const result = await NotificationService.getAllNotifications(query, userId);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     success: true,
