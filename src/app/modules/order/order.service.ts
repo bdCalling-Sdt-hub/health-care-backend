@@ -111,6 +111,43 @@ const importOrders = async (req: Request, res: Response): Promise<any[]> => {
   return submitAllOrder;
 };
 
+const exportOrders = async (req: Request, res: Response): Promise<void> => {
+  try {
+    // Fetch orders from database
+    const orders = await Order.find({});
+
+    // Create workbook and worksheet
+    const workbook = XLSX.utils.book_new();
+    const worksheet = XLSX.utils.json_to_sheet(orders);
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Orders');
+
+    // Generate buffer
+    const buffer = XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' });
+
+    // Format date for filename
+    const date = new Date().toISOString().split('T')[0];
+    const filename = `orders_${date}.xlsx`;
+
+    // IMPORTANT: Send headers BEFORE sending the file
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    res.setHeader(
+      'Content-Type',
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    );
+    res.setHeader('Content-Length', buffer.length);
+
+    // Additional headers to force download
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+
+    // Use res.end() instead of res.send() for binary data
+    return res.end(buffer);
+  } catch (error) {
+    console.error('Error exporting orders:', error);
+    res.status(500).json({ error: 'Failed to export orders' });
+  }
+};
 export const OrderService = {
   createOrder,
   getAllOrders,
@@ -118,4 +155,5 @@ export const OrderService = {
   updateOrder,
   deleteOrder,
   importOrders,
+  exportOrders,
 };

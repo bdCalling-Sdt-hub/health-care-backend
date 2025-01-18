@@ -3,7 +3,10 @@ import catchAsync from '../../../shared/catchAsync';
 import sendResponse from '../../../shared/sendResponse';
 import { StatusCodes } from 'http-status-codes';
 import { OrderService } from './order.service';
-
+import { Order } from './order.model';
+import XLSX from 'xlsx';
+import ApiError from '../../../errors/ApiError';
+import { IOrder } from './order.interface';
 const createOrder = catchAsync(async (req: Request, res: Response) => {
   const result = await OrderService.createOrder(req.body);
   sendResponse(res, {
@@ -65,6 +68,43 @@ const importOrders = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const exportOrders = catchAsync(
+  async (req: Request, res: Response): Promise<void> => {
+    const orders = await Order.find(
+      {},
+      {
+        trackingNo: 1,
+        company: 1,
+        country: 1,
+        city: 1,
+        name: 1,
+        email: 1,
+        phone: 1,
+        address: 1,
+        price: 1,
+        _id: 0,
+      }
+    ).lean();
+    const workbook = XLSX.utils.book_new();
+    const worksheet = XLSX.utils.json_to_sheet(orders);
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Orders');
+    const buffer = XLSX.write(workbook, {
+      type: 'buffer',
+      bookType: 'xlsx',
+    });
+    const filename = `orders_${new Date().toISOString()}.xlsx`;
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    res.setHeader(
+      'Content-Type',
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    );
+    res.setHeader('Content-Length', buffer.length);
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+    res.send(buffer);
+  }
+);
 export const OrderController = {
   createOrder,
   getAllOrders,
@@ -72,4 +112,5 @@ export const OrderController = {
   updateOrder,
   deleteOrder,
   importOrders,
+  exportOrders,
 };

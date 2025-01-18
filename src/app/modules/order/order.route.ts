@@ -21,6 +21,7 @@ router.post(
   OrderController.createOrder
 );
 router.post('/import', upload.single('file'), OrderController.importOrders);
+router.get('/export', OrderController.exportOrders);
 router.get('/', OrderController.getAllOrders);
 router.get('/:id', OrderController.getOrderById);
 router.patch(
