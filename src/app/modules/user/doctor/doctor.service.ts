@@ -1,5 +1,5 @@
 import { StatusCodes } from 'http-status-codes';
-import { CONSULTATION_TYPE } from '../../../../enums/consultation';
+import { CONSULTATION_TYPE, STATUS } from '../../../../enums/consultation';
 import ApiError from '../../../../errors/ApiError';
 import { Consultation } from '../../consultation/consultation.model';
 import { User } from '../user.model';
@@ -353,10 +353,35 @@ const setUpStripeConnectAccount = async (
 
   return accountLink.url;
 };
-
+const getDoctorEarningsFromDB = async (user: string) => {
+  const isExistUser = await User.findOne({ _id: user });
+  if (!isExistUser) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, "User doesn't exist!");
+  }
+  const consultations = await Consultation.countDocuments({
+    doctorId: user,
+    status: STATUS.ACCEPTED,
+  });
+  const totalEarn = consultations * 25 * 0.15;
+  const doctor = await User.findOne({ _id: user });
+  if (!doctor) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, 'Where is the teacher');
+  }
+  const totalWithdrawn = Consultation.countDocuments({
+    doctorId: user,
+    withrawn: true,
+  });
+  const balanceAvailable = Number(totalEarn) - Number(totalWithdrawn);
+  return {
+    totalEarn,
+    totalWithdrawn,
+    balanceAvailable,
+  };
+};
 export const DoctorService = {
   getDoctorStatus,
   getDoctorActivityStatusFromDB,
   getDoctorEarningStatusFromDB,
   setUpStripeConnectAccount,
+  getDoctorEarningsFromDB,
 };

@@ -4,6 +4,7 @@ import { USER_ROLES } from '../../../enums/user';
 import auth from '../../middlewares/auth';
 import validateRequest from '../../middlewares/validateRequest';
 import { DiscountValidation } from './discount.validation';
+import { DoctorController } from '../user/doctor/doctor.controller';
 
 const router = express.Router();
 const rolesOfAccess = [
@@ -19,6 +20,7 @@ router.post(
 );
 router.get('/', DiscountController.getAllDiscounts);
 router.get('/:id', DiscountController.getDiscountById);
+
 router.patch(
   '/:id',
   auth(...rolesOfAccess),

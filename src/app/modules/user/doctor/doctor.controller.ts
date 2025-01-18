@@ -145,6 +145,16 @@ const getDoctorEarningStatus = catchAsync(
     });
   }
 );
+const getDoctorEarnings = catchAsync(async (req: Request, res: Response) => {
+  const user = req.user.id;
+  const result = await DoctorService.getDoctorEarningsFromDB(user);
+  sendResponse(res, {
+    success: true,
+    statusCode: StatusCodes.OK,
+    message: 'Doctor status retrived successfully',
+    data: result,
+  });
+});
 export const DoctorController = {
   addDoctor,
   getAllDoctors,
@@ -154,4 +164,5 @@ export const DoctorController = {
   getDoctorActivityStatus,
   setUpStripeConnectAccount,
   getDoctorEarningStatus,
+  getDoctorEarnings,
 };

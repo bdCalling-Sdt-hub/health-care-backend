@@ -15,6 +15,11 @@ const consultationSchema = new Schema<IConsultation, ConsultationModel>(
       type: Number,
       required: false,
     },
+    withrawn: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
     medicins: {
       type: [
         {

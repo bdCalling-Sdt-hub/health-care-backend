@@ -17,10 +17,16 @@ router.get(
   auth(USER_ROLES.DOCTOR),
   DoctorController.getDoctorActivityStatus
 );
+
 router.get(
   '/earning/status',
   auth(USER_ROLES.DOCTOR),
   DoctorController.getDoctorEarningStatus
+);
+router.get(
+  '/earnings',
+  auth(USER_ROLES.DOCTOR),
+  DoctorController.getDoctorEarnings
 );
 router.post(
   '/',

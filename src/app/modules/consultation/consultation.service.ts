@@ -267,7 +267,7 @@ const withdrawDoctorMoney = async (id: string) => {
   if (!transfer) {
     throw new ApiError(StatusCodes.BAD_REQUEST, 'Failed to transfer money!');
   }
-
+  await Consultation.findByIdAndUpdate(id, { withrawn: true });
   return {};
 };
 
