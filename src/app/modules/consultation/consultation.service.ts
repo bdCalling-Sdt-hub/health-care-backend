@@ -16,6 +16,7 @@ import { UserService } from '../user/user.service';
 import { HelperService } from '../../../helpers/helper.service';
 import { IMedicine } from '../medicine/medicine.interface';
 import config from '../../../config';
+import { Order } from '../order/order.model';
 
 const createConsultation = async (
   payload: IConsultation,
@@ -364,6 +365,18 @@ const buyMedicineSuccess = async (
       },
     });
   }
+  await Order.create({
+    address: `${isExistConsultation.address}, ${isExistConsultation.city}, ${isExistConsultation.country}`,
+    name: isExistConsultation.userId.name || 'N/A',
+    email: isExistConsultation.userId.email || 'N/A',
+    phone: isExistConsultation.userId.contact || 'N/A',
+    city: isExistConsultation.address.city || 'N/A',
+    company: 'Apotheek Zaandam Oost',
+    country: 'Netherlands',
+    orderDate: todaysDate,
+    price: isExistConsultation.totalAmount,
+    status: 'processing',
+  });
   return res.redirect(`http://${process.env.FRONTEND}/profile`);
 };
 export const ConsultationService = {
