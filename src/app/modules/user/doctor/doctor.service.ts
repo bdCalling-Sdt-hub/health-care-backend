@@ -383,7 +383,11 @@ const getDoctorEarningHistory = async (user: string) => {
   const consultations = await Consultation.find({
     doctorId: user,
     status: { $in: [STATUS.ACCEPTED, STATUS.PROCESSING, STATUS.PRESCRIBED] },
-  });
+  })
+    .populate('userId')
+    .populate('subCategory')
+    .populate('category')
+    .populate('doctorId');
 
   return consultations;
 };
