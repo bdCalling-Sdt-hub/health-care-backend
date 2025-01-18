@@ -2,8 +2,16 @@ import express, { Request, Response } from 'express';
 import puppeteer from 'puppeteer';
 import { StatusCodes } from 'http-status-codes';
 import ApiError from '../../../errors/ApiError';
+import { ConsultationService } from '../consultation/consultation.service';
 
 export const generatePdf = async (req: Request, res: Response) => {
+  const consultationId = req.params.id;
+  const consultation = await ConsultationService.getConsultationByID(
+    consultationId
+  );
+  if (!consultation) {
+    throw new ApiError(StatusCodes.NOT_FOUND, 'Consultation not found');
+  }
   let browser = null;
   try {
     // Your existing HTML content

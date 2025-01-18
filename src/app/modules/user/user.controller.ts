@@ -41,14 +41,20 @@ const getUserProfile = catchAsync(async (req: Request, res: Response) => {
 const updateProfile = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const user = req.user;
+    let signature;
+    if (req.files && 'signature' in req.files && req.files.signature[0]) {
+      signature = `/images/${req.files.signature[0].filename}`;
+    }
     let profile;
     if (req.files && 'profile' in req.files && req.files.profile[0]) {
       profile = `/images/${req.files.profile[0].filename}`;
     }
     const data = {
       profile,
+      signature,
       ...req.body,
     };
+
     const result = await UserService.updateProfileToDB(user, data);
 
     sendResponse(res, {

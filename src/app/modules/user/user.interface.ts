@@ -17,6 +17,7 @@ export type IUser = {
   gender: GENDER;
   profile?: string;
   designation?: string;
+  signatureImage?: string;
   dateOfBirth?: string;
   status: 'active' | 'delete';
   verified: boolean;

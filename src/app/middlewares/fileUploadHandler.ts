@@ -30,6 +30,9 @@ const fileUploadHandler = () => {
         case 'profile':
           uploadDir = path.join(baseUploadDir, 'images');
           break;
+        case 'signature':
+          uploadDir = path.join(baseUploadDir, 'images');
+          break;
         case 'media':
           uploadDir = path.join(baseUploadDir, 'medias');
           break;
@@ -67,6 +70,7 @@ const fileUploadHandler = () => {
     if (
       file.fieldname === 'image' ||
       file.fieldname === 'profile' ||
+      file.fieldname === 'signature' ||
       file.fieldname === 'KYC'
     ) {
       if (
@@ -113,6 +117,7 @@ const fileUploadHandler = () => {
     { name: 'media', maxCount: 3 },
     { name: 'pdfFile', maxCount: 3 },
     { name: 'profile', maxCount: 3 },
+    { name: 'signature', maxCount: 3 },
     { name: 'doc', maxCount: 3 },
     { name: 'KYC', maxCount: 3 },
   ]);

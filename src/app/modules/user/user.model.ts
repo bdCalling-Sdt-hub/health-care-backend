@@ -21,6 +21,10 @@ const userSchema = new Schema<IUser, UserModal>(
       enum: Object.values(USER_ROLES),
       required: true,
     },
+    signatureImage: {
+      type: String,
+      required: false,
+    },
     designation: {
       type: String,
       required: false,

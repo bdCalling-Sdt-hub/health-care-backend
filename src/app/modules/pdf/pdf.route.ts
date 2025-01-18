@@ -8,6 +8,6 @@ import { pdfController } from './pdf.controller';
 
 const router = express.Router();
 
-router.get('/generate-pdf', pdfController.generatePdf);
+router.get('/generate-pdf/:id', pdfController.generatePdf);
 
 export const PdfRouter = router;
