@@ -179,7 +179,7 @@ export const generatePdf = async (req: Request, res: Response) => {
       body {
         padding: 0;
         margin: 0;
-        background-size: 800px 1140px;
+        background-size: 800px 1200px;
       }
       
       .prescription-form {
@@ -200,6 +200,7 @@ export const generatePdf = async (req: Request, res: Response) => {
     <div class="logo-section">
       <img src="https://res.cloudinary.com/dulgs9eba/image/upload/v1735388552/pdf_o25ezj.png" class="pdf-image" alt="Logo">
     </div>
+<br><br><br><br>
     
     <div class="info-grid">
       <div>
@@ -237,7 +238,6 @@ export const generatePdf = async (req: Request, res: Response) => {
         </div>
       </div>
     </div>
-
     <table class="medicine-table">
       <thead>
         <tr>
