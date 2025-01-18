@@ -9,12 +9,22 @@ export const generatePdf = async (req: Request, res: Response) => {
   const consultation = await ConsultationService.getConsultationByID(
     consultationId
   );
+
   if (!consultation) {
     throw new ApiError(StatusCodes.NOT_FOUND, 'Consultation not found');
   }
+
+  // Validate required data
+  if (!consultation.userId || !consultation.doctorId) {
+    throw new ApiError(
+      StatusCodes.BAD_REQUEST,
+      'Missing required user or doctor information'
+    );
+  }
+
+  const todaysDate = new Date();
   let browser = null;
   try {
-    // Your existing HTML content
     const htmlContent = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,282 +32,254 @@ export const generatePdf = async (req: Request, res: Response) => {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Medical Prescription - Dokter For You</title>
   <style>
-    * {
+ * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
+    
     body {
       background-image: url("https://res.cloudinary.com/dulgs9eba/image/upload/v1735533787/Untitled_design_zrnqak.png");
       background-size: 800px 1000px;
       background-position: center;
       background-repeat: no-repeat;
-      
-      padding-top: 20px;
-      padding-left: 20px;
-      padding-right: 20px;
-      padding-bottom: 10px;
+      padding: 20px;
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
     }
+    
     .prescription-form {
       width: 210mm;
-      height: 297mm;
-      padding: 20px 20px;
+      min-height: 297mm;
+      padding: 20px;
       display: flex;
       flex-direction: column;
-      height:100dvh;
       justify-content: space-between;
       position: relative;
+      background-color: rgba(255, 255, 255, 0.95);
     }
-    .top-wave {
-      position: absolute;
-      top: -10px;
-      left: -20px;
-      width: calc(100% + 40px);
-      height: 150px;
-      z-index: 1;
-    }
-    .bottom-wave {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 60px;
-      z-index: 1;
-    }
+    
     .logo-section {
       display: flex;
       align-items: center;
       gap: 15px;
-      margin-bottom: 20px;
+      margin-bottom: 30px;
       position: relative;
       z-index: 2;
     }
-    .logo {
-      width: 50px;
-      height: 50px;
-      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    
+    .pdf-image {
+      height: 70px;
+      object-fit: contain;
     }
-    .logo-text h1 {
-      color: #0070C0;
-      font-size: 24px;
-      font-weight: 600;
-      letter-spacing: -0.5px;
-    }
-    .logo-text p {
-      color: #40B4AA;
-      font-size: 12px;
-      text-transform: uppercase;
-    }
+    
     .info-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 30px;
+      margin-bottom: 30px;
       position: relative;
       z-index: 2;
     }
+    
     .info-item {
       margin-bottom: 15px;
     }
+    
     .info-label {
-      font-weight: bold;
+      font-weight: 600;
       color: #0070C0;
-      font-size: 12px;
+      font-size: 13px;
+      margin-bottom: 4px;
     }
+    
     .info-value {
       font-size: 14px;
       color: #333;
       padding: 5px 0;
       border-bottom: 1px solid #e0e0e0;
     }
+    
     .divider {
-      margin: 20px 0;
+      margin: 25px 0;
       height: 1px;
-      background-color: #000;
+      background-color: #e0e0e0;
     }
-    .prescription-area {
-      flex-grow: 1;
-      padding: 0px;
-      border-radius: 10px;
-      color: #005075;
-      font-size: 14px;
-      font-weight: bold;
-      margin-bottom: 10px;
+    
+    .medicine-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
     }
+    
+    .medicine-table th,
+    .medicine-table td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: left;
+    }
+    
+    .medicine-table th {
+      background-color: rgba(0, 112, 192, 0.1);
+    }
+    
+    .medicine-name {
+      font-weight: normal;
+    }
+    
+    .text-header {
+      color: #0070C0;
+      font-size: 15px;
+      font-weight: 600;
+    }
+    
     .footer {
-      padding: 15px;
+      margin-top: auto;
+      padding: 20px;
       border-radius: 10px;
     }
-    .pdf-image{
-        height: 70px;
-    }
+    
     .doctor-section {
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      align-items: flex-end;
+      margin-bottom: 20px;
     }
+    
     .signature-section {
       text-align: right;
     }
+    
+    .signature-section img {
+      max-height: 60px;
+      margin-bottom: 10px;
+    }
+    
     .signature-line {
       width: 200px;
       height: 1px;
-      margin-top: 50px;
       background-color: #000;
+      margin: 10px 0;
     }
+    
     .confirmation {
       text-align: center;
       font-size: 12px;
-      color: #555;
-      padding: 10px;
-      background: rgb(255, 255, 255);
-      border-radius: 10px;
+      color: #666;
+      padding: 15px;
+      background: rgba(64, 180, 170, 0.1);
+      border-radius: 8px;
       border: 1px solid rgba(64, 180, 170, 0.2);
-      margin-top: 10px;
     }
+    
     @media print {
       body {
         padding: 0;
         margin: 0;
-        background-image: url("https://res.cloudinary.com/dulgs9eba/image/upload/v1735533787/Untitled_design_zrnqak.png");
         background-size: 800px 1140px;
-        background-position: center;
-        background-repeat: no-repeat;
       }
+      
       .prescription-form {
         box-shadow: none;
+        background-color: transparent;
+      }
+      
+      .medicine-table th {
+        background-color: rgba(0, 112, 192, 0.1) !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
       }
     }
-    .medicine-table {
-        margin-top: 10px;
-        width: 100%;
-        border-collapse: collapse;
-      }
-      .medicine-table td, .medicine-table th {
-        border: 1px solid #ddd;
-        padding: 8px;
-      }
-      .medicine-table tr {
-        font-size: 14px;
-
-      }
-      .medicine-table th {
-        padding-top: 12px;
-        padding-bottom: 12px;
-        text-align: left;
-
-      }
-      .medicine-name {
-        font-weight: normal;
-      }
-      .text-header{
-        color: #0070C0;
-        font-size: 15px;
-        font-weight: 550;
-      }
   </style>
 </head>
 <body>
   <div class="prescription-form">
-    <!-- <svg class="top-wave" viewBox="0 0 1440 320" preserveAspectRatio="none">
-      <path fill="#113cb1" fill-opacity="0.3" d="M0,160 C480,280 960,200 1440,160 L1440,0 L0,0 Z"></path>
-      <path fill="#40B4AA" fill-opacity="0.4" d="M0,120 C480,200 960,120 1440,120 L1440,0 L0,0 Z"></path>
-    </svg> -->
     <div class="logo-section">
-      <img src="https://res.cloudinary.com/dulgs9eba/image/upload/v1735388552/pdf_o25ezj.png" class="pdf-image" alt="" srcset="">
+      <img src="https://res.cloudinary.com/dulgs9eba/image/upload/v1735388552/pdf_o25ezj.png" class="pdf-image" alt="Logo">
     </div>
-    <br>
-    <br>
-    <br>
-    <br>
+    
     <div class="info-grid">
       <div>
         <div class="info-item">
           <span class="info-label">SNo:</span>
-          <div class="info-value">PRE-2024-001</div>
+          <div class="info-value">${consultation._id || 'N/A'}</div>
         </div>
         <div class="info-item">
           <span class="info-label">Patient's Name:</span>
-          <div class="info-value">John Smith</div>
+          <div class="info-value">${consultation.userId?.name || 'N/A'}</div>
         </div>
         <div class="info-item">
           <span class="info-label">Address:</span>
-          <div class="info-value">123 Main Street</div>
+          <div class="info-value">${
+            consultation.userId?.location || 'N/A'
+          }</div>
         </div>
       </div>
       <div>
         <div class="info-item">
           <span class="info-label">Type of Prescription:</span>
-          <div class="info-value">Copy</div>
+          <div class="info-value">Original</div>
         </div>
         <div class="info-item">
           <span class="info-label">Date of Birth:</span>
-          <div class="info-value">15/05/1985</div>
+          <div class="info-value">${
+            consultation.userId?.dateOfBirth
+              ? new Date(consultation.userId.dateOfBirth).toDateString()
+              : 'N/A'
+          }</div>
         </div>
         <div class="info-item">
           <span class="info-label">Date:</span>
-          <div class="info-value">28/12/2024</div>
+          <div class="info-value">${todaysDate.toDateString()}</div>
         </div>
       </div>
     </div>
-    <div class="">
-      <table class="medicine-table">
-        <thead>
-          <tr>
-            <th class="text-header">Medicine Name</th>
-            <th class="text-header">Dosage</th>
-            <th class="text-header">Contents of the box</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="medicine-name">Paracetamol</td>
-            <td>3x a day</td>
-            <td>10 tablets</td>
-          </tr>
-          <tr>
-            <td class="medicine-name">Antibiotic</td>
-            <td>2x a day</td>
-            <td>20 capsules</td>
-          </tr>
-          <tr>
-            <td class="medicine-name">Ibuprofen</td>
-            <td>4x a day</td>
-            <td>30 tablets</td>
-          </tr>
-          <tr>
-            <td class="medicine-name">Vitamin C</td>
-            <td>1x a day</td>
-            <td>60 tablets</td>
-          </tr>
-          <tr>
-            <td class="medicine-name">Omeprazole</td>
-            <td>2x a day</td>
-            <td>28 capsules</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+
+    <table class="medicine-table">
+      <thead>
+        <tr>
+          <th class="text-header">Medicine Name</th>
+          <th class="text-header">Dosage</th>
+          <th class="text-header">Contents of the box</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${(consultation.suggestedMedicine || [])
+          .map((medicine: any) => {
+            if (!medicine?._id) return '';
+            return `
+            <tr>
+              <td class="medicine-name">${medicine._id?.name || 'N/A'}</td>
+              <td>${medicine.dosage || 'N/A'}</td>
+              <td>${medicine.count || 'N/A'}</td>
+            </tr>
+          `;
+          })
+          .join('')}
+      </tbody>
+    </table>
+
     <div class="divider"></div>
     
-    <div class="prescription-area">
-      ved not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets
-    </div>
-    <br>
     <div class="footer">
       <div class="doctor-section">
         <div>
           <div class="info-item">
             <span class="info-label">DR:</span>
-            <div class="info-value">Dr. Sarah Johnson</div>
+            <div class="info-value">${
+              consultation.doctorId?.firstName || 'N/A'
+            }</div>
           </div>
         </div>
         <div class="signature-section">
-          <span class="info-label">Signature</span>
+          ${
+            consultation.doctorId?.signature
+              ? `<img src='https://tamim.binarybards.online${consultation.doctorId.signature}' alt="Doctor's Signature"/>`
+              : '<div style="height: 60px;"></div>'
+          }
           <div class="signature-line"></div>
         </div>
       </div>
@@ -307,28 +289,25 @@ export const generatePdf = async (req: Request, res: Response) => {
     </div>
   </div>
 </body>
-</html>`; // Keep your existing HTML content here
+</html>`;
 
-    // Launch browser with specific options for better stability
     browser = await puppeteer.launch({
-      headless: true, // Use new headless mode
+      headless: true,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
 
     const page = await browser.newPage();
 
-    // Set viewport for consistent rendering
     await page.setViewport({
-      width: 794, // A4 width in pixels (roughly)
-      height: 1123, // A4 height in pixels (roughly)
+      width: 794,
+      height: 1123,
       deviceScaleFactor: 1,
     });
 
     await page.setContent(htmlContent, {
-      waitUntil: 'networkidle0', // Wait for all network connections to finish
+      waitUntil: 'networkidle0',
     });
 
-    // Generate PDF with specific options
     const pdf = await page.pdf({
       format: 'A4',
       printBackground: true,
@@ -336,15 +315,12 @@ export const generatePdf = async (req: Request, res: Response) => {
       preferCSSPageSize: true,
     });
 
-    // Set response headers
     res.contentType('application/pdf');
     res.setHeader(
       'Content-Disposition',
       'attachment; filename=prescription.pdf'
     );
     res.setHeader('Content-Length', pdf.length);
-
-    // End the response with the PDF buffer
     res.end(pdf);
   } catch (error: any) {
     console.error('PDF Generation Error:', error);
@@ -354,7 +330,6 @@ export const generatePdf = async (req: Request, res: Response) => {
       error: error.message,
     });
   } finally {
-    // Always close the browser
     if (browser) {
       await browser.close();
     }
