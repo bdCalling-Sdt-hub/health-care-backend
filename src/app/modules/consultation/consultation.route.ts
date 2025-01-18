@@ -23,7 +23,7 @@ router.post(
   auth(...rolesOfAccess),
   ConsultationController.createConsultationSuccess
 );
-router.get(
+router.post(
   '/withdraw',
   auth(USER_ROLES.DOCTOR),
   ConsultationController.withdrawDoctorMoney

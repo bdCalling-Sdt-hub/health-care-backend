@@ -252,8 +252,12 @@ const withdrawDoctorMoney = async (id: string) => {
   const allDoctorConsultation = await Consultation.countDocuments({
     status: 'accepted',
     doctorId: id,
+    withrawn: { $ne: true },
   });
   const totalAmount = 25 * allDoctorConsultation * 0.15;
+  if (totalAmount === 0) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, 'No money to withdraw');
+  }
   const teacherStripeAccountId = doctor?.accountInformation?.stripeAccountId;
   if (!teacherStripeAccountId) {
     throw new ApiError(StatusCodes.BAD_REQUEST, 'Teacher payment not setup');
