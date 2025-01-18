@@ -164,10 +164,19 @@ const getConsultationByID = async (id: string): Promise<any> => {
     .populate('userId')
     .populate('suggestedMedicine._id')
     .populate('medicins._id');
+
   if (!result) {
     throw new ApiError(StatusCodes.BAD_REQUEST, 'Consultation not found!');
   }
-  return result;
+  const totalPrice =
+    result?.suggestedMedicine?.reduce(
+      //@ts-ignore
+      (acc, curr) => acc + (curr?._id?.sellingPrice || 0),
+      0
+    ) || 0;
+  //@ts-ignore
+  const finalResult = { ...result._doc, totalPrice };
+  return finalResult;
 };
 
 const refundByIDFromDB = async (id: string) => {

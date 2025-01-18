@@ -17,10 +17,11 @@ import { MessageRoutes } from '../app/modules/message/message.route';
 import { PdfRouter } from '../app/modules/pdf/pdf.route';
 import { NotificationRoutes } from '../app/modules/notification/notification.route';
 import { QuestionRoutes } from '../app/modules/question/question.route';
+import { OrderRoutes } from '../app/modules/order/order.route';
 const router = express.Router();
 
 const apiRoutes = [
-{
+  {
     path: '/user',
     route: UserRoutes,
   },
@@ -91,6 +92,10 @@ const apiRoutes = [
   {
     path: '/question',
     route: QuestionRoutes,
+  },
+  {
+    path: '/order',
+    route: OrderRoutes,
   },
 ];
 
