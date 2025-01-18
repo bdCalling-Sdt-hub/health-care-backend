@@ -25,7 +25,7 @@ export const generatePdf = async (req: Request, res: Response) => {
   const todaysDate = new Date();
   let browser = null;
   try {
-    const htmlContent = `<!DOCTYPE html>
+    const htmlContent = await `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -290,7 +290,7 @@ export const generatePdf = async (req: Request, res: Response) => {
   </div>
 </body>
 </html>`;
-
+    console.log(consultation.doctorId?.signature);
     browser = await puppeteer.launch({
       headless: true,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
