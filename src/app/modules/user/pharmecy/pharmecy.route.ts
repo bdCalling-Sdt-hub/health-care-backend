@@ -7,11 +7,6 @@ import { PharmecyController } from './pharmecy.controller';
 
 const router = Router();
 
-router.get(
-  '/earnings',
-  auth(USER_ROLES.PHARMACY),
-  PharmecyController.getPharmecyEarnings
-);
 router.post(
   '/',
   auth(USER_ROLES.SUPERADMIN, USER_ROLES.ADMIN),
@@ -29,11 +24,15 @@ router.get(
   auth(USER_ROLES.PHARMACY),
   PharmecyController.GetPharmecyStatus
 );
-
 router.get(
   '/workload',
   auth(USER_ROLES.PHARMACY),
   PharmecyController.GetPharmecyWorkload
+);
+router.get(
+  '/earnings',
+  auth(USER_ROLES.PHARMACY),
+  PharmecyController.getPharmecyEarnings
 );
 
 router.get(
