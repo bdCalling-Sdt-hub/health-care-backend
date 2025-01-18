@@ -211,7 +211,9 @@ export const generatePdf = async (req: Request, res: Response) => {
         <div class="info-item">
           <span class="info-label">Patient's Name:</span>
           <div class="info-value">${
-            consultation.userId?.firstName || 'N/A'
+            consultation.userId?.firstName +
+              ' ' +
+              consultation.userId?.lastName || 'N/A'
           }</div>
         </div>
         <div class="info-item">
