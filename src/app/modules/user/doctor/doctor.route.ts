@@ -28,6 +28,11 @@ router.get(
   auth(USER_ROLES.DOCTOR),
   DoctorController.getDoctorEarnings
 );
+router.get(
+  '/withdrawals',
+  auth(USER_ROLES.DOCTOR),
+  DoctorController.getDoctorWithdrawals
+);
 router.post(
   '/',
   auth(USER_ROLES.SUPERADMIN, USER_ROLES.ADMIN),

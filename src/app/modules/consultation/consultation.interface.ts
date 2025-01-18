@@ -29,6 +29,7 @@ export type IConsultation = {
   opinion?: string;
   paid?: boolean;
   withrawn?: boolean;
+  withdrawnDate?: Date;
   paymentIntent?: string;
   scheduledDate?: Date;
   address?: {

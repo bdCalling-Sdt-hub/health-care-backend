@@ -378,10 +378,27 @@ const getDoctorEarningsFromDB = async (user: string) => {
     balanceAvailable,
   };
 };
+
+const getDoctorWithdrawalsFromDB = async (user: string) => {
+  const isExistUser = await User.findOne({ _id: user });
+  if (!isExistUser) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, "User doesn't exist!");
+  }
+  const consultations = await Consultation.find({
+    doctorId: user,
+    status: STATUS.ACCEPTED,
+    withrawn: true,
+  })
+    .select('_id withrawnDate totalAmount')
+    .lean();
+  return consultations;
+};
+
 export const DoctorService = {
   getDoctorStatus,
   getDoctorActivityStatusFromDB,
   getDoctorEarningStatusFromDB,
   setUpStripeConnectAccount,
   getDoctorEarningsFromDB,
+  getDoctorWithdrawalsFromDB,
 };

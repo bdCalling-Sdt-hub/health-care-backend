@@ -20,6 +20,10 @@ const consultationSchema = new Schema<IConsultation, ConsultationModel>(
       required: false,
       default: false,
     },
+    withdrawnDate: {
+      type: Date,
+      required: false,
+    },
     medicins: {
       type: [
         {
