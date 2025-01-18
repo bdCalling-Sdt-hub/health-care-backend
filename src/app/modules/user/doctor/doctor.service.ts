@@ -363,15 +363,11 @@ const getDoctorEarningsFromDB = async (user: string) => {
     status: STATUS.ACCEPTED,
   });
   const totalEarn = consultations * 25 * 0.15;
-  const doctor = await User.findOne({ _id: user });
-  if (!doctor) {
-    throw new ApiError(StatusCodes.BAD_REQUEST, 'Where is the teacher');
-  }
-  const totalWithdrawn = Consultation.countDocuments({
+  const totalWithdrawn = await Consultation.countDocuments({
     doctorId: user,
     withrawn: true,
   });
-  const balanceAvailable = Number(totalEarn) - Number(totalWithdrawn);
+  const balanceAvailable = totalEarn - totalWithdrawn;
   return {
     totalEarn,
     totalWithdrawn,
@@ -390,7 +386,13 @@ const getDoctorWithdrawalsFromDB = async (user: string) => {
     withrawn: true,
   })
     .select('_id withrawnDate totalAmount')
-    .lean();
+    .lean()
+    .then(data =>
+      data.map(item => ({
+        ...item,
+        totalAmount: Number(item?.totalAmount) * 0.15,
+      }))
+    );
   return consultations;
 };
 
