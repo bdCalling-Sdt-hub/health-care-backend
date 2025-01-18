@@ -210,7 +210,9 @@ export const generatePdf = async (req: Request, res: Response) => {
         </div>
         <div class="info-item">
           <span class="info-label">Patient's Name:</span>
-          <div class="info-value">${consultation.userId?.name || 'N/A'}</div>
+          <div class="info-value">${
+            consultation.userId?.firstName || 'N/A'
+          }</div>
         </div>
         <div class="info-item">
           <span class="info-label">Address:</span>
@@ -247,9 +249,8 @@ export const generatePdf = async (req: Request, res: Response) => {
         </tr>
       </thead>
       <tbody>
-        ${(consultation.suggestedMedicine || [])
+        ${consultation.suggestedMedicine
           .map((medicine: any) => {
-            if (!medicine?._id) return '';
             return `
             <tr>
               <td class="medicine-name">${medicine._id?.name || 'N/A'}</td>
