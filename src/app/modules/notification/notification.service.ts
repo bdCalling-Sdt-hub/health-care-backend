@@ -25,7 +25,7 @@ const createNotification = async (
 
 const getAllNotifications = async (
   queryFields: Record<string, any>
-): Promise<INotification[]> => {
+): Promise<any> => {
   const { search, page, limit } = queryFields;
   const query = search
     ? {
@@ -45,7 +45,14 @@ const getAllNotifications = async (
   delete queryFields.page;
   delete queryFields.limit;
   queryBuilder.find(queryFields);
-  return await queryBuilder;
+  const result = await queryBuilder;
+  const unreadCount = await Notification.countDocuments({
+    ...queryFields,
+  });
+  return {
+    data: result,
+    unreadCount,
+  };
 };
 
 const getNotificationById = async (

@@ -25,7 +25,8 @@ const getAllNotifications = catchAsync(async (req: Request, res: Response) => {
     statusCode: StatusCodes.OK,
     success: true,
     message: 'Notifications fetched successfully',
-    data: result,
+    unreadCount: result.unreadCount,
+    data: result.data,
   });
 });
 
