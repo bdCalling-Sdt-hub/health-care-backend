@@ -91,19 +91,25 @@ const createConsultationSuccess = async (
   return result;
 };
 const getMyConsultations = async (userId: string, query: any): Promise<any> => {
-  console.log(query);
-
-  const result = await Consultation.find({
+  const searchQuery = {
     userId: new Types.ObjectId(userId),
-    ...query,
-  })
+  };
+  if (query.consultationType) {
+    if (query.consultationType === CONSULTATION_TYPE.FORWARDTO) {
+      //@ts-ignore
+      searchQuery?.forwardToPartner = true;
+    } else if (query.consultationType === CONSULTATION_TYPE.MEDICATION) {
+      //@ts-ignore
+      searchQuery?.medicins = { $exists: true, $ne: [] };
+    }
+  }
+  const result = await Consultation.find(searchQuery)
     .populate('category')
     .populate('subCategory')
     .populate('medicins._id')
     .populate('doctorId')
     .skip(Number(query.limit) * (Number(query.page) - 1));
 
-  console.log('data', result);
   if (!result.length) {
     throw new ApiError(StatusCodes.BAD_REQUEST, 'Consultation not found!');
   }
