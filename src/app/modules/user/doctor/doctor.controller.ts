@@ -156,16 +156,18 @@ const getDoctorEarnings = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const getDoctorWithdrawals = catchAsync(async (req: Request, res: Response) => {
-  const user = req.user.id;
-  const result = await DoctorService.getDoctorWithdrawalsFromDB(user);
-  sendResponse(res, {
-    success: true,
-    statusCode: StatusCodes.OK,
-    message: 'Doctor withdrawls retrived successfully',
-    data: result,
-  });
-});
+const getDoctorEarningHistory = catchAsync(
+  async (req: Request, res: Response) => {
+    const user = req.user.id;
+    const result = await DoctorService.getDoctorEarningHistory(user);
+    sendResponse(res, {
+      success: true,
+      statusCode: StatusCodes.OK,
+      message: 'Doctor withdrawls retrived successfully',
+      data: result,
+    });
+  }
+);
 
 export const DoctorController = {
   addDoctor,
@@ -177,5 +179,5 @@ export const DoctorController = {
   setUpStripeConnectAccount,
   getDoctorEarningStatus,
   getDoctorEarnings,
-  getDoctorWithdrawals,
+  getDoctorEarningHistory,
 };

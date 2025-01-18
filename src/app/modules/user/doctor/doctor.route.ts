@@ -29,9 +29,9 @@ router.get(
   DoctorController.getDoctorEarnings
 );
 router.get(
-  '/withdrawals',
+  '/earning-history',
   auth(USER_ROLES.DOCTOR),
-  DoctorController.getDoctorWithdrawals
+  DoctorController.getDoctorEarningHistory
 );
 router.post(
   '/',
