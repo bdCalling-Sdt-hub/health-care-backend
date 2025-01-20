@@ -102,11 +102,11 @@ const setUpStripeConnectAccount = catchAsync(
     let paths: any[] = [];
 
     const ip = req.ip || '0.0.0.0';
-    if (req.files && 'KYC' in req.files && req.files.KYC) {
-      for (const file of req.files.KYC) {
-        paths.push(`/KYCs/${file.filename}`);
-      }
-    }
+    // if (req.files && 'KYC' in req.files && req.files.KYC) {
+    //   for (const file of req.files.KYC) {
+    //     paths.push(`/KYCs/${file.filename}`);
+    //   }
+    // }
     console.log(data);
     const user = req.user;
     if (!req.user.email) {

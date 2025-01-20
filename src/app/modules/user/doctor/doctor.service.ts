@@ -241,20 +241,20 @@ const setUpStripeConnectAccount = async (
 
   const dob = new Date(values.dateOfBirth);
 
-  // Process KYC
-  const KYCFiles = files;
-  if (!KYCFiles || KYCFiles.length < 2) {
-    throw new ApiError(StatusCodes.BAD_REQUEST, 'Two KYC files are required!');
-  }
-  const uploadsPath = path.join(__dirname, '../../../../../');
+  // // Process KYC
+  // const KYCFiles = files;
+  // if (!KYCFiles || KYCFiles.length < 2) {
+  //   throw new ApiError(StatusCodes.BAD_REQUEST, 'Two KYC files are required!');
+  // }
+  // const uploadsPath = path.join(__dirname, '../../../../../');
 
-  // File upload to Stripe
-  const frontFileId = await uploadFileToStripe(
-    `${uploadsPath}/uploads/${paths[0]}`
-  );
-  const backFileId = await uploadFileToStripe(
-    `${uploadsPath}/uploads/${paths[1]}`
-  );
+  // // File upload to Stripe
+  // const frontFileId = await uploadFileToStripe(
+  //   `${uploadsPath}/uploads/${paths[0]}`
+  // );
+  // const backFileId = await uploadFileToStripe(
+  //   `${uploadsPath}/uploads/${paths[1]}`
+  // );
 
   // Create token
   const token = await stripe.tokens.create({
@@ -272,18 +272,18 @@ const setUpStripeConnectAccount = async (
         phone: values.phoneNumber,
         address: {
           city: values.address.city,
-          country: values.address.country,
+          country: 'NL',
           line1: values.address.line1,
           state: values.address.state,
           postal_code: values.address.postal_code,
         },
-        ...(values.idNumber && { ssn_last_4: values.idNumber.slice(-4) }),
-        verification: {
-          document: {
-            front: frontFileId,
-            back: backFileId,
-          },
-        },
+        // ...(values.idNumber && { ssn_last_4: values.idNumber.slice(-4) }),
+        // verification: {
+        //   document: {
+        //     front: frontFileId,
+        //     back: backFileId,
+        //   },
+        // },
       },
       business_type: 'individual',
       tos_shown_and_accepted: true,
