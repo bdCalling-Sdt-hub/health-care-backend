@@ -6,7 +6,7 @@ import ApiError from '../errors/ApiError';
 import { StatusCodes } from 'http-status-codes';
 const createCheckoutSession = async (userId: string, id: string) => {
   const session = await stripe.checkout.sessions.create({
-    payment_method_types: ['card'],
+    payment_method_types: ['card', 'ideal'],
     line_items: [
       {
         price_data: {
@@ -37,7 +37,7 @@ const createPaymentLink = async (product: Stripe.Product) => {
         quantity: 1,
       },
     ],
-    payment_method_types: ['card'],
+    payment_method_types: ['card', 'ideal'],
   });
 
   return paymentLink.url;
