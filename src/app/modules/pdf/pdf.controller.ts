@@ -226,7 +226,9 @@ export const generatePdf = async (req: Request, res: Response) => {
       <div>
         <div class="info-item">
           <span class="info-label">Type of Prescription:</span>
-          <div class="info-value">Original</div>
+          <div class="info-value">${
+            consultation.forwardToPartner === true ? 'Copy' : 'Original'
+          }</div>
         </div>
         <div class="info-item">
           <span class="info-label">Date of Birth:</span>
