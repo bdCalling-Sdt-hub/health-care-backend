@@ -7,7 +7,6 @@ export type IMedicine = {
   country: string;
   image: string;
   unitPerBox: [string];
-  medicineType: string;
   form: string;
   description: string;
   purchaseCost: number;

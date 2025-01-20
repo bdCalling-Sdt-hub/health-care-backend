@@ -19,10 +19,7 @@ const createMedicineZodSchema = z.object({
     invalid_type_error: 'image should be type string',
   }),
   unitPerBox: z.any(),
-  medicineType: z.string({
-    required_error: 'medicineType is required',
-    invalid_type_error: 'medicineType should be type string',
-  }),
+
   form: z.string({
     required_error: 'from is required',
     invalid_type_error: 'from should be type string',
@@ -72,9 +69,7 @@ const updateMedicineZodSchema = z.object({
     .string({ invalid_type_error: 'image should be type string' })
     .optional(),
   unitPerBox: z.any(),
-  medicineType: z
-    .string({ invalid_type_error: 'medicineType should be type string' })
-    .optional(),
+
   form: z
     .string({ invalid_type_error: 'from should be type string' })
     .optional(),
