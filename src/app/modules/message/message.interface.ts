@@ -7,5 +7,9 @@ export type IMessage = {
   email?: string;
   description?: string;
 };
-
+export type INotification = {
+  name: string;
+  email: string;
+  message?: string;
+};
 export type MessageModel = Model<IMessage>;

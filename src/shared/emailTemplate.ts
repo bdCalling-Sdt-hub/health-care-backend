@@ -1,4 +1,7 @@
-import { IMessage } from '../app/modules/message/message.interface';
+import {
+  IMessage,
+  INotification,
+} from '../app/modules/message/message.interface';
 import {
   ICreateAccount,
   IResetPassword,
@@ -85,9 +88,25 @@ const sendMessage = (values: IMessage) => {
 
   return data;
 };
+const sendNotification = (values: INotification) => {
+  const data = {
+    from: values.email,
+    subject: `Message from ${values.name}`,
+    html: `<body style="font-family: Arial, sans-serif; background-color: #f9f9f9; margin: 50px; padding: 20px; color: #555;">
+    <div style="width: 100%; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #fff; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+        <img src="https://res.cloudinary.com/dulgs9eba/image/upload/v1735107378/02A09086-1999-46A0-9272-B40D12A9C8A5_2_cmxrp2.png" alt="Logo" style="display: block; margin: 0 auto 20px; width:150px" />
+        <div style="padding: 20px;">
+            <p style="color: #555; font-size: 16px; line-height: 1.5; margin-bottom: 20px;">${values.message}</p>
+        </div>
+    </div>
+    </body>`,
+  };
 
+  return data;
+};
 export const emailTemplate = {
   createAccount,
   resetPassword,
   sendMessage,
+  sendNotification,
 };

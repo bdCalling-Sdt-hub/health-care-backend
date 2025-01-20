@@ -4,6 +4,10 @@ import { Order } from './order.model';
 import { IOrder } from './order.interface';
 import { Request, Response } from 'express';
 import XLSX from 'xlsx';
+import { User } from '../user/user.model';
+import { NotificationService } from '../notification/notification.service';
+import { emailHelper } from '../../../helpers/emailHelper';
+import { emailTemplate } from '../../../shared/emailTemplate';
 
 const createOrder = async (payload: IOrder): Promise<IOrder> => {
   const result = await Order.create(payload);
@@ -98,6 +102,29 @@ const importOrders = async (req: Request, res: Response): Promise<any[]> => {
         ...data,
         orderDate: todaysDate,
         status: 'delivered',
+      });
+      //@ts-ignore
+      const io = global.io;
+      const user = await User.findOne({ email: data.email });
+      if (!user) {
+        throw new ApiError(StatusCodes.BAD_REQUEST, 'User not found!');
+      }
+      await NotificationService.createNotification(
+        {
+          title: 'Your meicine order is delivered',
+          description: `Your order for medicines is delivered to ${data.address}`,
+          reciever: user._id,
+        },
+        io
+      );
+      await emailHelper.sendEmail({
+        to: data.email,
+        subject: 'Your order is delivered',
+        html: emailTemplate.sendNotification({
+          email: data.email,
+          name: user?.firstName || 'Unknown',
+          message: `Your order for medicines is delivered to ${data.address}`,
+        }).html,
       });
       return order;
     }
