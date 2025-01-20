@@ -73,9 +73,24 @@ const updateProfileToDB = async (
 
   return updateDoc;
 };
+const updateAdminToDB = async (
+  id: string,
+  payload: Partial<IUser>
+): Promise<Partial<IUser | null>> => {
+  const isExistUser = await User.isExistUserById(id);
+  if (!isExistUser) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, "User doesn't exist!");
+  }
 
+  const updateDoc = await User.findOneAndUpdate({ _id: id }, payload, {
+    new: true,
+  });
+
+  return updateDoc;
+};
 export const UserService = {
   createUserToDB,
   getUserProfileFromDB,
   updateProfileToDB,
+  updateAdminToDB,
 };

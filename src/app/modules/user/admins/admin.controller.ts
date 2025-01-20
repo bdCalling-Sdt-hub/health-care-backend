@@ -109,6 +109,16 @@ const getMonthlyWorkLoad = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+const updateAdmin = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const result = await UserService.updateAdminToDB(id, req.body);
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'Admin updated successfully',
+    data: result,
+  });
+});
 export const AdminController = {
   addAdmin,
   getAllAdmins,
@@ -118,4 +128,5 @@ export const AdminController = {
   getMonthlyUserCount,
   getEarningStatus,
   getMonthlyWorkLoad,
+  updateAdmin,
 };

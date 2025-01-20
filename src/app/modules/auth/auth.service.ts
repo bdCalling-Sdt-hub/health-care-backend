@@ -20,7 +20,10 @@ import { User } from '../user/user.model';
 //login
 const loginUserFromDB = async (payload: ILoginData) => {
   const { email, password } = payload;
-  const isExistUser = await User.findOne({ email }).select('+password');
+  const isExistUser = await User.findOne({
+    email,
+    status: { $ne: 'lock' },
+  }).select('+password');
   if (!isExistUser) {
     throw new ApiError(StatusCodes.BAD_REQUEST, "User doesn't exist!");
   }

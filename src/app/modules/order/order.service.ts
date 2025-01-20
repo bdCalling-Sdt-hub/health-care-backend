@@ -4,6 +4,7 @@ import { Order } from './order.model';
 import { IOrder } from './order.interface';
 import { Request, Response } from 'express';
 import XLSX from 'xlsx';
+
 const createOrder = async (payload: IOrder): Promise<IOrder> => {
   const result = await Order.create(payload);
   if (!result) {

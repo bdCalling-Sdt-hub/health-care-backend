@@ -42,6 +42,7 @@ router.get(
   auth(USER_ROLES.SUPERADMIN, USER_ROLES.ADMIN),
   AdminController.getSingleAdmin
 );
+router.patch('/:id', auth(USER_ROLES.SUPERADMIN), AdminController.updateAdmin);
 router.delete(
   '/:id',
   auth(USER_ROLES.SUPERADMIN, USER_ROLES.ADMIN),
