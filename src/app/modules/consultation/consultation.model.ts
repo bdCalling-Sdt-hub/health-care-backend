@@ -10,6 +10,12 @@ const consultationSchema = new Schema<IConsultation, ConsultationModel>(
         answer: { type: String, required: true },
       },
     ],
+    DinamicQNA: [
+      {
+        question: { type: String, required: true },
+        answer: { type: String, required: true },
+      },
+    ],
     userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     totalAmount: {
       type: Number,

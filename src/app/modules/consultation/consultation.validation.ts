@@ -14,6 +14,18 @@ const createConsultationZodSchema = z.object({
         }),
       })
     ),
+    DinamicQNA: z.array(
+      z.object({
+        question: z.string({
+          required_error: 'question is required',
+          invalid_type_error: 'question should be type string',
+        }),
+        answer: z.string({
+          required_error: 'answer is required',
+          invalid_type_error: 'answer should be type string',
+        }),
+      })
+    ),
 
     medicins: z.array(
       z.object({

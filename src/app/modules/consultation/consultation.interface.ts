@@ -9,6 +9,7 @@ export type IMedicineItem = {
 export type IConsultation = {
   _id?: Types.ObjectId;
   QNA: Array<IQNA>;
+  DinamicQNA: Array<IQNA>;
   userId: Types.ObjectId;
   category: Types.ObjectId;
   subCategory: Types.ObjectId;
