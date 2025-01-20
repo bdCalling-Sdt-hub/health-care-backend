@@ -277,7 +277,9 @@ export const generatePdf = async (req: Request, res: Response) => {
     </table>
 
     <div class="divider"></div>
-    
+    <div class="confirmation">${
+      consultation.opinion ? consultation.opinion : ''
+    }</div>
     <div class="footer">
       <div class="doctor-section">
         <div>
