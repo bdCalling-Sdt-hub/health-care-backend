@@ -95,6 +95,8 @@ const importOrders = async (req: Request, res: Response): Promise<any[]> => {
     if (isExistOrder) {
       const order = await Order.findByIdAndUpdate(isExistOrder._id, {
         ...data,
+        orderDate: todaysDate,
+        status: 'delivered',
       });
       return order;
     }
@@ -111,7 +113,7 @@ const importOrders = async (req: Request, res: Response): Promise<any[]> => {
   return submitAllOrder;
 };
 
-const exportOrders = async (req: Request, res: Response): Promise<void> => {
+const exportOrders = async (req: Request, res: Response): Promise<any> => {
   try {
     // Fetch orders from database
     const orders = await Order.find({});
