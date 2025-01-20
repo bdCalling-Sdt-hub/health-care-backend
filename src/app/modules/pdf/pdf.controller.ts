@@ -298,7 +298,9 @@ export const generatePdf = async (req: Request, res: Response) => {
         </div>
       </div>
       <div class="confirmation">
-        <p>I confirm this prescription is based on a valid doctor-patient relationship.</p>
+        <p>I have prescribed the medication listed above for the patient mentioned above.
+I confirm that this prescription is based on a valid physician-patient relationship with my patient.
+</p>
       </div>
     </div>
   </div>
