@@ -88,9 +88,41 @@ const updateAdminToDB = async (
 
   return updateDoc;
 };
+
+const updateUserToDB = async (id: string, payload: Partial<IUser>) => {
+  const isExistUser = await User.isExistUserById(id);
+  if (!isExistUser) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, "User doesn't exist!");
+  }
+
+  const updateDoc = await User.findOneAndUpdate({ _id: id }, payload, {
+    new: true,
+  });
+
+  return updateDoc;
+};
+const lockUserToDB = async (id: string) => {
+  const isExistUser = await User.isExistUserById(id);
+  if (!isExistUser) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, "User doesn't exist!");
+  }
+
+  const updateDoc = await User.findOneAndUpdate(
+    { _id: id },
+    { status: 'lock' },
+    {
+      new: true,
+    }
+  );
+
+  return updateDoc;
+};
+
 export const UserService = {
   createUserToDB,
   getUserProfileFromDB,
   updateProfileToDB,
   updateAdminToDB,
+  updateUserToDB,
+  lockUserToDB,
 };

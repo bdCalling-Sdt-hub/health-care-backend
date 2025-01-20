@@ -96,10 +96,42 @@ const getSingleUser = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const updateUser = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const id = (req.params.id as string) || (req.user.id as string);
+    if (!id) throw new ApiError(StatusCodes.BAD_REQUEST, 'User not found');
+
+    const data = req.body;
+
+    const result = await UserService.updateUserToDB(id, data);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: StatusCodes.OK,
+      message: 'User updated successfully',
+      data: result,
+    });
+  }
+);
+const lockUser = catchAsync(async (req: Request, res: Response) => {
+  const id = (req.params.id as string) || (req.user.id as string);
+  if (!id) throw new ApiError(StatusCodes.BAD_REQUEST, 'User not found');
+
+  const result = await UserService.lockUserToDB(id);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: StatusCodes.OK,
+    message: 'User locked successfully',
+    data: result,
+  });
+});
 export const UserController = {
   createUser,
   getUserProfile,
   updateProfile,
   getAllUsers,
   getSingleUser,
+  updateUser,
+  lockUser,
 };

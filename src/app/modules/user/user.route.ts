@@ -30,6 +30,11 @@ router
     fileUploadHandler(),
     UserController.updateProfile
   );
+router.patch(
+  '/lock/:id',
+  auth(USER_ROLES.ADMIN, USER_ROLES.SUPERADMIN),
+  UserController.lockUser
+);
 router.get(
   '/all',
   auth(USER_ROLES.ADMIN, USER_ROLES.SUPERADMIN),
