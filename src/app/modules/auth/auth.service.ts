@@ -22,12 +22,16 @@ const loginUserFromDB = async (payload: ILoginData) => {
   const { email, password } = payload;
   const isExistUser = await User.findOne({
     email,
-    status: { $ne: 'lock' },
   }).select('+password');
   if (!isExistUser) {
     throw new ApiError(StatusCodes.BAD_REQUEST, "User doesn't exist!");
   }
-
+  if (isExistUser?.status.toString() === 'lock') {
+    throw new ApiError(
+      StatusCodes.BAD_REQUEST,
+      'It looks like your account has been locked.'
+    );
+  }
   //check verified and status
   if (!isExistUser.verified) {
     throw new ApiError(
