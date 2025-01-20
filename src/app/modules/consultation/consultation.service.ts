@@ -149,6 +149,14 @@ const getAllConsultations = async (query: any): Promise<any> => {
   }
   const result = await Consultation.find({
     ...query,
+    status: {
+      $in: query.status || [
+        STATUS.PENDING,
+        STATUS.PROCESSING,
+        STATUS.ACCEPTED,
+        STATUS.REJECTED,
+      ],
+    },
   })
     .populate('category')
     .populate('subCategory')
