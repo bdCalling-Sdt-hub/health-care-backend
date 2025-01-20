@@ -8,9 +8,9 @@ const createMessage = async (payload: any): Promise<{ message: string }> => {
   try {
     const messageTemplate = emailTemplate.sendMessage(payload);
     await emailHelper.sendEmail({
-      to: config.admin.email,
+      to: config.admin.email!,
       subject: 'New Message',
-      html: messageTemplate,
+      html: messageTemplate.html,
     });
     return { message: 'Message sent successfully' };
   } catch (error) {
