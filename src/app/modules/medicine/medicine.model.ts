@@ -27,7 +27,6 @@ const medicineSchema = new Schema<IMedicine, MedicineModel>(
       type: [String],
       required: true,
     },
-
     subCategory: {
       type: Schema.Types.ObjectId,
       ref: 'SubCategory',

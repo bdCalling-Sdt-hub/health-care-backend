@@ -106,17 +106,17 @@ const importOrders = async (req: Request, res: Response): Promise<any[]> => {
       //@ts-ignore
       const io = global.io;
       const user = await User.findOne({ email: data.email });
-      if (!user) {
-        throw new ApiError(StatusCodes.BAD_REQUEST, 'User not found!');
+      if (user) {
+        await NotificationService.createNotification(
+          {
+            title: 'Your meicine order is delivered',
+            description: `Your order for medicines is delivered to ${data.address}`,
+            reciever: user._id,
+          },
+          io
+        );
       }
-      await NotificationService.createNotification(
-        {
-          title: 'Your meicine order is delivered',
-          description: `Your order for medicines is delivered to ${data.address}`,
-          reciever: user._id,
-        },
-        io
-      );
+
       await emailHelper.sendEmail({
         to: data.email,
         subject: 'Your order is delivered',
