@@ -151,10 +151,11 @@ const getAllConsultations = async (query: any): Promise<any> => {
     ...query,
     status: {
       $in: query.status || [
-        STATUS.PENDING,
-        STATUS.PROCESSING,
-        STATUS.ACCEPTED,
-        STATUS.REJECTED,
+        "pending",
+        "processing",
+        "prescribed",
+        "accepted",
+        "rejected",
       ],
     },
   })
