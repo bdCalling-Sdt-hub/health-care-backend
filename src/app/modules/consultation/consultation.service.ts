@@ -156,6 +156,7 @@ const getAllConsultations = async (query: any): Promise<any> => {
         "prescribed",
         "accepted",
         "rejected",
+        "delivered"
       ],
     },
   })
