@@ -4,7 +4,9 @@ import { IMessage } from './message.interface';
 import { emailHelper } from '../../../helpers/emailHelper';
 import { emailTemplate } from '../../../shared/emailTemplate';
 import config from '../../../config';
-const createMessage = async (payload: any): Promise<{ message: string }> => {
+const createMessage = async (
+  payload: IMessage
+): Promise<{ message: string }> => {
   try {
     const messageTemplate = emailTemplate.sendMessage(payload);
     await emailHelper.sendEmail({
