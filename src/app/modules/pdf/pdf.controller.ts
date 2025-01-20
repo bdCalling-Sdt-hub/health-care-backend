@@ -226,10 +226,7 @@ export const generatePdf = async (req: Request, res: Response) => {
           <span class="info-label">Email Address:</span>
           <div class="info-value">${consultation.userId?.email || 'N/A'}</div>
         </div>
-        <div class="info-item">
-          <span class="info-label">Phone Number:</span>
-          <div class="info-value">${consultation.userId?.contact || 'N/A'}</div>
-        </div>
+       
       </div>
       <div>
         <div class="info-item">
@@ -249,6 +246,10 @@ export const generatePdf = async (req: Request, res: Response) => {
         <div class="info-item">
           <span class="info-label">Date:</span>
           <div class="info-value">${todaysDate.toDateString()}</div>
+        </div>
+         <div class="info-item">
+          <span class="info-label">Phone Number:</span>
+          <div class="info-value">${consultation.userId?.contact || 'N/A'}</div>
         </div>
       </div>
     </div>
