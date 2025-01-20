@@ -109,7 +109,7 @@ const lockUserToDB = async (id: string) => {
 
   const updateDoc = await User.findOneAndUpdate(
     { _id: id },
-    { status: 'lock' },
+    { status: isExistUser.status === 'lock' ? 'active' : 'lock' },
     {
       new: true,
     }
