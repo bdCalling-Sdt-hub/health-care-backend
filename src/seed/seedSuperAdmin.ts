@@ -7,6 +7,7 @@ import { logger } from '../shared/logger';
 const superUser: any = {
   firstName: 'SUPER',
   lastName: 'ADMIN',
+  contact: '54763312',
   role: USER_ROLES.SUPERADMIN,
   email: config.admin.email as string,
   password: config.admin.password as string,
