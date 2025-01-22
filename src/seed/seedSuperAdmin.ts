@@ -7,15 +7,14 @@ import { logger } from '../shared/logger';
 const superUser: any = {
   firstName: 'SUPER',
   lastName: 'ADMIN',
-  contact: '54763312',
-  role: USER_ROLES.ADMIN,
+  role: USER_ROLES.SUPERADMIN,
   email: config.admin.email as string,
   password: config.admin.password as string,
   verified: true,
 };
 
 const seedSuperAdmin = async () => {
-  const isExistSuperAdmin = await User.findOne({email: superUser.email});
+  const isExistSuperAdmin = await User.findOne({ email: superUser.email });
 
   if (!isExistSuperAdmin) {
     await User.create(superUser);
