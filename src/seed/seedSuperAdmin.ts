@@ -15,9 +15,7 @@ const superUser: any = {
 };
 
 const seedSuperAdmin = async () => {
-  const isExistSuperAdmin = await User.findOne({
-    email: superUser.email
-  });
+  const isExistSuperAdmin = await User.findOne({email: superUser.email});
 
   if (!isExistSuperAdmin) {
     await User.create(superUser);
