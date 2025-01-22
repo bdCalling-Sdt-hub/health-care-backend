@@ -8,7 +8,7 @@ const superUser: any = {
   firstName: 'SUPER',
   lastName: 'ADMIN',
   contact: '54763312',
-  role: USER_ROLES.SUPERADMIN,
+  role: USER_ROLES.ADMIN,
   email: config.admin.email as string,
   password: config.admin.password as string,
   verified: true,
@@ -16,7 +16,7 @@ const superUser: any = {
 
 const seedSuperAdmin = async () => {
   const isExistSuperAdmin = await User.findOne({
-    role: USER_ROLES.SUPERADMIN,
+    email: superUser.email ,
   });
 
   if (!isExistSuperAdmin) {
