@@ -17,6 +17,7 @@ import { HelperService } from '../../../helpers/helper.service';
 import { IMedicine } from '../medicine/medicine.interface';
 import config from '../../../config';
 import { Order } from '../order/order.model';
+import { USER_ROLES } from '../../../enums/user';
 
 const createConsultation = async (
   payload: IConsultation,
@@ -130,10 +131,23 @@ const prescribeMedicine = async (id: string, payload: any): Promise<any> => {
   const result = await Consultation.findByIdAndUpdate(id, {
     $set: { ...payload, status: STATUS.PRESCRIBED },
   });
+  const doctor = await User.findById(result?.doctorId);
   if (!result) {
     throw new ApiError(
       StatusCodes.BAD_REQUEST,
       'Failed to update consultation!'
+    );
+  }
+  const isExistPharmecy = await User.find({ role: USER_ROLES.PHARMACY });
+  if (isExistPharmecy) {
+    await NotificationService.createNotification(
+      {
+        title: `A new prescription request by ${doctor?.firstName}`,
+        description: `A new prescription request by ${doctor?.firstName}.`,
+        reciever: isExistPharmecy[0]?._id,
+      },
+      // @ts-ignore
+      global.io
     );
   }
   return result;
