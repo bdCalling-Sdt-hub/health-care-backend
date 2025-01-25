@@ -55,8 +55,11 @@ const createConsultationSuccess = async (
     const allDoctors = await User.find({
       subCategory: isExistConsultation.subCategory,
     });
-    const selectRandomDoctor =
+    let selectRandomDoctor: any =
       allDoctors[Math.floor(Math.random() * allDoctors.length)];
+    if (!selectRandomDoctor) {
+      selectRandomDoctor = await User.findOne({ role: USER_ROLES.DOCTOR });
+    }
     const updateConsultation = await Consultation.findByIdAndUpdate(
       id,
       {
@@ -74,7 +77,6 @@ const createConsultationSuccess = async (
         'Failed to update consultation!'
       );
     }
-    const doctor = await User.findById(selectRandomDoctor._id);
     //@ts-ignore
     const io = global.io;
     await NotificationService.createNotification(
