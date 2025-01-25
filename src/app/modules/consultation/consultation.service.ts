@@ -78,8 +78,8 @@ const createConsultationSuccess = async (
     const io = global.io;
     await NotificationService.createNotification(
       {
-        title: `A new consultation request by ${consultation?.userId?.firstname}`,
-        description: `A new consultation request by ${consultation?.userId?.firstname} on ${consultation?.subCategory?.name}`,
+        title: `A new consultation request by ${consultation?.userId?.firstName}`,
+        description: `A new consultation request by ${consultation?.userId?.firstName} on ${consultation?.subCategory?.name}`,
 
         reciever: selectRandomDoctor._id,
       },
@@ -151,12 +151,12 @@ const getAllConsultations = async (query: any): Promise<any> => {
     ...query,
     status: {
       $in: query.status || [
-        "pending",
-        "processing",
-        "prescribed",
-        "accepted",
-        "rejected",
-        "delivered"
+        'pending',
+        'processing',
+        'prescribed',
+        'accepted',
+        'rejected',
+        'delivered',
       ],
     },
   })
