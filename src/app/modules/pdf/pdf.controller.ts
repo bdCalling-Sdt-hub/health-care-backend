@@ -14,13 +14,13 @@ export const generatePdf = async (req: Request, res: Response) => {
     throw new ApiError(StatusCodes.NOT_FOUND, 'Consultation not found');
   }
 
-  // Validate required data
-  if (!consultation.userId || !consultation.doctorId) {
-    throw new ApiError(
-      StatusCodes.BAD_REQUEST,
-      'Missing required user or doctor information'
-    );
-  }
+  // // Validate required data
+  // if (!consultation.userId || !consultation.doctorId) {
+  //   throw new ApiError(
+  //     StatusCodes.BAD_REQUEST,
+  //     'Missing required user or doctor information'
+  //   );
+  // }
 
   const todaysDate = new Date();
   let browser = null;
