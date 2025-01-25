@@ -3,8 +3,9 @@ import puppeteer from 'puppeteer';
 import { StatusCodes } from 'http-status-codes';
 import ApiError from '../../../errors/ApiError';
 import { ConsultationService } from '../consultation/consultation.service';
+import catchAsync from '../../../shared/catchAsync';
 
-export const generatePdf = async (req: Request, res: Response) => {
+export const generatePdf = catchAsync(async (req: Request, res: Response) => {
   const consultationId = req.params.id;
   const consultation = await ConsultationService.getConsultationByID(
     consultationId
@@ -352,7 +353,7 @@ I confirm that this prescription is based on a valid physician-patient relations
       await browser.close();
     }
   }
-};
+});
 
 export const pdfController = {
   generatePdf,
