@@ -347,7 +347,7 @@ const buyMedicine = async (userId: string, id: string) => {
     .map((medicine: any) => {
       return {
         price: medicine?._id?.sellingPrice
-          ? medicine?._id?.sellingPrice * medicine.count
+          ? medicine?._id?.sellingPrice * medicine.count * 100
           : 0,
       };
     })
