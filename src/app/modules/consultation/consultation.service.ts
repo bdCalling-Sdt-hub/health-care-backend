@@ -373,7 +373,7 @@ const buyMedicine = async (userId: string, id: string) => {
     ],
     mode: 'payment',
     success_url: `http://${config.ip_address}:${config.port}/api/v1/consultation/buySuccess?session_id={CHECKOUT_SESSION_ID}&id=${id}`,
-    cancel_url: `http://${process.env.FRONTEND}/profile`,
+    cancel_url: `${process.env.FRONTEND}/profile`,
     metadata: {
       userId,
     },
