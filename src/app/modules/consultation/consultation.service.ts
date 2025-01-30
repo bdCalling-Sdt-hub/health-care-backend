@@ -96,6 +96,7 @@ const createConsultationSuccess = async (
 const getMyConsultations = async (userId: string, query: any): Promise<any> => {
   const searchQuery = {
     userId: new Types.ObjectId(userId),
+    status: 'accepted',
   };
   if (query.consultationType) {
     if (query.consultationType === CONSULTATION_TYPE.FORWARDTO) {
