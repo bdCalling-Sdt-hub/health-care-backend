@@ -410,7 +410,7 @@ const buyMedicineSuccess = async (
     price: isExistConsultation.totalAmount,
     status: 'processing',
   });
-  return res.redirect(`http://${process.env.FRONTEND}/profile`);
+  return res.redirect(`${process.env.FRONTEND}/profile`);
 };
 export const ConsultationService = {
   createConsultation,
