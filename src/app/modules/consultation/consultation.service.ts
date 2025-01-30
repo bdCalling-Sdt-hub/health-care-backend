@@ -121,6 +121,8 @@ const getMyConsultations = async (userId: string, query: any): Promise<any> => {
 };
 
 const updateConsultation = async (id: string, payload: any): Promise<any> => {
+  if (payload.status === 'accepted') {
+  }
   const result = await Consultation.findByIdAndUpdate(id, { $set: payload });
   if (!result) {
     throw new ApiError(
@@ -295,8 +297,8 @@ const addLinkToConsultation = async (data: IConsultation, id: string) => {
   const io = global.io;
   await NotificationService.createNotification(
     {
-      title: `Doctor ${consultation.doctorId.name} sent a meeting link for consultation`,
-      description: `Doctor ${consultation.doctorId.name} sent a meeting link for consultation on ${consultation.subCategory.name}`,
+      title: `Doctor ${consultation.doctorId.fileName} sent a meeting link for consultation`,
+      description: `Doctor ${consultation.doctorId.firstName} sent a meeting link for consultation on ${consultation.subCategory.name}`,
       reciever: consultation.userId._id,
     },
     io
