@@ -58,10 +58,7 @@ const consultationSchema = new Schema<IConsultation, ConsultationModel>(
       required: false,
       default: STATUS.DRAFT,
     },
-    trackingNo: {
-      type: String,
-      required: false,
-    },
+
     orderDate: {
       type: Date,
       required: false,
