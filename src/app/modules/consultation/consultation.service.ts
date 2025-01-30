@@ -357,7 +357,7 @@ const buyMedicine = async (userId: string, id: string) => {
     })
     .reduce((prev: number, current: any) => prev + current.price, 0);
   await Consultation.findByIdAndUpdate(id, {
-    totalAmount: allMedicinsPrice,
+    totalAmount: allMedicinsPrice / 100,
   });
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card', 'ideal'],
