@@ -261,7 +261,7 @@ export const generatePdf = catchAsync(async (req: Request, res: Response) => {
         <tr>
           <th class="text-header">Medicine Name</th>
           <th class="text-header">Dosage</th>
-          <th class="text-header">Contents of the box</th>
+          <th class="text-header">Quantity</th>
         </tr>
       </thead>
       <tbody>
