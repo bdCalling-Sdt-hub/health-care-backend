@@ -3,7 +3,7 @@ import { IOrder, OrderModel } from './order.interface';
 
 const orderSchema = new Schema<IOrder, OrderModel>(
   {
-    trackingNo: { type: String, required: true },
+    trackingNo: { type: String, required: false },
     company: { type: String, required: true },
     country: { type: String, required: true },
     city: { type: String, required: true },
