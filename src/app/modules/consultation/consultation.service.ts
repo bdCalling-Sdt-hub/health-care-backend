@@ -273,7 +273,7 @@ const scheduleConsultationToDB = async (data: IConsultation, id: string) => {
       description: `Your consultation on ${
         consultation.subCategory.name
       } with doctor ${
-        consultation.userId.name
+        consultation.doctorId.firstName
       } was scheduled on ${data?.scheduledDate?.toLocaleString('en-US', {
         year: 'numeric',
         month: 'long',
