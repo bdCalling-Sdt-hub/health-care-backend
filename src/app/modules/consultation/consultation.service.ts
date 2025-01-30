@@ -403,7 +403,7 @@ const buyMedicineSuccess = async (
   }
   await Order.create({
     address: `${isExistConsultation.address}, ${isExistConsultation.city}, ${isExistConsultation.country}`,
-    name: isExistConsultation.userId.name || 'N/A',
+    name: `${isExistConsultation.userId.firstName} ${isExistConsultation.userId.lastName}`,
     email: isExistConsultation.userId.email || 'N/A',
     phone: isExistConsultation.userId.contact || 'N/A',
     city: isExistConsultation.address.city || 'N/A',
