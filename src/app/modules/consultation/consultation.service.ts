@@ -389,13 +389,14 @@ const buyMedicine = async (userId: string, id: string) => {
   const allMedicinsPrice = isExistConsultation.suggestedMedicine
     .map((medicine: any) => {
       const pieces = medicine.total?.match(/\d+/);
+      const price =
+        medicine?._id?.sellingPrice && pieces?.[0] && medicine.count
+          ? Math.floor(
+              medicine?._id?.sellingPrice * (pieces?.[0] || 0) * medicine.count
+            )
+          : 0;
       return {
-        price: medicine?._id?.sellingPrice
-          ? medicine?._id?.sellingPrice *
-            (pieces?.[0] || 0) *
-            medicine.count *
-            100
-          : 0,
+        price,
       };
     })
     .reduce((prev: number, current: any) => prev + current.price, 0);
