@@ -12,7 +12,7 @@ const orderSchema = new Schema<IOrder, OrderModel>(
     phone: { type: String, required: true },
     address: { type: String, required: true },
     orderDate: { type: Date, required: false },
-    price: { type: Number, required: true },
+    price: { type: Number, required: false },
     status: { type: String, required: false },
   },
   { timestamps: true }
