@@ -451,7 +451,10 @@ const buyMedicineSuccess = async (
     country: 'Netherlands',
     orderDate: todaysDate,
     city: isExistConsultation.address.place,
-    zipCode: isExistConsultation.address.postalCode,
+    zipCode:
+      isExistConsultation.address.postalCode ||
+      isExistConsultation.userId.postcode ||
+      'N/A',
     trackingNo: '____',
     status: 'processing',
   });
