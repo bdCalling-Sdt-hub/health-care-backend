@@ -9,6 +9,7 @@ export type IUser = {
   contact?: string;
   email: string;
   password: string;
+  regNo?: string;
   location: string;
   city: string;
   postcode: string;

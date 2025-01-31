@@ -46,6 +46,10 @@ const userSchema = new Schema<IUser, UserModal>(
       required: false,
       default: GENDER.MALE,
     },
+    regNo: {
+      type: String,
+      required: false,
+    },
     contact: {
       type: String,
       required: true,
