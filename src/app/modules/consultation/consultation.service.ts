@@ -388,10 +388,10 @@ const buyMedicine = async (userId: string, id: string) => {
   const isExistConsultation = await getConsultationByID(id);
   const allMedicinsPrice = isExistConsultation.suggestedMedicine
     .map((medicine: any) => {
-      console.log(Number(medicine.total) * 100);
+      const totals = Number(medicine.total);
       return {
         price: medicine?._id?.sellingPrice
-          ? medicine?._id?.sellingPrice * medicine.count * 100
+          ? medicine?._id?.sellingPrice * totals * medicine.count * 100 + 20
           : 0,
       };
     })
