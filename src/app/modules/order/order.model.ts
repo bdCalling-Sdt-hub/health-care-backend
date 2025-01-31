@@ -14,6 +14,7 @@ const orderSchema = new Schema<IOrder, OrderModel>(
     orderDate: { type: Date, required: false },
     price: { type: Number, required: false },
     status: { type: String, required: false },
+    zipCode: { type: String, required: false },
   },
   { timestamps: true }
 );

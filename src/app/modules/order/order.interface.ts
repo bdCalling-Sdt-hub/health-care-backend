@@ -11,6 +11,7 @@ export type IOrder = {
   address: string;
   orderDate?: Date;
   price: number;
+  zipCode?: string;
   status?: string;
 };
 
