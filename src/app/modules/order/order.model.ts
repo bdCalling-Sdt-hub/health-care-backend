@@ -6,7 +6,7 @@ const orderSchema = new Schema<IOrder, OrderModel>(
     trackingNo: { type: String, required: false },
     company: { type: String, required: true },
     country: { type: String, required: true },
-    city: { type: String, required: true },
+    city: { type: String, required: false },
     name: { type: String, required: true },
     email: { type: String, required: true },
     phone: { type: String, required: true },
