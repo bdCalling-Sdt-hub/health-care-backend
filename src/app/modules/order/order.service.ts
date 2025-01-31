@@ -128,13 +128,14 @@ const importOrders = async (req: Request, res: Response): Promise<any[]> => {
         }).html,
       });
       return order;
+    } else {
+      const order = await Order.create({
+        ...data,
+        orderDate: todaysDate,
+        status: 'processing',
+      });
+      return order;
     }
-    const order = await Order.create({
-      ...data,
-      orderDate: todaysDate,
-      status: 'processing',
-    });
-    return order;
   });
 
   const submitAllOrder = await Promise.all(promises);
