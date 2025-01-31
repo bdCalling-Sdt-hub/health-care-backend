@@ -18,6 +18,8 @@ import { IMedicine } from '../medicine/medicine.interface';
 import config from '../../../config';
 import { Order } from '../order/order.model';
 import { USER_ROLES } from '../../../enums/user';
+import { emailHelper } from '../../../helpers/emailHelper';
+import { emailTemplate } from '../../../shared/emailTemplate';
 
 const createConsultation = async (
   payload: IConsultation,
@@ -44,7 +46,8 @@ const createConsultationSuccess = async (
 ): Promise<any> => {
   const consultation: any = await Consultation.findById(id)
     .populate('userId')
-    .populate('subCategory');
+    .populate('subCategory')
+    .populate('doctorId');
   const result = await stripe.checkout.sessions.retrieve(session_id);
   if (result.payment_status === 'paid') {
     const paymentIntentID = result.payment_intent;
@@ -88,6 +91,17 @@ const createConsultationSuccess = async (
       },
       io
     );
+    await emailHelper.sendEmail({
+      to: consultation.userId.email,
+      subject:
+        'Dear customer, we thank you very much for your trust and payment.',
+      html: emailTemplate.sendNotification({
+        email: consultation.userId.email,
+        name: consultation?.userId?.firstName || 'Unknown',
+        message: `Dear customer, we thank you very much for your trust and payment. 
+Your answers are sent to the doctor. Based on this, the doctor will decide what the best treatment is for you. If this results in a prescription, you will receive a message from the pharmacy that a prescription is ready for you with the next steps. If you have any questions in the meantime, please do not hesitate to ask us (support@dokterforyou.com). Kind regards, team Doctor For You`,
+      }).html,
+    });
     return updateConsultation;
   }
 
