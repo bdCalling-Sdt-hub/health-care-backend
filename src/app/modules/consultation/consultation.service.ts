@@ -399,8 +399,9 @@ const buyMedicine = async (userId: string, id: string) => {
     throw new ApiError(StatusCodes.BAD_REQUEST, 'User not found');
   }
   const isExistConsultation = await getConsultationByID(id);
+  let allMedicinsPrice = 0;
   if (!isExistConsultation.totalAmount) {
-    const allMedicinsPrice = isExistConsultation.suggestedMedicine
+    allMedicinsPrice = isExistConsultation.suggestedMedicine
       .map((medicine: any) => {
         const totals = Number(medicine.total);
         return {
@@ -424,7 +425,8 @@ const buyMedicine = async (userId: string, id: string) => {
             name: 'Consultation service Medicins.',
             description: 'Prescription medicins',
           },
-          unit_amount: isExistConsultation.totalAmount || allMedicinsPrice,
+          unit_amount:
+            isExistConsultation.totalAmount || Number(allMedicinsPrice),
         },
         quantity: 1,
       },
