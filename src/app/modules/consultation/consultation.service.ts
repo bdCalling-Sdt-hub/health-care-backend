@@ -162,6 +162,7 @@ const updateConsultation = async (id: string, payload: any): Promise<any> => {
   return result;
 };
 const prescribeMedicine = async (id: string, payload: any): Promise<any> => {
+  const consultation: any = getConsultationByID(id);
   const result = await Consultation.findByIdAndUpdate(id, {
     $set: { ...payload, status: STATUS.PRESCRIBED },
   });
@@ -183,6 +184,16 @@ const prescribeMedicine = async (id: string, payload: any): Promise<any> => {
       // @ts-ignore
       global.io
     );
+    await emailHelper.sendEmail({
+      to: consultation.userId.email,
+      subject:
+        'Dear customer, we thank you very much for your trust and payment.',
+      html: emailTemplate.sendNotification({
+        email: consultation.userId.email,
+        name: consultation?.userId?.firstName || 'Unknown',
+        message: `Dear customer, the doctor has left a prescription for you in your account. You can login now on dokterforyou.com. Beware that your prescription is valid for 7 days and that you can use it just one time. We thank you for your trust and look forward to see you back on our website. If you have any questions in the meantime, please do not hesitate to ask us (support@dokterforyou.com). Kind regards, team Doctor For You`,
+      }).html,
+    });
   }
   return result;
 };
