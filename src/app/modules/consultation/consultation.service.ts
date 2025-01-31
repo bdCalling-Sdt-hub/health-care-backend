@@ -391,9 +391,12 @@ const buyMedicine = async (userId: string, id: string) => {
       const pieces = medicine.total?.match(/\d+/);
       const price =
         medicine?._id?.sellingPrice && pieces?.[0] && medicine.count
-          ? Math.floor(
-              medicine?._id?.sellingPrice * (pieces?.[0] || 0) * medicine.count
-            )
+          ? Math.ceil(
+              (medicine?._id?.sellingPrice *
+                (pieces?.[0] || 0) *
+                medicine.count) /
+                100
+            ) * 100
           : 0;
       return {
         price,
