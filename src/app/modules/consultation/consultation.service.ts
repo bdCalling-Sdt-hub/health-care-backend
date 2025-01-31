@@ -173,6 +173,19 @@ const prescribeMedicine = async (id: string, payload: any): Promise<any> => {
       'Failed to update consultation!'
     );
   }
+  const allMedicinsPrice = consultation.suggestedMedicine
+    .map((medicine: any) => {
+      const totals = Number(medicine.total);
+      return {
+        price: medicine?._id?.sellingPrice
+          ? medicine?._id?.sellingPrice * totals * medicine.count * 100
+          : 0,
+      };
+    })
+    .reduce((prev: number, current: any) => prev + current.price, 0);
+  await Consultation.findByIdAndUpdate(id, {
+    totalAmount: allMedicinsPrice / 100,
+  });
   const isExistPharmecy = await User.find({ role: USER_ROLES.PHARMACY });
   if (isExistPharmecy) {
     await NotificationService.createNotification(
