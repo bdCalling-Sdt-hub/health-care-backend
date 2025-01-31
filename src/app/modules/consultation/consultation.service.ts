@@ -402,15 +402,15 @@ const buyMedicineSuccess = async (
     });
   }
   await Order.create({
-    address: `${isExistConsultation.address}, ${isExistConsultation.city}, ${isExistConsultation.country}`,
+    address: `${isExistConsultation.address.streetAndHouseNo}, ${isExistConsultation.address.place}, ${isExistConsultation.address.country}`,
     name: `${isExistConsultation.userId.firstName} ${isExistConsultation.userId.lastName}`,
     email: isExistConsultation.userId.email || 'N/A',
     phone: isExistConsultation.userId.contact || 'N/A',
-    city: isExistConsultation.address.city || 'N/A',
     company: 'Apotheek Zaandam Oost',
     country: 'Netherlands',
     orderDate: todaysDate,
     price: isExistConsultation.totalAmount,
+    trackingNo: 'N/A',
     status: 'processing',
   });
   return res.redirect(`${process.env.FRONTEND}/profile`);
