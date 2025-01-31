@@ -122,7 +122,7 @@ const importOrders = async (req: Request, res: Response): Promise<any[]> => {
         html: emailTemplate.sendNotification({
           email: data.email,
           name: user?.firstName || 'Unknown',
-          message: `Your order for medicines is delivered and your DHL tracking number is ${data.trackingNo} please check DHL for more information`,
+          message: `Dear customer, the pharmacy has handed over your prescription to the parcel deliverers. You can track your delivery status using the code (${data.trackingNo}) on DHL website (https://www.dhl.com/nl-en/home/tracking.html). We thank you for your trust and look forward to see you back on our website. If you have any questions in the meantime, please do not hesitate to ask us (support@dokterforyou.com). Kind regards, team Doctor For You`,
         }).html,
       });
       return order;
