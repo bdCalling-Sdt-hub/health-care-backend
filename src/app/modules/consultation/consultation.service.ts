@@ -451,6 +451,7 @@ const buyMedicineSuccess = async (
     country: 'Netherlands',
     orderDate: todaysDate,
     city: isExistConsultation.address.place,
+    price: isExistConsultation.totalAmount,
     zipCode:
       isExistConsultation.address.postalCode ||
       isExistConsultation.userId.postcode ||
