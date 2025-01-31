@@ -399,19 +399,7 @@ const buyMedicine = async (userId: string, id: string) => {
     throw new ApiError(StatusCodes.BAD_REQUEST, 'User not found');
   }
   const isExistConsultation = await getConsultationByID(id);
-  const allMedicinsPrice = isExistConsultation.suggestedMedicine
-    .map((medicine: any) => {
-      const totals = Number(medicine.total);
-      return {
-        price: medicine?._id?.sellingPrice
-          ? medicine?._id?.sellingPrice * totals * medicine.count * 100 + 20
-          : 0,
-      };
-    })
-    .reduce((prev: number, current: any) => prev + current.price, 0);
-  await Consultation.findByIdAndUpdate(id, {
-    totalAmount: allMedicinsPrice / 100,
-  });
+
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card', 'ideal'],
     line_items: [
@@ -422,7 +410,7 @@ const buyMedicine = async (userId: string, id: string) => {
             name: 'Consultation service Medicins.',
             description: 'Prescription medicins',
           },
-          unit_amount: allMedicinsPrice,
+          unit_amount: isExistConsultation.totalAmount,
         },
         quantity: 1,
       },
