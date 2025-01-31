@@ -80,6 +80,8 @@ const exportOrders = catchAsync(
         email: 1,
         phone: 1,
         address: 1,
+        city: 1,
+        zipCode: 1,
         price: 1,
         _id: 0,
       }

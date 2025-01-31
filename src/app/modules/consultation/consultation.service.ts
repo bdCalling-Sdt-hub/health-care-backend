@@ -450,7 +450,8 @@ const buyMedicineSuccess = async (
     company: 'Apotheek Zaandam Oost',
     country: 'Netherlands',
     orderDate: todaysDate,
-    price: isExistConsultation.totalAmount,
+    city: isExistConsultation.address.place,
+    zipCode: isExistConsultation.address.postalCode,
     trackingNo: '____',
     status: 'processing',
   });
