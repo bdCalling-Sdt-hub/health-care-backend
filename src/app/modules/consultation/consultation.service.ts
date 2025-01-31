@@ -136,7 +136,21 @@ const getMyConsultations = async (userId: string, query: any): Promise<any> => {
 };
 
 const updateConsultation = async (id: string, payload: any): Promise<any> => {
+  const consultation: any = await Consultation.findById(id)
+    .populate('userId')
+    .populate('subCategory')
+    .populate('doctorId');
   if (payload.status === 'accepted') {
+    await emailHelper.sendEmail({
+      to: consultation.userId.email,
+      subject:
+        'Dear customer, your doctor has written you a prescription after your consultation.',
+      html: emailTemplate.sendNotification({
+        email: consultation.userId.email,
+        name: consultation?.userId?.firstName || 'Unknown',
+        message: ` A copy of this prescription can be found as attachment for your own administration. At your account at Dokterforyou.com you can find the paymentlink for the medication. If you make the payment before 3:00 PM on workdays, your prescription will be processed immediately by the pharmacy and you will receive your medication at home the next working day. If you have any questions in the meantime, please do not hesitate to mail us (support@dokterforyou.com). Kind regards, team Dokter For You`,
+      }).html,
+    });
   }
   const result = await Consultation.findByIdAndUpdate(id, { $set: payload });
   if (!result) {
