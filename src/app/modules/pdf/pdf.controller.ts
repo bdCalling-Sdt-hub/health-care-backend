@@ -293,10 +293,18 @@ export const generatePdf = catchAsync(async (req: Request, res: Response) => {
             }</div>
           </div>
         </div>
+      <div>
+          <div class="info-item">
+            <span class="info-label">Registration No:</span>
+            <div class="info-value">${
+              consultation.doctorId?.regNo || 'N/A'
+            }</div>
+          </div>
+        </div>
         <div class="signature-section">
           ${
             consultation.doctorId?.signature
-              ? `<img src='https://tamim.binarybards.online${consultation.doctorId.signature}' alt="Doctor's Signature"/>`
+              ? `<img src='http://152.42.140.58:5000/${consultation.doctorId.signature}' alt="Doctor's Signature"/>`
               : '<div style="height: 60px;"></div>'
           }
           <div class="signature-line"></div>
