@@ -76,7 +76,6 @@ const exportOrders = catchAsync(
         trackingNo: 1,
         company: 1,
         country: 1,
-        city: 1,
         name: 1,
         email: 1,
         phone: 1,
