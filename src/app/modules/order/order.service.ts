@@ -96,6 +96,7 @@ const importOrders = async (req: Request, res: Response): Promise<any[]> => {
       phone: data.phone,
       address: data.address,
       price: data.price,
+      trackingNo: '____',
     });
     if (isExistOrder) {
       const order = await Order.findByIdAndUpdate(isExistOrder._id, {
