@@ -410,7 +410,7 @@ const buyMedicineSuccess = async (
     country: 'Netherlands',
     orderDate: todaysDate,
     price: isExistConsultation.totalAmount,
-    trackingNo: 'N/A',
+    trackingNo: '____',
     status: 'processing',
   });
   return res.redirect(`${process.env.FRONTEND}/profile`);
