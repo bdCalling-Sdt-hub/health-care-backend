@@ -388,18 +388,11 @@ const buyMedicine = async (userId: string, id: string) => {
   const isExistConsultation = await getConsultationByID(id);
   const allMedicinsPrice = isExistConsultation.suggestedMedicine
     .map((medicine: any) => {
-      const pieces = medicine.total?.match(/\d+/);
-      const price =
-        medicine?._id?.sellingPrice && pieces?.[0] && medicine.count
-          ? Math.ceil(
-              (medicine?._id?.sellingPrice *
-                (pieces?.[0] || 0) *
-                medicine.count) /
-                100
-            ) * 100
-          : 0;
+      console.log(Number(medicine.total) * 100);
       return {
-        price,
+        price: medicine?._id?.sellingPrice
+          ? medicine?._id?.sellingPrice * medicine.count * 100
+          : 0,
       };
     })
     .reduce((prev: number, current: any) => prev + current.price, 0);
@@ -430,6 +423,7 @@ const buyMedicine = async (userId: string, id: string) => {
   });
   return session.url;
 };
+
 const buyMedicineSuccess = async (
   session_id: string,
   id: string,
