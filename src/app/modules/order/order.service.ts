@@ -123,7 +123,7 @@ const importOrders = async (req: Request, res: Response): Promise<any[]> => {
         html: emailTemplate.sendNotification({
           email: data.email,
           name: user?.firstName || 'Unknown',
-          message: `Your order for medicines is delivered to ${data.address}`,
+          message: `Your order for medicines is delivered and your DHL tracking number is ${data.trackingNo} please check DHL for more information`,
         }).html,
       });
       return order;
