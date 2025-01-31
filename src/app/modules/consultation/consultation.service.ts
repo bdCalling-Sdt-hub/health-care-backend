@@ -441,6 +441,18 @@ const buyMedicineSuccess = async (
     trackingNo: '____',
     status: 'processing',
   });
+
+  await emailHelper.sendEmail({
+    to: isExistConsultation.userId.email,
+    subject:
+      'Dear customer, we thank you very much for your trust and payment.',
+    html: emailTemplate.sendNotification({
+      email: isExistConsultation.userId.email,
+      name: isExistConsultation?.userId?.firstName || 'Unknown',
+      message: `Dear customer, we thank you very much for your trust and payment. 
+If you make the payment before 3:00 PM on workdays, your prescription will be processed immediately by the pharmacy and you will receive your medication at home the next working day. If you have any questions in the meantime, please do not hesitate to mail us (support@dokterforyou.com). Kind regards, team Dokter For You`,
+    }).html,
+  });
   return res.redirect(`${process.env.FRONTEND}/profile`);
 };
 export const ConsultationService = {
