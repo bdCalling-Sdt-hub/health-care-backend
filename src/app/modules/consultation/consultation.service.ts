@@ -162,17 +162,18 @@ const updateConsultation = async (id: string, payload: any): Promise<any> => {
   return result;
 };
 const prescribeMedicine = async (id: string, payload: any): Promise<any> => {
-  const consultation: any = getConsultationByID(id);
+  const consultation: any = await getConsultationByID(id);
   const result = await Consultation.findByIdAndUpdate(id, {
     $set: { ...payload, status: STATUS.PRESCRIBED },
   });
-  const doctor = await User.findById(result?.doctorId);
+
   if (!result) {
     throw new ApiError(
       StatusCodes.BAD_REQUEST,
       'Failed to update consultation!'
     );
   }
+
   const allMedicinsPrice = consultation?.suggestedMedicine
     ?.map((medicine: any) => {
       const totals = Number(medicine.total);
@@ -183,10 +184,15 @@ const prescribeMedicine = async (id: string, payload: any): Promise<any> => {
       };
     })
     .reduce((prev: number, current: any) => prev + current.price, 0);
+
+  const priceToUpdate = allMedicinsPrice ? allMedicinsPrice / 100 : 0;
   await Consultation.findByIdAndUpdate(id, {
-    totalAmount: allMedicinsPrice / 100,
+    totalAmount: priceToUpdate,
   });
+
+  const doctor = await User.findById(result?.doctorId);
   const isExistPharmecy = await User.find({ role: USER_ROLES.PHARMACY });
+
   if (isExistPharmecy) {
     await NotificationService.createNotification(
       {
@@ -197,6 +203,7 @@ const prescribeMedicine = async (id: string, payload: any): Promise<any> => {
       // @ts-ignore
       global.io
     );
+
     await emailHelper.sendEmail({
       to: consultation.userId.email,
       subject:
@@ -208,6 +215,7 @@ const prescribeMedicine = async (id: string, payload: any): Promise<any> => {
       }).html,
     });
   }
+
   return result;
 };
 
