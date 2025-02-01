@@ -173,8 +173,8 @@ const prescribeMedicine = async (id: string, payload: any): Promise<any> => {
       'Failed to update consultation!'
     );
   }
-  const allMedicinsPrice = consultation.suggestedMedicine
-    .map((medicine: any) => {
+  const allMedicinsPrice = consultation?.suggestedMedicine
+    ?.map((medicine: any) => {
       const totals = Number(medicine.total);
       return {
         price: medicine?._id?.sellingPrice
