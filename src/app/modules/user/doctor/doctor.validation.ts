@@ -8,7 +8,7 @@ const createDoctorZodSchema = z.object({
     contact: z.string({ required_error: 'Contact is required' }),
     email: z.string({ required_error: 'Email is required' }),
     password: z.string({ required_error: 'Password is required' }),
-    subCategory: z.string({ required_error: 'Doctor Type is required' }),
+
     profile: z.string().optional(),
   }),
 });
