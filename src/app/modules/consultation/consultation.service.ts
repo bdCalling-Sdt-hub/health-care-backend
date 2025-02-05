@@ -442,7 +442,7 @@ const buyMedicine = async (userId: string, id: string) => {
       },
     ],
     mode: 'payment',
-    success_url: `http://${config.ip_address}:${config.port}/api/v1/consultation/buySuccess?session_id={CHECKOUT_SESSION_ID}&id=${id}`,
+    success_url: `https://api.dokterforyou.com/api/v1/consultation/buySuccess?session_id={CHECKOUT_SESSION_ID}&id=${id}`,
     cancel_url: `${process.env.FRONTEND}/profile`,
     metadata: {
       userId,
@@ -498,7 +498,7 @@ const buyMedicineSuccess = async (
 If you make the payment before 3:00 PM on workdays, your prescription will be processed immediately by the pharmacy and you will receive your medication at home the next working day. If you have any questions in the meantime, please do not hesitate to mail us (support@dokterforyou.com). Kind regards, team Dokter For You`,
     }).html,
   });
-  return res.redirect(`${process.env.FRONTEND}/profile`);
+  return res.redirect(`https://dokterforyou.com/profile`);
 };
 export const ConsultationService = {
   createConsultation,
