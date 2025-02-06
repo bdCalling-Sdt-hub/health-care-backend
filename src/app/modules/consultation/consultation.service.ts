@@ -414,7 +414,7 @@ const buyMedicine = async (userId: string, id: string) => {
         const totals = Number(medicine._id.total);
         return {
           price: medicine?._id?.sellingPrice
-            ? medicine?._id?.sellingPrice * totals * medicine.count * 100 + 20
+            ? medicine?._id?.sellingPrice * totals * medicine.count
             : 0,
         };
       })
@@ -434,7 +434,7 @@ const buyMedicine = async (userId: string, id: string) => {
             name: 'Consultation service Medicins.',
             description: 'Prescription medicins',
           },
-          unit_amount: (Number(allMedicinsPrice) + 20) * 100,
+          unit_amount: Number(allMedicinsPrice) * 100,
         },
         quantity: 1,
       },
