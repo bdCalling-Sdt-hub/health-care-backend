@@ -23,7 +23,11 @@ export const generatePdf = catchAsync(async (req: Request, res: Response) => {
   //   );
   // }
 
-  const todaysDate = new Date();
+  const todaysDate = new Date().toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+  });
   let browser = null;
   try {
     const htmlContent = await `<!DOCTYPE html>
