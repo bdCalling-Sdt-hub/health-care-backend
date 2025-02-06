@@ -91,15 +91,13 @@ const importOrders = async (req: Request, res: Response): Promise<any[]> => {
   console.log(jsonData);
   const promises = jsonData.map(async (data: IOrder) => {
     const isExistOrder = await Order.findOne({
-      name: data.name,
       email: data.email,
-      phone: data.phone,
       price: data.price,
+      trackingNo: '____',
     });
     if (isExistOrder) {
       const order = await Order.findByIdAndUpdate(isExistOrder._id, {
         ...data,
-        orderDate: todaysDate,
         status: 'delivered',
       });
       //@ts-ignore
