@@ -411,7 +411,7 @@ const buyMedicine = async (userId: string, id: string) => {
   if (!isExistConsultation.totalAmount) {
     allMedicinsPrice = isExistConsultation.suggestedMedicine
       .map((medicine: any) => {
-        const totals = Number(medicine.total);
+        const totals = Number(medicine._id.total);
         return {
           price: medicine?._id?.sellingPrice
             ? medicine?._id?.sellingPrice * totals * medicine.count * 100 + 20
