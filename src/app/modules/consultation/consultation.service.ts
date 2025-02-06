@@ -408,19 +408,22 @@ const buyMedicine = async (userId: string, id: string) => {
   }
   const isExistConsultation = await getConsultationByID(id);
   let allMedicinsPrice = 0;
-  allMedicinsPrice = isExistConsultation.suggestedMedicine.map(
-    (medicine: any) => {
-      const totals = Number(medicine.total);
+  allMedicinsPrice = isExistConsultation.suggestedMedicine.reduce(
+    (total: number, medicine: any) => {
       const price = medicine._id.sellingPrice
-        ? Math.round(medicine._id.sellingPrice * 100) * totals * medicine.count
+        ? Math.round(medicine._id.sellingPrice * 100) * medicine.count
         : 0;
-      allMedicinsPrice += Number(price);
-      return {};
-    }
+      return total + Number(price);
+    },
+    0
   );
-  await Consultation.findByIdAndUpdate(id, {
-    totalAmount: allMedicinsPrice / 100,
-  });
+  await Consultation.findByIdAndUpdate(
+    id,
+    {
+      totalAmount: allMedicinsPrice / 100,
+    },
+    { runValidators: true }
+  );
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card', 'ideal'],
     line_items: [
