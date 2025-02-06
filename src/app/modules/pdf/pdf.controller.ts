@@ -246,7 +246,7 @@ export const generatePdf = catchAsync(async (req: Request, res: Response) => {
           <span class="info-label">Date of Birth:</span>
           <div class="info-value">${
             consultation.userId?.dateOfBirth
-              ? new Date(consultation.userId.dateOfBirth)
+              ? consultation.userId.dateOfBirth
               : 'N/A'
           }</div>
         </div>
