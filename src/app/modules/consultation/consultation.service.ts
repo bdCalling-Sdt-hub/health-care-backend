@@ -423,6 +423,7 @@ const buyMedicine = async (userId: string, id: string) => {
       totalAmount: allMedicinsPrice,
     });
   }
+  console.log(allMedicinsPrice);
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card', 'ideal'],
     line_items: [
