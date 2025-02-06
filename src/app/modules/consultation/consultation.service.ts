@@ -414,7 +414,7 @@ const buyMedicine = async (userId: string, id: string) => {
       const price = medicine._id.sellingPrice
         ? Math.round(medicine._id.sellingPrice * 100) * totals * medicine.count
         : 0;
-      allMedicinsPrice += price;
+      allMedicinsPrice += Number(price);
       return {};
     }
   );
