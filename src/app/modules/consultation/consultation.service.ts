@@ -414,13 +414,15 @@ const buyMedicine = async (userId: string, id: string) => {
         const totals = Number(medicine.total);
         return {
           price: medicine._id.sellingPrice
-            ? medicine._id.sellingPrice * totals * medicine.count
+            ? Math.round(medicine._id.sellingPrice * 100) *
+              totals *
+              medicine.count
             : 0,
         };
       })
       .reduce((prev: number, current: any) => prev + current.price, 0);
     await Consultation.findByIdAndUpdate(id, {
-      totalAmount: allMedicinsPrice,
+      totalAmount: allMedicinsPrice / 100,
     });
   }
   const session = await stripe.checkout.sessions.create({
@@ -433,7 +435,7 @@ const buyMedicine = async (userId: string, id: string) => {
             name: 'Consultation service Medicins.',
             description: 'Prescription medicins',
           },
-          unit_amount: allMedicinsPrice * 100,
+          unit_amount: allMedicinsPrice,
         },
         quantity: 1,
       },
