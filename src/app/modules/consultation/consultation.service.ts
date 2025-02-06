@@ -434,8 +434,7 @@ const buyMedicine = async (userId: string, id: string) => {
             description: 'Prescription medicins',
           },
           unit_amount:
-            Math.round(isExistConsultation.totalAmount || allMedicinsPrice) *
-              100 +
+            Math.round(isExistConsultation.totalAmount || allMedicinsPrice) +
             20,
         },
         quantity: 1,
