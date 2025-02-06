@@ -411,10 +411,10 @@ const buyMedicine = async (userId: string, id: string) => {
   if (!isExistConsultation.totalAmount) {
     allMedicinsPrice = isExistConsultation.suggestedMedicine
       .map((medicine: any) => {
-        const totals = Number(medicine._id.total);
+        const totals = Number(medicine.total);
         return {
-          price: medicine?._id?.sellingPrice
-            ? medicine?._id?.sellingPrice * totals * medicine.count
+          price: medicine._id.sellingPrice
+            ? medicine._id.sellingPrice * totals * medicine.count
             : 0,
         };
       })
@@ -423,7 +423,6 @@ const buyMedicine = async (userId: string, id: string) => {
       totalAmount: allMedicinsPrice,
     });
   }
-  console.log(allMedicinsPrice);
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card', 'ideal'],
     line_items: [
@@ -434,7 +433,7 @@ const buyMedicine = async (userId: string, id: string) => {
             name: 'Consultation service Medicins.',
             description: 'Prescription medicins',
           },
-          unit_amount: Number(allMedicinsPrice) * 100,
+          unit_amount: allMedicinsPrice * 100,
         },
         quantity: 1,
       },
