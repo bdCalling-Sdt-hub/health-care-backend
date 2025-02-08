@@ -49,6 +49,17 @@ const getDoctorStatus = async (id: string) => {
     },
   });
 
+  const consultations = await Consultation.countDocuments({
+    doctorId: id,
+    status: STATUS.ACCEPTED,
+  });
+  const totalEarn = consultations * 25 * 0.15;
+  const totalWithdrawn = await Consultation.countDocuments({
+    doctorId: id,
+    withrawn: true,
+  });
+  const balanceAvailable = totalEarn - totalWithdrawn * 25 * 0.15;
+
   return {
     totalEarning: totalAcceptedConsultation * 25,
     dailyEarning: dailyAcceptedConsultation * 25,
@@ -56,6 +67,7 @@ const getDoctorStatus = async (id: string) => {
     totalVideoConsultation,
     totalMedicationByPatient,
     totalDigitalPrescription,
+    balanceAvailable,
   };
 };
 
