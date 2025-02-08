@@ -61,8 +61,8 @@ const getDoctorStatus = async (id: string) => {
   const balanceAvailable = totalEarn - totalWithdrawn * 25 * 0.15;
 
   return {
-    totalEarning: totalAcceptedConsultation * 25,
-    dailyEarning: dailyAcceptedConsultation * 25,
+    totalEarning: totalAcceptedConsultation * 25 * 0.15,
+    dailyEarning: dailyAcceptedConsultation * 25 * 0.15,
     totalRegularConsultation,
     totalVideoConsultation,
     totalMedicationByPatient,
