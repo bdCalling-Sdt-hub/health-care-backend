@@ -367,7 +367,7 @@ const getDoctorEarningsFromDB = async (user: string) => {
     doctorId: user,
     withrawn: true,
   });
-  const balanceAvailable = totalEarn - totalWithdrawn;
+  const balanceAvailable = totalEarn - totalWithdrawn * 25 * 0.15;
   return {
     totalEarn,
     totalWithdrawn,
