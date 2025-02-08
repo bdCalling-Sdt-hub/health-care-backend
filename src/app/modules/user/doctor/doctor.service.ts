@@ -34,6 +34,7 @@ const getDoctorStatus = async (id: string) => {
   ]);
   const totalAcceptedConsultation = await Consultation.countDocuments({
     doctorId: id,
+    status: STATUS.ACCEPTED,
   });
 
   const today = new Date();
