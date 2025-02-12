@@ -10,7 +10,7 @@ const createMessage = async (
   try {
     const messageTemplate = emailTemplate.sendMessage(payload);
     await emailHelper.sendEmail({
-      to: config.admin.email!,
+      to: config.email.user!,
       subject: 'New Message',
       html: messageTemplate.html,
     });
