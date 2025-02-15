@@ -421,7 +421,7 @@ const buyMedicine = async (userId: string, id: string) => {
   allMedicinsPrice = isExistConsultation.suggestedMedicine.reduce(
     (total: number, medicine: any) => {
       const price = medicine._id.sellingPrice
-        ? Math.round(medicine._id.sellingPrice * 100) * medicine.count
+        ? Math.round(medicine._id.sellingPrice * medicine.count * 100 * total)
         : 0;
       return total + Number(price);
     },
