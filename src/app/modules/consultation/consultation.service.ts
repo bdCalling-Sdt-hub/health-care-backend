@@ -457,7 +457,7 @@ const buyMedicine = async (userId: string, id: string) => {
     ],
     mode: 'payment',
     success_url: `https://api.dokterforyou.com/api/v1/consultation/buySuccess?session_id={CHECKOUT_SESSION_ID}&id=${id}`,
-    cancel_url: `${process.env.FRONTEND}/profile`,
+    cancel_url: `https://www.dokterforyou.com/profile`,
     metadata: {
       userId,
     },
