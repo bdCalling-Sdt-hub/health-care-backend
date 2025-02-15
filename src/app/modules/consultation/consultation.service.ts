@@ -436,7 +436,7 @@ const buyMedicine = async (userId: string, id: string) => {
   await Consultation.findByIdAndUpdate(
     id,
     {
-      totalAmount: allMedicinsPrice / 100,
+      totalAmount: allMedicinsPrice,
     },
     { runValidators: true }
   );
@@ -450,7 +450,7 @@ const buyMedicine = async (userId: string, id: string) => {
             name: 'Consultation service Medicins.',
             description: 'Prescription medicins',
           },
-          unit_amount: allMedicinsPrice + 2000,
+          unit_amount: allMedicinsPrice * 100,
         },
         quantity: 1,
       },
