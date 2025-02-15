@@ -418,12 +418,18 @@ const buyMedicine = async (userId: string, id: string) => {
   }
   const isExistConsultation = await getConsultationByID(id);
   let allMedicinsPrice = 0;
-  allMedicinsPrice = isExistConsultation.suggestedMedicine.reduce(
-    (total: number, medicine: any) => {
-      const price = medicine._id.sellingPrice
-        ? medicine._id.sellingPrice * medicine.count * 100 * total
-        : 0;
-      return total + Number(price);
+  allMedicinsPrice = isExistConsultation?.suggestedMedicine?.reduce(
+    (
+      total: number,
+      medication: {
+        count: number;
+        _id: { sellingPrice: string; unitPerBox: string[] };
+      }
+    ) => {
+      const pricePerUnit =
+        Number(medication?._id?.sellingPrice) *
+        Number(medication?._id?.unitPerBox[0]);
+      return total + pricePerUnit * Number(medication?.count);
     },
     0
   );
