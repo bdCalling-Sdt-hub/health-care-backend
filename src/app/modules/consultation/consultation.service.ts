@@ -108,7 +108,7 @@ If you have any questions in the meantime, please do not hesitate to ask us (sup
     return updateConsultation;
   }
 
-  return res.redirect('https://www.dokterforyou.com/profile/success');
+  return res.redirect('https://www.dokterforyou.com/profile?isSuccess=true');
 };
 const getMyConsultations = async (userId: string, query: any): Promise<any> => {
   const searchQuery = {
