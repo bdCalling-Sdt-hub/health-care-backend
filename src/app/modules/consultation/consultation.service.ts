@@ -450,7 +450,7 @@ const buyMedicine = async (userId: string, id: string) => {
             name: 'Consultation service Medicins.',
             description: 'Prescription medicins',
           },
-          unit_amount: allMedicinsPrice * 100,
+          unit_amount: allMedicinsPrice * 100 + 2000,
         },
         quantity: 1,
       },
