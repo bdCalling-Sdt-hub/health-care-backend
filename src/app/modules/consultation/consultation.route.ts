@@ -18,9 +18,9 @@ router.post(
   validateRequest(ConsultationValidation.createConsultationZodSchema),
   ConsultationController.createConsultation
 );
-router.post(
+router.get(
   '/create/success',
-  auth(...rolesOfAccess),
+  // auth(...rolesOfAccess),
   ConsultationController.createConsultationSuccess
 );
 router.post(

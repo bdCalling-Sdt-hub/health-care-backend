@@ -42,7 +42,8 @@ const createConsultation = async (
 };
 const createConsultationSuccess = async (
   session_id: string,
-  id: string
+  id: string,
+  res: Response
 ): Promise<any> => {
   const consultation: any = await Consultation.findById(id)
     .populate('userId')
@@ -98,14 +99,16 @@ const createConsultationSuccess = async (
       html: emailTemplate.sendNotification({
         email: consultation.userId.email,
         name: consultation?.userId?.firstName || 'Unknown',
-        message: `Dear customer, we thank you very much for your trust and payment. 
-Your answers are sent to the doctor. Based on this, the doctor will decide what the best treatment is for you. If this results in a prescription, you will receive a message from the pharmacy that a prescription is ready for you with the next steps. If you have any questions in the meantime, please do not hesitate to ask us (support@dokterforyou.com). Kind regards, team Doctor For You`,
+        message: `Dear customer, 
+Your answers have been sent to the doctor. Based on this, the doctor will decide what the best treatment is for you. If this results in a prescription, you will receive a message that the doctor has sent your prescription to a connected pharmacy with further information.
+If you have any questions in the meantime, please do not hesitate to ask us (support@dokterforyou.com).
+ Kind regards, team Doctor For You`,
       }).html,
     });
     return updateConsultation;
   }
 
-  return result;
+  return res.redirect('https://www.dokterforyou.com/profile/success');
 };
 const getMyConsultations = async (userId: string, query: any): Promise<any> => {
   const searchQuery = {
@@ -143,12 +146,16 @@ const updateConsultation = async (id: string, payload: any): Promise<any> => {
   if (payload.status === 'accepted') {
     await emailHelper.sendEmail({
       to: consultation.userId.email,
-      subject:
-        'Dear customer, your doctor has written you a prescription after your consultation.',
+      subject: 'Dear customer, the doctor has approved your consultation.',
       html: emailTemplate.sendNotification({
         email: consultation.userId.email,
         name: consultation?.userId?.firstName || 'Unknown',
-        message: ` A copy of this prescription can be found as attachment for your own administration. At your account at Dokterforyou.com you can find the paymentlink for the medication. If you make the payment before 3:00 PM on workdays, your prescription will be processed immediately by the pharmacy and you will receive your medication at home the next working day. If you have any questions in the meantime, please do not hesitate to mail us (support@dokterforyou.com). Kind regards, team Dokter For You`,
+        message: `
+        Dear customer, 
+If you have chosen that a connected pharmacy sends you the prescribed medication, then the doctor has sent the prescription for you to an connected Pharmacy. Once the Pharmacy accepts the receipt, you will receive a payment link for the medication. 
+If you have chosen for only an receipt, then the doctor has sent the prescription for you to an connected Pharmacy for a double check. Once the Pharmacy checks the receipt, you will receive this receipt in your profile at our website. Beware that a receipt is valid for 7 days from the moment it’s sent and that you can use it only once.
+We thank you for your trust and look forward to see you back on our website. If you have any questions in the meantime, please do not hesitate to ask us (support@dokterforyou.com). 
+Kind regards, team Doctor For You`,
       }).html,
     });
   }
@@ -206,12 +213,15 @@ const prescribeMedicine = async (id: string, payload: any): Promise<any> => {
 
     await emailHelper.sendEmail({
       to: consultation.userId.email,
-      subject:
-        'Dear customer, we thank you very much for your trust and payment.',
+      subject: 'Dear customer, the doctor has approved your consultation',
       html: emailTemplate.sendNotification({
         email: consultation.userId.email,
         name: consultation?.userId?.firstName || 'Unknown',
-        message: `Dear customer, the doctor has left a prescription for you in your account. You can login now on dokterforyou.com. Beware that your prescription is valid for 7 days and that you can use it just one time. We thank you for your trust and look forward to see you back on our website. If you have any questions in the meantime, please do not hesitate to ask us (support@dokterforyou.com). Kind regards, team Doctor For You`,
+        message: ` Dear customer, 
+If you have chosen that a connected pharmacy sends you the prescribed medication, then the doctor has sent the prescription for you to an connected Pharmacy. Once the Pharmacy accepts the receipt, you will receive a payment link for the medication. 
+If you have chosen for only an receipt, then the doctor has sent the prescription for you to an connected Pharmacy for a double check. Once the Pharmacy checks the receipt, you will receive this receipt in your profile at our website. Beware that a receipt is valid for 7 days from the moment it’s sent and that you can use it only once.
+We thank you for your trust and look forward to see you back on our website. If you have any questions in the meantime, please do not hesitate to ask us (support@dokterforyou.com). 
+Kind regards, team Doctor For You`,
       }).html,
     });
   }

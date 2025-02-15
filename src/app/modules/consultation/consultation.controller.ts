@@ -25,7 +25,8 @@ const createConsultationSuccess = catchAsync(
     }
     const result = await ConsultationService.createConsultationSuccess(
       session_id.toString(),
-      id.toString()
+      id.toString(),
+      res
     );
     sendResponse(res, {
       statusCode: StatusCodes.OK,
