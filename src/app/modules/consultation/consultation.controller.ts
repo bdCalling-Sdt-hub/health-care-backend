@@ -28,9 +28,7 @@ const createConsultationSuccess = catchAsync(
       id.toString(),
       res
     );
-    return res.redirect(
-      'https://www.dokterforyou.com/profile?isSuccess="true"'
-    );
+    return res.redirect('https://www.dokterforyou.com/profile?isSuccess=true');
   }
 );
 const getMyConsultations = catchAsync(async (req: Request, res: Response) => {
