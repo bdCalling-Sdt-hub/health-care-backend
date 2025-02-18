@@ -281,7 +281,7 @@ const resendEmailOTP = async (email: string) => {
     }
   );
 
-  return isExistUser;
+  return {};
 };
 export const AuthService = {
   verifyEmailToDB,
