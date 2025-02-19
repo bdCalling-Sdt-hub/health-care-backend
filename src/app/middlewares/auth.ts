@@ -32,7 +32,13 @@ const auth =
             "You don't have permission to access this api"
           );
         }
-
+        const isExpired = jwtHelper.isTokenExpired(token);
+        if (isExpired) {
+          throw new ApiError(
+            StatusCodes.UNAUTHORIZED,
+            'Your token is expired, please login again'
+          );
+        }
         next();
       }
     } catch (error) {
