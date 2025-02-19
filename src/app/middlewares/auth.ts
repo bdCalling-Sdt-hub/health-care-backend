@@ -34,10 +34,16 @@ const auth =
         }
         const isExpired = jwtHelper.isTokenExpired(token);
         if (isExpired) {
-          throw new ApiError(
-            StatusCodes.UNAUTHORIZED,
-            'Your token is expired, please login again'
-          );
+          return res.status(StatusCodes.UNAUTHORIZED).json({
+            success: false,
+            message: 'jwt expired',
+            errorMessages: [
+              {
+                path: '',
+                message: 'jwt expired',
+              },
+            ],
+          });
         }
         next();
       }
