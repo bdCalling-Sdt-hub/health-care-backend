@@ -94,15 +94,16 @@ const createConsultationSuccess = async (
     );
     await emailHelper.sendEmail({
       to: consultation.userId.email,
-      subject:
-        'Dear customer, we thank you very much for your trust and payment.',
+      subject: 'Dear customer, the doctor has approved your consultation',
       html: emailTemplate.sendNotification({
         email: consultation.userId.email,
         name: consultation?.userId?.firstName || 'Unknown',
-        message: `Dear customer, 
-Your answers have been sent to the doctor. Based on this, the doctor will decide what the best treatment is for you. If this results in a prescription, you will receive a message that the doctor has sent your prescription to a connected pharmacy with further information.
-If you have any questions in the meantime, please do not hesitate to ask us (support@dokterforyou.com).
- Kind regards, team Doctor For You`,
+        message: ` Dear customer, 
+If you have chosen that a connected pharmacy sends you the prescribed medication, then the doctor has sent the prescription for you to an connected Pharmacy. Once the Pharmacy accepts the receipt, you will receive a payment link for the medication. 
+If you have chosen for only an receipt, then the doctor has sent the prescription for you to an connected Pharmacy for a double check. Once the Pharmacy checks the receipt, you will receive this receipt in your profile at our website. Beware that a receipt is valid for 7 days from the moment it’s sent and that you can use it only once.
+We thank you for your trust and look forward to see you back on our website. If you have any questions in the meantime, please do not hesitate to ask us (support@dokterforyou.com). 
+Kind regards, team Doctor For You
+`,
       }).html,
     });
     return updateConsultation;
