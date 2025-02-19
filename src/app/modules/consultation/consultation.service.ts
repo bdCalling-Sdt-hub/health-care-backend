@@ -148,16 +148,19 @@ const updateConsultation = async (id: string, payload: any): Promise<any> => {
   if (payload.status === 'accepted') {
     await emailHelper.sendEmail({
       to: consultation.userId.email,
-      subject: 'Dear customer, the doctor has approved your consultation.',
+      subject:
+        'Dear customer, a connected Pharmacy has approved your prescription.',
       html: emailTemplate.sendNotification({
         email: consultation.userId.email,
         name: consultation?.userId?.firstName || 'Unknown',
         message: `
-        Dear customer, 
-If you have chosen that a connected pharmacy sends you the prescribed medication, then the doctor has sent the prescription for you to an connected Pharmacy. Once the Pharmacy accepts the receipt, you will receive a payment link for the medication. 
-If you have chosen for only an receipt, then the doctor has sent the prescription for you to an connected Pharmacy for a double check. Once the Pharmacy checks the receipt, you will receive this receipt in your profile at our website. Beware that a receipt is valid for 7 days from the moment it’s sent and that you can use it only once.
-We thank you for your trust and look forward to see you back on our website. If you have any questions in the meantime, please do not hesitate to ask us (support@dokterforyou.com). 
-Kind regards, team Doctor For You`,
+        Dear customer,
+At your account at Dokterforyou.com you can find a copy of the prescription and the paymentlink for the medication. If you make the payment before 3:00 PM on workdays, your prescription will be processed immediately by the pharmacy and they will handover within 24 hours your medication to PostNL. PostNL will deliver your medication by express delivery.
+If you have chosen for only an receipt, you’ll find the receipt in your profile at www.dokterforyou.com. Beware that a receipt is valid for 7 days from now an that you can use it only once.
+We thank you for your trust and look forward to see you back on our website. 
+If you have any questions in the meantime, please do not hesitate to ask us (support@dokterforyou.com).
+ Kind regards, team Dokter For You
+`,
       }).html,
     });
   }
