@@ -331,6 +331,19 @@ const rejectConsultation = async (id: string, opinion: string) => {
     //@ts-ignore
     global.io
   );
+
+  await emailHelper.sendEmail({
+    to: consultation.userId.email,
+    subject: 'Dear customer, the doctor has rejected your consultation',
+    html: emailTemplate.sendNotification({
+      email: consultation.userId.email,
+      name: consultation?.userId?.firstName || 'Unknown',
+      message: ` Dear customer, 
+The doctor has rejected your consultation. The money has been refunded to your account. The doctor rejected the consultation with the following reason: ${opinion}.
+`,
+    }).html,
+  });
+
   return {};
 };
 
