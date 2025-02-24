@@ -36,16 +36,16 @@ const consultationSchema = new Schema<IConsultation, ConsultationModel>(
           _id: {
             type: Schema.Types.ObjectId,
             ref: 'Medicine',
-            required: true,
+            required: false,
           },
 
           count: {
             type: Number,
-            required: true,
+            required: false,
           },
           total: {
             type: String,
-            required: true,
+            required: false,
           },
         },
       ],
@@ -92,11 +92,11 @@ const consultationSchema = new Schema<IConsultation, ConsultationModel>(
           _id: {
             type: Schema.Types.ObjectId,
             ref: 'Medicine',
-            required: true,
+            required: false,
           },
           dosage: {
             type: String,
-            required: true,
+            required: false,
           },
           count: {
             type: Number,
@@ -104,7 +104,7 @@ const consultationSchema = new Schema<IConsultation, ConsultationModel>(
           },
           total: {
             type: String,
-            required: true,
+            required: false,
           },
         },
       ],
