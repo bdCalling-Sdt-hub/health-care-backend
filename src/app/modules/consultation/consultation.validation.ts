@@ -27,25 +27,31 @@ const createConsultationZodSchema = z.object({
       })
     ),
 
-    medicins: z.array(
-      z.object({
-        _id: z
-          .string({
-            required_error: '_id is required',
-            invalid_type_error: '_id must be a string',
-          })
-          .optional(),
-        count: z.number({
-          required_error: 'Count is required',
-          invalid_type_error: 'Count must be a number',
-        }),
+    medicins: z
+      .array(
+        z
+          .object({
+            _id: z
+              .string({
+                invalid_type_error: '_id must be a string',
+              })
+              .optional()
+              .optional(),
+            count: z
+              .number({
+                invalid_type_error: 'Count must be a number',
+              })
+              .optional(),
 
-        total: z.string({
-          required_error: 'Total is required',
-          invalid_type_error: 'Total must be a string',
-        }),
-      })
-    ),
+            total: z
+              .string({
+                invalid_type_error: 'Total must be a string',
+              })
+              .optional(),
+          })
+          .optional()
+      )
+      .optional(),
     suggestedMedicine: z
       .array(
         z.object({
