@@ -134,9 +134,6 @@ const getMyConsultations = async (userId: string, query: any): Promise<any> => {
     .populate('doctorId')
     .skip(Number(query.limit) * (Number(query.page) - 1));
 
-  if (!result.length) {
-    throw new ApiError(StatusCodes.BAD_REQUEST, 'Consultation not found!');
-  }
   return result;
 };
 
