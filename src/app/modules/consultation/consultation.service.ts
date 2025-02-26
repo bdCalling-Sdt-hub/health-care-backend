@@ -126,14 +126,22 @@ const getMyConsultations = async (userId: string, query: any): Promise<any> => {
       searchQuery?.medicins = { $exists: true, $ne: [] };
     }
   }
-  const result = await Consultation.find(searchQuery)
+  let result = await Consultation.find(searchQuery)
     .populate('category')
     .populate('subCategory')
     .populate('medicins._id')
     .populate('suggestedMedicine._id')
-    .populate('doctorId')
-    .skip(Number(query.limit) * (Number(query.page) - 1))
-    .sort({ createdAt: -1 });
+    .populate('doctorId');
+  if (query.limit && query.page) {
+    result = await Consultation.find(searchQuery)
+      .populate('category')
+      .populate('subCategory')
+      .populate('medicins._id')
+      .populate('suggestedMedicine._id')
+      .populate('doctorId')
+      .skip(Number(query.limit) * (Number(query.page) - 1))
+      .sort({ createdAt: -1 });
+  }
 
   return result;
 };
