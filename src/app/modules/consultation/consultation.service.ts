@@ -132,7 +132,8 @@ const getMyConsultations = async (userId: string, query: any): Promise<any> => {
     .populate('medicins._id')
     .populate('suggestedMedicine._id')
     .populate('doctorId')
-    .skip(Number(query.limit) * (Number(query.page) - 1));
+    .skip(Number(query.limit) * (Number(query.page) - 1))
+    .sort({ createdAt: -1 });
 
   return result;
 };
