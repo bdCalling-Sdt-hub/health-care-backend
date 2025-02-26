@@ -120,28 +120,25 @@ const getMyConsultations = async (userId: string, query: any): Promise<any> => {
   if (query.consultationType) {
     if (query.consultationType === CONSULTATION_TYPE.FORWARDTO) {
       //@ts-ignore
-      searchQuery?.forwardToPartner = true;
+      searchQuery.forwardToPartner = true;
     } else if (query.consultationType === CONSULTATION_TYPE.MEDICATION) {
       //@ts-ignore
-      searchQuery?.medicins = { $exists: true, $ne: [] };
+      searchQuery.medicins = { $exists: true, $ne: [] };
     }
   }
-  let result = await Consultation.find(searchQuery)
+
+  const limit = Number(query.limit) || 10;
+  const page = Number(query.page) || 1;
+
+  const result = await Consultation.find(searchQuery)
     .populate('category')
     .populate('subCategory')
     .populate('medicins._id')
     .populate('suggestedMedicine._id')
-    .populate('doctorId');
-  if (query.limit && query.page) {
-    result = await Consultation.find(searchQuery)
-      .populate('category')
-      .populate('subCategory')
-      .populate('medicins._id')
-      .populate('suggestedMedicine._id')
-      .populate('doctorId')
-      .skip(Number(query.limit) * (Number(query.page) - 1))
-      .sort({ createdAt: -1 });
-  }
+    .populate('doctorId')
+    .skip(limit * (page - 1))
+    .limit(limit)
+    .sort({ createdAt: -1 });
 
   return result;
 };
